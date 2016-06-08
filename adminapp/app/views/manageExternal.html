@@ -1,0 +1,71 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="text-success">{{messageAlert}}</span>
+            <span class="text-danger">{{messageAlertError}}</span>
+        </div>
+    </div>
+    
+    <div class="row margin-top-md" ng-show="displayForm == 'edit'">
+        <div class="container-fluid padding-zero">
+            <div class="col-xs-12 margin-top-md">
+                <div id="grid1" ui-grid="myData" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class="grid"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" ng-show="displayForm == 'add'">
+        <form class="form-horizontal margin-top-md" name="externalReport" novalidate autocomplete="off">
+            <div class="form-group">
+                <label for="reportName" class="col-sm-2 control-label">Report Name * :  </label>
+                <div class="col-sm-6">
+                    <input type="text" name="reportName" class="form-control" ng-model="external.reportName" ng-class="{'has-error' :externalReport.reportName.$invalid && externalReport.reportName.$pristine }" required>
+                    <!--<p ng-show="externalReport.reportName.$error"></p>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reportDesc" class="col-sm-2 control-label">Report Description :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="reportDesc" class="form-control" ng-model="external.reportDesc" ng-class="{'has-error' :externalReport.reportDesc.$invalid && externalReport.reportDesc.$pristine }">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reportLink" class="col-sm-2 control-label">Report Link * :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="reportLink" class="form-control" ng-model="external.reportLink"  ng-class="{'has-error' :externalReport.reportLink.$invalid && externalReport.reportLink.$pristine && urlValid}" ng-change="validateUrl(external.reportLink)" required>
+                    <p class="error urlValidation" ng-show="!externalReport.reportLink.$pristine && !urlValid">Invalid URL</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="functionalArea" class="col-sm-2 control-label">Functional Area :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="functionalArea" class="form-control" ng-model="external.functionalArea" ng-class="{'has-error' :externalReport.functionalArea.$invalid && externalReport.functionalArea.$pristine }">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="linkTitle" class="col-sm-2 control-label">Link Title :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="linkTitle" class="form-control" ng-model="external.linkTitle" ng-class="{'has-error' :externalReport.linkTitle.$invalid && externalReport.linkTitle.$pristine }">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="linkHoverInfo" class="col-sm-2 control-label">Link Hover Info :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="linkHoverInfo" class="form-control" ng-model="external.linkHoverInfo" ng-class="{'has-error' :externalReport.linkHoverInfo.$invalid && externalReport.linkHoverInfo.$pristine }">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="additionalInfo" class="col-sm-2 control-label">Tile Color :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="additionalInfo" class="form-control" ng-model="external.additionalInfo" ng-class="{'has-error' :externalReport.additionalInfo.$invalid && externalReport.additionalInfo.$pristine }">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <button name="add" class="btn btn-info" type="submit" ng-disabled="externalReport.$invalid || !urlValid" ng-click="addExternal(external)">Add Report</button>
+                    <button name="clear" class="btn btn-warning" type="reset">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

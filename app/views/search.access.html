@@ -1,0 +1,32 @@
+<table class="table table-hover">
+    <tr>
+        <td class="col-md-4">
+            <strong>Source Environment:</strong>
+        </td>
+        <td>{{reportAccessData.sourceSystem}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line1">
+        <td><strong>Identity & Access Tools:</strong></td>
+        <td>{{reportAccessData.line1}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line2">
+        <td><strong>Request Application:</strong></td>
+        <td>{{reportAccessData.line2}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line3">
+        <td><!--<strong>Module:</strong>--></td>
+        <td>{{reportAccessData.line3}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line4">
+        <td><!--<strong>Level 2:</strong>--></td>
+        <td>{{reportAccessData.line4}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line5">
+        <td><!--<strong>Level 3:</strong>--></td>
+        <td>{{reportAccessData.line5}}</td>
+    </tr>
+    <tr ng-show="reportAccessData.line6">
+        <td><!--<strong>Level 4:</strong>--></td>
+        <td>{{reportAccessData.line6}}</td>
+    </tr>
+</table>

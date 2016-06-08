@@ -1,0 +1,12 @@
+<div class="ui-grid-cell-contents">
+  <div dropdown dropdown-append-to-body class="btn-group" >
+    <button type="button" ng-disabled="grid.appScope.userObject.userinfo.role.toLowerCase() === 'buadmin' && grid.appScope.checkRoleForOption(row.entity)" class="btn btn-xs btn-primary dropdown-toggle" dropdown-toggle>
+      Options<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li ng-hide="grid.appScope.state.current.name !== 'administration.list.users' || grid.appScope.checkRole(row.entity) || grid.appScope.userObject.userinfo.role.toLowerCase() !== 'admin'"><a ng-click=grid.appScope.updateMemberShip(row.entity)>BU Persona Membership</a>
+        <li><a ng-click=grid.appScope.open(row.entity)> Edit </a></li>
+        <li ng-hide="grid.appScope.state.current.name === 'administration.list.users' && grid.appScope.userObject.userinfo.role.toLowerCase() === 'buadmin'"><a  ng-click=grid.appScope.deleteItems(row.entity)>Delete</a></li>
+  </ul>
+  </div>
+</div>

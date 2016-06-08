@@ -1,0 +1,97 @@
+<div id="addUser">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 ng-show="items.type" class="modal-title" >{{modalTitle}}</h3>
+        <h3 ng-hide="items.type" class="modal-title" >Edit an existing user</h3>
+    </div>
+    
+    <div class="modal-body">
+        <!--Start: Add user from Active directory or from the CSV file -->
+        <div ng-show="items.type">
+            <div ng-show="!(activeDirectoryButton || importFromCSV)">
+                <button style="width: 200px" type="button" ng-click="addUserFromActiveDirectory()">Active Directory User</button>
+                    <label>Import one or more users from Active Directory</label>
+                    <br><br>
+                <button style="width: 200px" type="button" ng-click="importUser()">Import from File</button>
+                    <label>Import Users from a CSV file</label>
+            </div>    
+            <div ng-show="activeDirectoryButton" class="container-fluid updateNews">
+                <div class="row">
+                    <div class="col-xs-12">
+                    
+                    <h5>Enter Active Directory usernames(NT ids separated by comma)</h5>
+                    <textarea row="10" ng-model="items.userName" cols="100"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4" ng-hide="items.userRole === 'buadmin'">Insights role</div>
+                    <div class="col-xs-8" ng-hide="items.userRole === 'buadmin'">
+                        <select ng-model="items.role" class="col-xs-8">
+                            <option ng-repeat="role in roles">{{role}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">Persona</div>
+                    <div class="col-xs-8">
+                        <select ng-model="items.groupId" class="col-xs-8">
+                            <option ng-repeat="group in groups" value="{{group.groupId}}">{{group.groupName}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div> 
+
+            <div ng-show="importFromCSV">
+                <form name="userUploadFile">    
+                    <input type="file" name="myfile" valid-file accept=".csv" ng-model="myInputFile" required ng-files="getTheFiles($files)">
+                    <span class="error urlValidation" ng-if="userUploadFile.myfile.$touched" ng-show="userUploadFile.myfile.$invalid"> Only Csv file is supported!</span>
+                </form>
+                
+                <!--a href="#" onclick="document.getElementById('fileID').click(); return false;" />Browse</a -->
+            </div>
+                
+        </div>        
+        
+        <!--End of Code for adding user from active directory or from the CSV file -->
+        
+        
+        <!--Start:Code for the edit the existing user -->
+        <div ng-hide="items.type">
+            <form name="userEditForm">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row updateNews">
+                            <div class="col-xs-4"> Username</div>
+                            <div class="col-xs-8"> 
+                                {{items.userName}}
+                            </div>
+                        </div>
+                       
+                        <div class="row updateNews">
+                            <div class="col-xs-4"> Persona</div>
+                            <div class="col-xs-8"> 
+                                <select ng-model="items.groupName" class="col-xs-8">
+                                    <option ng-repeat="group in groups">{{group.groupName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row updateNews">
+                            <div class="col-xs-4"> Insights role</div>
+                            <div class="col-xs-8">
+                                <input type="text" ng-model="items.role" value="{{role}}" readonly ng-show="buFlag"> 
+                                <select ng-model="items.role" class="col-xs-8" ng-show="!buFlag">
+                                    <option ng-repeat="role in roles">{{role}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--End of edit user code -->
+    </div>
+    <div class="modal-footer" ng-show="(activeDirectoryButton || importFromCSV) || !(items.type) ">
+        <button class="btn btn-primary" type="button" ng-disabled="userUploadFile.myfile.$invalid && checkSaveConditions()" ng-click="save(items)">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="close()"> Cancel </button>
+    </div>
+</div>

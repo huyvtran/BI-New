@@ -1,0 +1,180 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">External Reports</h3>
+</div>
+
+<div class="modal-body" style="margin-left: 20px">
+    <form name="reportForm">
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Created Date</div>
+                    <div class="col-xs-8"> {{items.createdDate}} </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Updated Date </div>
+                    <div class="col-xs-6">{{items.updatedDate}} </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row1-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Created By</div>
+                    <div class="col-xs-8">{{items.owner}}</div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> System Description </div>
+                    <div class="col-xs-8">{{ items.systemDescription}} </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row2-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Source System</div>
+                    <div class="col-xs-8">
+                        <!--input type="text" name="sourceSystem" ng-model="items.sourceSystem" readonly--> 
+                        {{items.sourceSystem}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Name </div>
+                    <div class="col-xs-8">
+                        <input type="text" name="reportName" ng-model="items.reportName"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row4-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Source Report Id</div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="sourceReport" ng-model="items.sourceReportId" -->
+                        {{items.sourceReportId}}
+                    </div>
+                </div>  
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Description </div>
+                    <div class="col-xs-8">
+                        <textarea name="reportDesc" ng-model="items.reportDesc">{{items.reportDesc}}</textarea>
+                        <!--<input type="text" name="reportDesc" ng-model="items.reportDesc" ng-readonly="exFlag">--> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row5-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Type</div>
+                    <div class="col-xs-6">
+                        <!-- input type="text" name="reportType" ng-model="items.reportType" -->
+                        {{items.reportType}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Tile Color </div>
+                    <div class="col-xs-6">
+                        <input type="text" name="additionalInfo" ng-model="items.additionalInfo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row6-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Link </div>
+                    <div class="col-xs-8" style="word-wrap: break-word;">
+                        <input type="text" name="reportLink" ng-model="items.reportLink">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row">
+                    <div class="col-xs-4"> View Count </div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="viewCount" ng-model="items.viewCount" -->
+                        {{items.viewCount}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row7-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Functional Area</div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="functionalArea" ng-model="items.functionalArea" -->
+                        {{items.functionalArea}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" ></div>
+        </div>
+        <hr />
+        <!--End of row8-->  
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Link Title</div>
+                    <div class="col-xs-8">
+                        <input type="text" name="titleLink" ng-model="items.linkTitle">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" ></div>
+        </div>
+        <hr /> 
+        <!--End of row9-->   
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Link Hover Information</div>
+                    <div class="col-xs-8">
+                        <input type="text" name="linkHoverInfo" ng-model="items.linkHoverInfo">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" ></div>
+        </div>
+    </form>
+</div>
+
+<!--End of row10   -->
+<div class="modal-footer">
+    <span class="text-success">{{saveText}}</span>
+    <button class="btn btn-primary" type="button" ng-disabled="progress" ng-click="ok()">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

@@ -1,0 +1,97 @@
+<div class=" row myprofile picture-bg">
+    <div class="row v-offset-bottom-10px">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="col-md-1 col-lg-1 col-sm-6">
+                <img alt="image" class="usr-image" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
+            </div>
+            <div class="col-md-7 col-lg-7 col-sm6 ">
+                <h3 ng-bind="userObject.userFullName" style="display:inline-block;" class="v-offset-top-15px"></h3>
+                <img style="width:40px;" src="images/bronzeBadge.png"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-lg-8 col-sm-8 col-md-offset-1 col-lg-offset-1">
+        <div class="color-white  v-offset-bottom-10px">My usage level indication</div>
+        <div class="row" style="border-bottom:0;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="70"
+                     aria-valuemin="0" aria-valuemax="100" ng-style="{width:badge}">
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" >
+                <div  class="text-center color-white ">Bronze</div>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
+                <div  class="text-center color-white">Silver</div>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
+                <div  class="text-center color-white">Gold</div>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
+                <div class="text-center color-white">Platinum</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br>
+<div class="row">
+    <ul class="list-unstyled">
+        <li>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                Persona:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <span ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}} </span>
+            </div>
+        </li>
+        <li>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                Badge:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                {{userObject.uid}}
+            </div>
+        </li>
+        <li>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                Designation:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                {{userObject.title}}
+            </div>
+        </li>
+        <li>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                Phone Number:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                {{userObject.telephonenumber}}
+            </div>
+        </li>
+        <li>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                Role:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                {{userObject.userinfo.role}}
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="col-md-12 col-lg-12 col-sm-12 v-offset-top-10px ng-scope">
+    <h3 style="color:#D7D7D7">Color Schemes</h3>
+    <hr/>
+    <div class="col-lg-3 col-md-3 col-lg-3">
+        <a class="theme-select"><img src="images/color-1.png" /></a>
+    </div>
+    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+        <a class="theme-select active"><img src="images/color-2.png" /></a>
+    </div>
+    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+        <a class="theme-select"><img src="images/color-3.png" /></a>
+    </div>
+</div>

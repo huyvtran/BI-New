@@ -1,0 +1,26 @@
+<div class="modal-header"> <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button> <h3 class="modal-title">Reports</h3> <!--    <a class="pull-right">close</a>  --> </div> <div class="modal-body"> <div class="col-sm-12 col-md-12"> <form class="navbar-form" role="search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search Reports" name="srch-term" id="srch-term" ng-model="searchText"> <div class="input-group-btn"> <button class="btn search-btn search-btn-size" type="button"><i class="glyphicon glyphicon-search"></i></button> </div> </div> </form> </div> <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12 select-report-text"> <span class="found-report">{{(items | filter:{'publish':false}).length}} Reports Found</span> <span class="pull-right"> <a class="select-report" ng-click="selectAll()"> Select All</a> | <a class="select-report" ng-click="deSelectAll()">Deselect All</a> <button class="btn add-to-gallary" type="button" ng-click="ok()">Add to Gallery</button> </span> </div> <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12"> <div class="container-fluid"> <div class="row"> <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-repeat="report in (mostviewed = (items | filter: {'publish':false} ) ) | filter: searchText"> <div class="clickableDiv" ng-click="toggleSelection(report.id)"> <div class="panel panel-primary reports-box"> <div class="panel-heading"> <img class="report-list-icon" ng-src="{{report.image}}"> </div> <div class="panel-footer"> <span class="pull-left"> <input class="checkbox-report-list" type="checkbox" name="selectReport[]" ng-checked="selection.indexOf(report.id) > -1" ng-click="toggleSelection(report.id); $event.stopPropagation();" value="{{report.id}}"> </span> <span class="pull-left">{{report.name}}</span> <div class="clearfix"></div> </div> </div> </div> </div> <!-- div ng-repeat="item in items" class="report-list col-md-2 col-lg-2">
+                    
+                        <div class="panel panel-primary reports-box">
+                            <div class="panel-heading report-list-box">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <i class="fa fa-comments fa-5x"></i> 
+                                        <div class="report-name">{{ item }}</div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <a href="#/">
+                                <div class="panel-footer">
+                                    <span class="pull-left">
+                                        <!-- <span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span> --> <!-- input class="checkbox-report-list" type="checkbox" name="selected-reports" > 
+                                    </span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div --> </div> </div> </div> <div class="clearfix"></div> </div> <div class="modal-footer"> <!--   <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button> 
+     <div ng-controller="PaginationCtrl">
+        <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    </div>  --> <div class="pull-right"> <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination> </div> </div>

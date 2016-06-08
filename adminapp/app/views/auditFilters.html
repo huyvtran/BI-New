@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-2">
+        <label>From Date</label>
+    </div>
+    <div class="col-md-2">
+        <label>To Date</label>
+    </div>
+</div>
+<div class="row calendarBlock">
+        
+        <div class="col-md-2">
+            
+            <p class="input-group">
+                
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="popup1.dt" is-open="popup1.opened" show-weeks="false" min-date="popup1.minDate" max-date="popup1.maxDate" datepicker-options="dateOptions"  ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            
+            <p class="input-group">
+                
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="popup2.dt" is-open="popup2.opened" show-weeks="false" min-date="popup1.dt" max-date="popup2.maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            
+            <p class="input-group">
+                <button type="button" class="btn btn-sm btn-info" ng-disabled="!popup1.dt || !popup2.dt" ng-click="filterAudit()">Filter</button>
+            </p>
+        </div>
+        <div class="col-md-2 col-md-offset-4">
+            <p class="input-group">
+                <a target="_self" class="btn btn-sm btn-info" href="{{downloadLink}}{{searchTextValue}}&searchGroupId={{searchGroupValue}}&searchFromDate={{popup1.dt | date:'yyyy-MM-dd'}} 00:00:00&searchToDate={{popup2.dt | date:'yyyy-MM-dd'}} 23:59:59" download="audit-report.csv" ng-disabled="myData.data.length==0">Download</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="grid3" ui-grid-infinite-scroll ui-grid="myData" class="grid"></div>

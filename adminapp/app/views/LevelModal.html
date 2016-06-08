@@ -1,0 +1,38 @@
+<div id="LevelsModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" ng-show="items.type">Add New Level</h3>
+        <h3 class="modal-titled" ng-hide="items.type">Edit Level</h3>
+    </div>
+    <div class="modal-body">
+        <form name="levelForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Level Name </div>
+                        <div class="col-xs-8">
+                            <input type="text" name="levelName" ng-model="items.levelDesc" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Level Number </div>
+                        <div class="col-xs-8">
+                            <input type="text" name="levelName" ng-model="items.levelNumber" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Parent Level Name </div>
+                        <div class="col-xs-8">
+                            <select ng-model="items.parentLevelId" ng-options="level.levelId as level.levelDesc for level in levels" class="col-xs-8"></select>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="!(!!items.levelDesc || !!items.levelNumber || !!items.parentLevelId)" ng-click="save(items)">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="close()"> Cancel </button>
+    </div>
+</div>

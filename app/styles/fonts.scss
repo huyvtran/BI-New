@@ -1,0 +1,22 @@
+@font-face {
+	font-family: metapro-book;
+	src: url('fonts/MetaPro-Normal.otf');
+	src: url('fonts/MetaPro-Normal.otf') format('embedded-opentype'), url("fonts/MetaPro-Medium_30264.ttf") format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: verdana;
+	src: url('fonts/Verdana Bold.ttf'); /* IE9*/
+	src: url('fonts/Verdana Bold.ttf?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url("../fonts/GEInspiraPitchBold.ttf") format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: verdana;
+	src: url('../fonts/GEInspiraPitchBold.eot'); /* IE9*/
+	src: url('../fonts/GEInspiraPitchBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url("../fonts/GEInspiraPitchBold.ttf") format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}

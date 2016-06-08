@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!-- Code for Modal-BICommunication -->
+<div id="BICommunicationModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" ng-show="items.type">Add Communication</h3> 
+        <h3 class="modal-title" ng-hide="items.type">Update Communication</h3>
+    </div>
+    <div class="modal-body">
+        <form name="CommunicationForm" novalidate>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Communication Title *</div>
+                        <div class="col-xs-8">
+                            <input type="text" name="communicationTitle" ng-model="items.title" class="col-xs-8" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Persona *</div>
+                        <div class="col-xs-8">
+                            <!-- 
+                            <select ng-model="items.groupId"  ng-options="group.groupId as group.groupName for group in groups" class="col-xs-8"></select>
+                            -->     
+                            <!--<select ng-model="items.groupId"  ng-options="group.groupId as group.groupName for group in groups" class="col-xs-8" multiple="multiple"></select>-->
+                            
+                            <dropdown-multiselect model="items.groupIdList" options="groups" ng-show="items.type === 'new'"></dropdown-multiselect>
+                            <input type="text" name="communicationGroup" ng-model="items.groupName" value="{{items.groupId}}" ng-show="items.type !== 'new'" class="col-xs-8" readonly="readonly">
+                        </div>
+                    </div>
+                    
+                    <div class="row updateNews">
+                        <div class="col-xs-4">Communication Link *</div>
+                        <div class="col-xs-8">
+                            <input type="url" name="communicationLink" ng-model="items.link" class="col-xs-8" required>
+                            <span class="error urlValidation" ng-show="CommunicationForm.communicationLink.$error.url">  Not Valid url!</span>
+                        </div>
+                    </div>
+                                                           
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Details *</div>
+                        <div class="col-xs-8">
+                            <textarea rows="4" cols="50" ng-model="items.details" name="communicationDetails" class="col-xs-8" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Upload Image / Image URL *</div>
+                        <div class="col-xs-8">
+                            <input type="radio" ng-model="imageMode" value="url">&nbsp;&nbsp;Image By URL.&nbsp;&nbsp;&nbsp;<input type="radio" ng-model="imageMode" value="upload">&nbsp;&nbsp;Image Upload <br/>
+                            
+                            <input type="url" name="communicationImage" id="communicationImageUrl" ng-model="items.image" class="col-xs-8 margin-top-md" ng-show="imageMode === 'url'"  ng-change="urlValidate()">
+                            <span class="error urlValidation margin-top-md pull-left" ng-show="CommunicationForm.communicationImage.$error.url && imageMode === 'url'">  Not Valid url!</span>
+                            <input type="file" name="myFile" id="myFile" ng-model="myFile" ng-show="imageMode === 'upload'" accept='image/jpeg, image/gif, image/png' class="margin-top-md" ng-change="validateUpload(this.files)" onchange="angular.element(this).scope().validateUpload(this.files)" ng-files="getTheImageFiles($files)" required>
+                            <span ng-show="imageMode === 'upload'"><i>500kb max file size. "jpg" and ".png" only.</i></span><br />
+                            <span class="error urlValidation" ng-show="imageError && imageMode === 'upload'">{{imageError}}</span>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </form> 
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="(CommunicationForm.communicationTitle.$invalid || CommunicationForm.communicationLink.$invalid || CommunicationForm.communicationDetails.$invalid || (items.type == 'new' &&  items.groupIdList.length < 1) || (!((!!items.image && !CommunicationForm.communicationImage.$error.url) || errorFlag)))" ng-click="save(items)"> Save</button>
+        <button class="btn btn-warning" type="button" ng-click="close()">Cancel</button>
+    </div>
+</div>

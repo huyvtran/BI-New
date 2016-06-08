@@ -1,0 +1,49 @@
+<div id="BINewsModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" ng-show="items.type">Add New News</h3>
+        <h3 class="modal-title" ng-hide="items.type">Edit News</h3>
+    </div>
+    <div class="modal-body">
+        <form name="NewsForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row updateNews" ng-hide="items.type">
+                        <div class="col-xs-4"> Created Date</div>
+                        <div class="col-xs-8"> 
+                            <span ng-bind="items.createdDate"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Title</div>
+                        <div class="col-xs-8">
+                            <input type="text" name="title" ng-model="items.title" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Description</div>
+                        <div class="col-xs-8">
+                           <input type="text" name="description" ng-model="items.description" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> URL</div>
+                        <div class="col-xs-8"> 
+                            <input type="url" name="newsurl" ng-model="items.url" class="col-xs-8">
+                            <span class="error urlValidation" ng-show="NewsForm.newsurl.$error.url">  Not Valid url!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+        </form>
+       
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="(NewsForm.newsurl.$invalid)||!(!!items.title || !!items.description || !!items.url)" ng-click="save(items)">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        
+    </div>
+    
+</div>

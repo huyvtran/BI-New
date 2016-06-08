@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <div class="row">
+        <span class="col-xs-offset-4 col-xs-12 font-bold text-warning" ng-show="maxSelected">Recommended Reports selection count has reached the max limit of {{recommendedCount}}</span>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <div id="grid1" ui-grid="myData1" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class="grid" > </div>
+        </div>
+        <div class="col-xs-1" style="text-align: center; top : 100px;">
+            <button type="button" class="btn btn-circle glyphicon glyphicon-chevron-right" ng-click="selectedReport()" ng-disabled="!selected"></button><br />
+            <button type="button" class="btn btn-circle glyphicon glyphicon-chevron-left" ng-click="deSelectedReport()" ng-disabled="!deSelected"></button>
+        </div>
+        <div class="col-xs-5">
+            <div id="grid2" ui-grid="myData2" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class="grid" style="height: 250px;"></div>
+            <div class="row">
+                <div class="col-xs-12 margin-top-md">
+                    <button type="button" class="" ng-click="move(true)" ng-disabled="!selectedMove">Move First</button>
+                    <button type="clear" class="" ng-click="moveUpDown(true)" ng-disabled="!selectedMove">Move Up</button>
+                    <button type="button" class="" ng-click="moveUpDown(false)" ng-disabled="!selectedMove">Move Down</button>
+                    <button type="clear" class="" ng-click="move(false)" ng-disabled="!selectedMove">Move Last</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-offset-8 col-xs-12 margin-top-md">
+                    <button type="button" class="btn btn-primary" ng-click="updateRecommendedReport();" ng-disabled="progress">Save</button>
+                    <button type="clear" class="btn btn-warning" ng-click="cancelSelectedReport();">Cancel</button>
+                </div>
+                <span class="col-xs-offset-4 col-xs-12 text-success ng-binding">{{saveText}}</span>
+            </div>
+        </div>
+    </div>
+    
+</div>

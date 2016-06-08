@@ -1,0 +1,12 @@
+<div ng-show="modalContent.title" class="modal-header">
+    <h4>{{modalContent.title}}</h4>
+</div>
+
+<div class="modal-body">
+    {{modalContent.message}}
+</div>
+
+<div class="modal-footer">
+    <button ng-show="modalContent.ok" ng-disabled="modalContent.ok.disabled" class="btn btn-default" ng-click="ok()">{{modalContent.ok.text}}</button>
+    <button ng-show="modalContent.cancel" class="btn btn-default" ng-click="cancel()">{{modalContent.cancel.text}}</button>
+</div>

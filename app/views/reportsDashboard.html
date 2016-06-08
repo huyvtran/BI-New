@@ -1,0 +1,59 @@
+
+                        <!--div class="pull-right view-tiles">
+                           <span>Current selected view is: '<span ng-bind="selectedTileView"></span>' to select another please click on above hamburger menu</span>
+                           <button class="navbar-toggle-reportsDashboard" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                               <span class="glyphicon glyphicon-menu-hamburger"></span>  
+                           </button> 
+                           <ul class="dropdown-menu tile-view-scroll">
+                               <li>
+                                   <a href="javascript:void(0);"> <span class="nav-label"><b>View</b></span> </a>
+                               </li>
+                               <li class="divider"></li>
+                               <li ng-repeat="listView in tileData.listViews">
+                                   <a href="javascript:void(0);" ng-click="updateSelectedView('{{listView}}')" ng-class="{'selectedViewTile':listView===selectedTileView}"><span class="nav-label" ng-bind="listView"></span></a>
+                               </li>
+                           </ul>
+                           
+                        </div -->
+                        <!-- div class="row" style="min-height: 459px;">
+                            <div ng-repeat="tilesForView in tilesForViews" ng-class="{'col-md-6 col-lg-6 col-sm-6 col-xs-12 right-border': $index % 3 === 0, 'col-md-3 col-lg-3 right-border': $index % 3 === 1, 'col-md-3 col-lg-3': $index % 3 === 2}">
+                                <h3>{{tilesForView.tileTitle}}</h3>
+                                <div class="row"> 
+                                    <div id="report-box" ng-class="{'col-lg-6 col-md-6 col-sm-6 col-xs-12': $parent.$index %3 === 0, 'col-lg-12 col-md-12 col-sm-12 col-xs-12 ': $parent.$index !== 0}" ng-repeat="report in tilesForView.tileBody">
+                                        --><!-- <a ng-href="{{report.link}}" title="{{report.tileTitle}}" target="_blank"> -->
+                                            <!-- div class="tile-panel" ng-style="{'backgroundColor':report.backGroundColor}">
+                                                <div class="row">
+                                                   <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1 option-vertical-p">
+                                                        <span class="glyphicon glyphicon-option-vertical"></span>
+                                                   </div>
+                                                   <div class="col-sm-11 col-md-11 col-lg-11 col-xs-11">
+                                                      <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 tilepanel-head-p" >
+                                                        <h3 class="col-sm-10 col-md-10 col-lg-10 col-xs-10 tilepanel-heading tilepanel-p tilepanel-head-nowrap">
+                                                        
+                                                         {{report.tileTitle}} </h3> 
+                                                         <span class="col-sm-2 col-md-2 col-lg-2 col-xs-2 glyphicon glyphicon-info-sign pull-right tilepanel-info-p"></span>
+                                                       
+                                                      </div>
+                                                      <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 tilepanel-footer tilepanel-p">
+                                                          <span class="">{{report.tileSubtitle}}</span>
+                                                      </div>
+                                                   </div>
+                                                   
+                                                </div>
+                                            </div>
+                                        --><!-- </a> -->
+                                        <!-- a id="hoverbar" ng-href="{{report.link}}" title="{{report.tileTitle}}" target="_blank">
+                                                <span>Click here</span>
+                                                <span class="glyphicon glyphicon-chevron-right"></span> 
+                                        </a -->
+                                    <!-- /div>
+                                    
+                                </div >
+                            </div -->
+                           <div class="row">
+                              <div class="col-xs-12">
+                                 <iframe ng-src="{{operationDashboardLink}}" style="width:100%; height: 700px;border: none;"></iframe>
+                              </div>
+                           </div>
+                        
+                            

@@ -1,0 +1,258 @@
+
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">Reports</h3>
+</div>
+
+<!-- Code for Tab1-->
+<div class="modal-body" style="margin-left: 20px">
+
+    <!--Code for Nav Tabs-->
+    <ul class="nav nav-pills">
+        <li ng-class="{'active':updatefields}" >
+            <a href="javascript:void(0);" ng-click="tabchange(true)">
+                Update Fields
+            </a>
+        </li>
+        <li ng-class="{'active':!updatefields}">
+            <a href="javascript:void(0);" ng-click="tabchange(false)">
+                Report Visibility
+            </a>
+        </li>
+    </ul>   
+    <!--End of Code for Nav Tabs-->
+
+    <br />
+    <form name="reportForm" ng-show="updatefields">
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Created Date</div>
+                    <div class="col-xs-8"> {{items.createdDate}} </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Updated Date </div>
+                    <div class="col-xs-6">{{items.updatedDate}} </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row1-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4" ng-hide="exFlag"> Owner</div>
+                    <div class="col-xs-4" ng-show="exFlag"> Created By</div>
+                    <div class="col-xs-8">{{items.owner}}</div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> System Description </div>
+                    <div class="col-xs-8">{{ items.systemDescription}} </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row2-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Source System</div>
+                    <div class="col-xs-8">
+                        <!--input type="text" name="sourceSystem" ng-model="items.sourceSystem" readonly--> 
+                        {{items.sourceSystem}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Name </div>
+                    <div class="col-xs-8">
+                        <input type="text" name="reportName" ng-model="items.reportName" ng-readonly="exFlag"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row4-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Source Report Id</div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="sourceReport" ng-model="items.sourceReportId" -->
+                        {{items.sourceReportId}}
+                    </div>
+                </div>  
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Description </div>
+                    <div class="col-xs-8">
+                        <textarea name="reportDesc" ng-model="items.reportDesc" ng-readonly="exFlag">{{items.reportDesc}}</textarea>
+                        <!--<input type="text" name="reportDesc" ng-model="items.reportDesc" ng-readonly="exFlag">--> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row5-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Type</div>
+                    <div class="col-xs-6">
+                        <!-- input type="text" name="reportType" ng-model="items.reportType" -->
+                        {{items.reportType}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+
+                <div class="row"  >
+                    <div class="col-xs-4" ng-hide="exFlag"> Additional Information </div>
+                    <div class="col-xs-4" ng-show="exFlag"> Tile Color </div>
+                    <div class="col-xs-6">
+                        <!-- input type="text" name="additionalInfo" ng-model="items.additionalInfo" -->
+                        {{items.additionalInfo}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row6-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Report Link </div>
+                    <div class="col-xs-8" style="word-wrap: break-word;">
+                        <!-- input type="text" name="reportLink" ng-model="items.reportLink" -->
+                        {{items.reportLink}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row" ng-hide="exFlag">
+                    <div class="col-xs-4"> View Count </div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="viewCount" ng-model="items.viewCount" -->
+                        {{items.viewCount}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row7-->   
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Functional Area</div>
+                    <div class="col-xs-8">
+                        <!-- input type="text" name="functionalArea" ng-model="items.functionalArea" -->
+                        {{items.functionalArea}}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+
+                <div class="row" ng-hide="exFlag">
+                    <div class="col-xs-4"> Refresh Status </div>
+                    <div class="col-xs-8">
+                        <select ng-model="items.refreshStatus">
+                            <option value="N">N</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!--End of row8-->  
+        <div class="row">
+            <div style="" class="col-xs-6">
+                <div class="row"  >
+                    <div class="col-xs-4"> Link Title</div>
+                    <div class="col-xs-8">
+                        <input type="text" name="titleLink" ng-model="items.linkTitle" ng-readonly="exFlag">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6" >
+                <div class="row" ng-hide="exFlag">
+                    <div class="col-xs-4"> View Tabs </div>
+                    <div class="col-xs-8">
+                        <select ng-model="items.tabbedViews">
+                            <option value="N">N</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr /> 
+        <!--End of row9-->   
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="row"  >
+                    <div class="col-xs-4"> Link Hover Information</div>
+                    <div class="col-xs-8">
+                        <input type="text" name="linkHoverInfo" ng-model="items.linkHoverInfo" ng-readonly="exFlag">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" ></div>
+        </div>
+    </form>
+</div>
+<!-- End of Code for Tab2-->
+
+<!-- Code for Tab2-->
+<form ng-hide="updatefields"  style="margin-left: 30px">
+    <div>
+        <b>Permissions</b> - Reports to give access
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col-xs-3">Set Level</div>
+        <div class="col-xs-3">Select Persona</div>
+    </div>
+    <hr />
+
+    <div class="row" ng-repeat="levelGroupMap in levelGroupMaps">
+        <div class="col-xs-3" >
+            <select ng-model="levelGroupMap.selectedlevel"  ng-options="level.levelId as level.levelDesc  for level in levelGroup.allLevels" ></select>     
+        </div>
+        <div class="col-xs-3" >
+            <select ng-model="levelGroupMap.selectedgroup"  ng-options="group.groupId as group.groupName for group in levelGroup.allGroups" ></select>     
+        </div>
+        <div class="col-xs-6" style="margin-bottom: 10px">
+            <button class="btn" type="button" ng-click="addLevelGroup()">+Add</button>
+            <button class="btn" type="button" ng-click="removeLevelGroup($index)">-Remove</button>
+        </div>
+    </div>
+    <br />
+</form>
+<!-- End of Code for Tab2-->
+
+<!--End of row10   -->
+<div class="modal-footer">
+    <span class="text-success">{{saveText}}</span>
+    <button class="btn btn-primary" type="button" ng-disabled="progress" ng-click="ok()">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

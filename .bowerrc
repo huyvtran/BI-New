@@ -1,0 +1,6 @@
+{
+	"registry": "http://bower.herokuapp.com",
+    "proxy": "http://gateway.zscaler.net:9400",
+    "https-proxy": "http://gateway.zscaler.net:9400",
+    "strict-ssl": false
+}
