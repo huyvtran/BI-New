@@ -2,10 +2,11 @@
 
 angular.module('adminPageApp').controller('BICommunicationCtrl',function($scope, userDetailsService, $http, $uibModal, $q, $timeout){
     var groups = []; 
-    $scope.myData = {}; 
+    $scope.myData = {};
     $scope.messageAlert= "";
     $scope.messageAlertError='';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     function columnDefs(){
         return[

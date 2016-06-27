@@ -11,7 +11,7 @@ angular.module('myBiApp')
 .controller('SearchdetailsCtrl', function ($scope, $rootScope, $stateParams, $state, searchservice, userDetailsService, commonService, $http) {
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
-
+    
     if ($stateParams.sourceReportId) {
 
         //$scope.mainState.$current.data.displayName = $rootScope.searchObject.reportName;
@@ -36,6 +36,7 @@ angular.module('myBiApp')
                     $http.get(reportUpdateViewed);
 
                     $scope.mainState.$current.data.displayName = resp.data.name;
+                    (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'):'';
                     $scope.isTableu = true;
                     var placeholderDiv = document.getElementById('tableu_report3');
                     //placeholderDiv.setAttribute('fixT',Math.random());
@@ -47,7 +48,6 @@ angular.module('myBiApp')
                     };
                     new tableau.Viz(placeholderDiv, url, options);
                 });
-
             });
             //TODO Remove isTableu from template for showing iframe or grid or d3 reports.
 

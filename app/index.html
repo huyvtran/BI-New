@@ -53,7 +53,8 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <header id="header">
+    <header id="header" ng-class="userTheme+'-theme-header'">
+    <!--<header id="header">-->    
         <div class="container">
             <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
                 <div class="navbar-brand col-md-3 col-lg-3 col-sm-3">
@@ -64,14 +65,15 @@
                     <a href="#/" style="display:inline-table; width:30px;">
                         <!--span class="emc-logo">x</span -->
                         <img class="logo"  src="images/EMCLogo.png"/>
-                        <span ng-show="!toggleLeft" class="portal-name">INSIGHTS</span>
+                        <!--<span ng-show="!toggleLeft" class="portal-name" scroll=''>INSIGHTS</span>-->
+                        <span ng-show="!toggleLeft && !scrollVariable" class="portal-name" scroll=''>INSIGHTS</span>
                     </a>
                 </div>
-                <div class="col-md-7 col-lg-7 col-sm-6">
+                <div class="col-md-6 col-lg-6 col-sm-6">
                     <search-report></search-report>
                 </div>
 
-                <div class="col-md-2 col-lg-2 col-sm-3">
+                <div class="col-md-3 col-lg-3 col-sm-3">
                     <div class="row">
                         <span class="header-right pull-right" ng-show="userObject.userFullName != ''">
                             <!--  userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin' -->
@@ -85,7 +87,7 @@
                                         <div class="profile-progress-small">
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                     aria-valuemin="0" aria-valuemax="100" ng-style="{width:badge}">
+                                                     aria-valuemin="0" aria-valuemax="100" ng-class="myLevel">
                                                 </div>
                                             </div>
                                         </div>
@@ -115,9 +117,9 @@
                             </a>
 
                             <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
-                                <li><a ui-sref="profile">Profile</a></li>
+                                <li><a ui-sref="profile">My Profile</a></li>
                                 <li class="divider"></li>
-                                <li><a href="admin">Admin</a></li>
+                                <li><a href="admin">Administration</a></li>
                             </ul>
                         </span>
                     </div>
@@ -158,14 +160,16 @@
         </div><!--/.container-->
     </header>
     <!--     <div class="container"> -->
-    <div class="pace-done">
+    <div class="pace-done" ng-class="userTheme+'-theme'">
+    <!--<div class="pace-done">-->    
         <div id="wrapper" class="container-fluid no-padding">
+        <!--<div id="wrapper" class="container-fluid no-padding" ng-class="userTheme+'-wrapper'">-->    
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <!--<div class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft" ></div>-->
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu" style="display: block;margin-top:60px;">
                         <li ui-sref-active="active" class="home">
-                            <a ui-sref="home">
+                            <a ui-sref="home" title="Home">
                                 <div class="row">
                                     <div class="col-md-4 col-lg-4 col-sm-4">
                                         <img src="images/homeIcon.png"/>
@@ -177,7 +181,7 @@
                             </a>
                         </li>
                         <li ui-sref-active="active" class="dashboard">
-                            <a ui-sref="reportsDashboard"> 
+                            <a ui-sref="reportsDashboard" title="Operational Dashboard"> 
                                 <div class="row">
                                     <div class="col-md-4 col-lg-4 col-sm-4">
                                         <img src="images/reportDashboardIcon_leftNavigation.png"/>
@@ -189,7 +193,7 @@
                             </a>
                         </li>
                         <li ng-class="{'active': mainState.includes('reports')}" class="reports">
-                            <a ui-sref="reports.list">
+                            <a ui-sref="reports.list" title="Available Reports">
                                 <div class="row">
                                     <div class="col-md-4 col-lg-4 col-sm-4">
                                         <img src="images/iconReports.png"/>
@@ -205,12 +209,12 @@
                                  data-tree-model="biGroup.biGroups"
                                  data-node-id="levelId"
                                  data-node-label="levelDesc"
-                                 data-node-children="children" >
+                                 data-node-children="children" ng-show="!toggleLeft">
                             </div>
 
 
                         </li>
-                        <li ui-sref-active="active" class="favorites">
+                        <li ui-sref-active="active" class="favorites" title="My Favorites">
                             <a ui-sref="favorites" >
                                 <div class="row">
                                     <div class="col-md-4 col-lg-4 col-sm-4">
@@ -247,13 +251,13 @@
                                                 <span >About</span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ui-sref-active="active">
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ui-sref-active="active" ng-show='reportAccess'>
                                             <a ui-sref="search.details.access({'searchId':searchId})">
                                                 <div class="icon request" ></div><br/>
                                                 <span>How to Request</span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active">
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active" ng-show='reportAccess'>
                                             <a ui-sref="search.details.feedback({'searchId':searchId})">
                                                 <div class="icon feedback" ></div><br/>
                                                 <span >User Feedback</span>
@@ -276,13 +280,13 @@
                                                 <span>About</span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active">
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active" ng-show='reportAccess'>
                                             <a ui-sref="reports.details.report.access({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <div class="icon request" ></div><br/>
                                                 <span>How to Request</span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active">
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active"  ng-show='reportAccess'>
                                             <a ui-sref="reports.details.report.feedback({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <div class="icon feedback" ></div><br/>
                                                 <span>User Feedback</span>
@@ -303,11 +307,22 @@
                     </nav>
                 </div>
                 <!-- main content -->
-                <div class="row white-bg">
+                <!--<div class="row white-bg">-->
+                <div class="row" ng-class="userTheme+'-bg'">    
                     <div class="col-md-12">
                         <div class="wrapper wrapper-content " ui-view></div>
                     </div>
                 </div>
+                <div class="row footer-row">
+                    <div class="footer">
+                        <div class="align-center visible-md visible-lg hidden-sm hidden-xs">
+                            <a ui-sref="faq">FAQ</a> | <a target="_blank" href="../doc/Insights%20User%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
+                        </div>
+                        <div class="pull-left">
+                            <!-- strong>Copyright 2015</strong> - All rights reserved. -->
+                        </div>
+                    </div>
+                </div>    
             </div> 
             <!-- end main content -->
         </div>
@@ -335,14 +350,6 @@
             <div id="circularG_8" class="circularG"></div>
         </div>
     </div>
-    <footer>
-        <div class=" visible-md visible-lg hidden-sm hidden-xs">
-            <a ui-sref="faq">FAQ</a> | <a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
-        </div>
-        <div class="pull-left">
-            <!-- strong>Copyright 2015</strong> - All rights reserved. -->
-        </div>
-    </footer>
     <!-- </div> -->
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -362,6 +369,7 @@
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/angular-underscore-module/angular-underscore-module.js"></script>
     <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
@@ -409,13 +417,14 @@
     <script src="scripts/controllers/searchReportController.js"></script>
     <script src="scripts/controllers/searchdetails.js"></script>
     <script src="scripts/services/searchservice.js"></script>
-    <!--<script src="scripts/module/tableau-2.0.0.min.js"></script>-->
+    <!--<script src="scripts/module/highlight.js"></script>-->
+    <script src="scripts/module/tableau-2.0.0.min.js"></script>
     <!-- endbuild -->
 
     <!-- Mainly scripts>
     <script src="scripts/js/jquery.metisMenu.js"></script> 
     <script src="scripts/js/jquery.slimscroll.min.js"></script>
     <script src="scripts/js/mybi-custom.js"></script -->
-    <script src="https://baaastableau.corp.emc.com/javascripts/api/tableau-2.0.0.min.js"></script>
+    <!--<script src="https://baaastableau.corp.emc.com/javascripts/api/tableau-2.0.0.min.js"></script>-->
 </body>
 </html>

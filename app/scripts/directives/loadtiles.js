@@ -103,8 +103,8 @@ angular.module('myBiApp')
             var ele;
             scope.externalUrl = false;
             if (scope.report.sourceSystem === 'EXTERNAL') {
-                scope.externalUrl = (scope.report.type !== 'HTTP') ? true : false;
-                var bg = (scope.report.additionalInfo.indexOf('#') > -1) ? 'style = background-color:' + scope.report.additionalInfo : '';
+                scope.externalUrl = true;
+                var bg = (scope.report.additionalInfo && scope.report.additionalInfo.indexOf('#') > -1) ? 'style = background-color:' + scope.report.additionalInfo : '';
                 var Desc = (scope.report.reportDesc) ? scope.report.reportDesc : '';
                 template = '<div class="panel-heading" ng-class="report.externalClass" ' + bg + '>' +
                         '<p class="external-reportName">' + scope.report.name + '</p>' +
@@ -185,7 +185,7 @@ angular.module('myBiApp')
  * # tilesController
  * Controller of the tiles. 
  */
-.controller('tilesController', function ($scope, commonService, $http, CONFIG) {
+.controller('tilesController', function ($scope, commonService, $http, CONFIG, $sce, $window) {
     $scope.panel = $scope.tilesData;
     $scope.$watch('panel.data', function (value) {
         _.map(value, function (report) {
@@ -206,7 +206,9 @@ angular.module('myBiApp')
                     report.iconClass = 'class-bobj';
                 } else if (report.type.toLowerCase() === 'tableau') {
                     if (report.refreshStatus === undefined || report.refreshStatus === 'N') {
-                        report.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(report.functionalArea) + '/' + report.sourceReportId + '.png';
+                        var sourceImg = (report.sourceSystem.toString().indexOf('Enterprise')>= 0) ? report.sourceReportId + "_ent" : report.sourceReportId;
+                        report.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(report.functionalArea) + '/' + sourceImg + '.png';
+                        //report.reportLinkImg = CONFIG.tableauImagesPath+encodeURIComponent(report.functionalArea)+'/'+report.sourceReportId+'.png';
                     } else if (report.refreshStatus && report.refreshStatus === 'Y') {
                         report.reportLinkImg = report.reportLinkImg.replace('#/site', 't');
                     }
@@ -227,7 +229,7 @@ angular.module('myBiApp')
                 });
             }
             if ($scope.panel.viewMoreUiLink && $scope.panel.viewMoreUiLink !== undefined) {
-                $scope.viewMoreLink = ($scope.panel.viewMoreUiLink === 'reports.list') ? 'View More Available Reports' : 'View More';
+                $scope.viewMoreLink = ($scope.panel.viewMoreUiLink === 'reports.list') ? 'View more available reports' : 'View more';
             }
         }
     });
@@ -235,10 +237,36 @@ angular.module('myBiApp')
     $scope.collapseOpen = function () {
         $scope.panel.open = !$scope.panel.open;
     };
-
-
+    
+    $scope.highlight = function(text, search) {
+        if (!search) {
+            return $sce.trustAsHtml(text);
+        }
+        var lowerText = (text) ? text.toLowerCase(): '';
+        var lowerSearch =(search) ? search.toLowerCase(): '';
+        if(lowerText.search(lowerSearch) >= 0 ) {
+            return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="highlighted">$&</span>'));
+        } else {
+            return $sce.trustAsHtml(text);
+        }
+    };
+    
+    $scope.loadReport = function(report) {
+        var url;
+        
+        if(report.type === 'HTTP') {
+            url = report.reportLink;
+            var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl($scope.userLoginName, report.sourceReportId, report.sourceSystem, 'Persona');
+            $http.get(reportUpdateViewed);
+        } else {
+            url = '../BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
+        }
+        $window.open(url, '_blank');
+    };
+    
     $scope.changeFavorite = function (report) {
         var url = commonService.prepareUserUpdateFavoriteUrl($scope.userLoginName);
+
         if (report.favorite === 'N') {
             $http.get(url + report.id + '/Y').then(function () {
 

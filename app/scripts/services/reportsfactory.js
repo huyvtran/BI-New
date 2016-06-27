@@ -11,18 +11,20 @@ angular.module('myBiApp')
 .factory('reportsFactory', function (commonService, userDetailsService, $http, $q, CONFIG) {
     // Service logic
     // ...
-    var reportsFactoryFunction = function (type, groupid, levelid, stopInfinite) {
+    var reportsFactoryFunction = function (type, groupid, levelid, searchfilter, stopInfinite) {
         this.reports = [];
         this.loadmoredisable = false;
         this.loadReports = function () {
             this.loadmoredisable = true;
             var defer = $q.defer();
+            
             userDetailsService.userPromise.then(function (response) {
                 var url = '',
                 /**
                  * Filter variable is the flag/key of response object which has the reports arraylist.
                  */
                 filter;
+                
                 if (type === 'favorite') {
                     url = commonService.prepareFavoriteReportUrl(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit);
                     filter = 'favoriteReports';
@@ -42,13 +44,24 @@ angular.module('myBiApp')
                     //while search groupid is searchtext & level id is persona y or n
                     groupid = decodeURIComponent(groupid);
                     if (levelid === 'Y') {
-                        url = commonService.prepareUserSearchUrlReports(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
+                        if(searchfilter) { 
+                            url = commonService.prepareSearchUrlPersonaFilter(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid, searchfilter);
+                        } else { 
+                            url = commonService.prepareSearchUrlPersona(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
+                        }
                     } else {
-                        url = commonService.prepareSearchUrl(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
+                        if(searchfilter) { 
+                            url = commonService.prepareSearchUrlFilter(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid, searchfilter);
+                        } else { 
+                            url = commonService.prepareSearchUrl(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
+                        }
                     }
+                    
+                    console.log(levelid);
+                    console.log(url);
                     filter = '';
-
                 }
+                
                 $http.get(url).then(function (resp) {
                     /**
                      * arrayReports is an array with all reports list from response with filter or without filter based on webservice
@@ -75,11 +88,12 @@ angular.module('myBiApp')
 
                         report.reportLinkImg = report.reportLink + '.png';
                         report.iconClass = 'class-tableau';
+                        
                         if (report.type === undefined && report.reportType !== undefined) {
                             report.type = report.reportType;
                         }
+                        
                         if (report.type) {
-
                             if (report.type.toLowerCase() === 'pdf') {
                                 report.reportLinkImg = 'images/charts/pdf-icon.png';
                                 report.iconClass = 'class-pdf';

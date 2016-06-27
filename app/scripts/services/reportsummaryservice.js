@@ -36,7 +36,8 @@ angular.module('myBiApp')
                                         eachReport.iconClass = 'class-bobj';
                                     } else if (eachReport.type.toLowerCase() === 'tableau') {
                                         if (eachReport.refreshStatus === undefined || eachReport.refreshStatus === 'N') {
-                                            eachReport.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(eachReport.functionalArea) + '/' + eachReport.sourceReportId + '.png';
+                                            var sourceImg = (eachReport.sourceSystem.toString().indexOf('Enterprise') >= 0) ? eachReport.sourceReportId + "_ent" : eachReport.sourceReportId;
+                                            eachReport.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(eachReport.functionalArea) + '/' + sourceImg + '.png';
                                         } else if (eachReport.refreshStatus && eachReport.refreshStatus === 'Y') {
                                             eachReport.reportLinkImg = eachReport.reportLinkImg.replace('#/site', 't');
                                         }

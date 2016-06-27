@@ -8,6 +8,7 @@ angular.module('adminPageApp')
     $scope.messageAlertError = '';
     $scope.personaId= '';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     function columnDefs() {
         return [

@@ -102,6 +102,13 @@ angular.module('myBiApp')
     };
     
     /**
+    *prepare the Search Url with Filter
+    */
+    this.prepareSearchUrlFilter = function(username, offset, limit, texttobesearched, filter) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.searchReportsFilter, {'username':username, 'offset':offset, 'limit':limit, 'texttobesearched':texttobesearched, 'filter':filter});
+    };
+    
+    /**
     *prepare the Search Url for persona
     */
     this.prepareSearchUrlPersona = function(username, offset, limit, texttobesearched) {
@@ -109,10 +116,24 @@ angular.module('myBiApp')
     };
     
     /**
+    *prepare the Search Url for persona with Filter
+    */
+    this.prepareSearchUrlPersonaFilter = function(username, offset, limit, texttobesearched, filter) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.searchReportsPersonaFilter, {'username':username, 'offset':offset, 'limit':limit, 'texttobesearched':texttobesearched, 'filter':filter});
+    };
+    
+    /**
     *prepare the Search Url for persona
     */
     this.prepareUserSearchUrlReports = function(username, offset, limit, texttobesearched) {
         return  this.replaceStringWithValues(WEBSERVICEURL.userSearchallReports, {'username':username, 'offset':offset, 'limit':limit, 'texttobesearched':texttobesearched});
+    };
+    
+    /**
+    *prepare the Search Url for persona with Filter
+    */
+    this.prepareUserSearchUrlReportsFilter = function(username, offset, limit, texttobesearched, filter) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.userSearchallReportsFilter, {'username':username, 'offset':offset, 'limit':limit, 'texttobesearched':texttobesearched, 'filter':filter});
     };
     
     /**

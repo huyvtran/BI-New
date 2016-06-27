@@ -28,8 +28,11 @@ angular.module('myBiApp')
     'reportDashboardGroup'  : 'BITool/reportDashboard/report/group/:username/:groupid/:offset/:limit',
     'reportSummary'         : 'BITool/report/reportSummary/:username',//
     'searchReports'         : 'BITool/userSearch/allReports/:username/:offset/:limit?searchText=:texttobesearched',
+    'searchReportsFilter'   : 'BITool/userSearch/allReports/:username/:offset/:limit?:filter=:texttobesearched',
     'searchReportsPersona'  : 'BITool/searchReports/persona/:username/:offset/:limit?searchText=:texttobesearched',
+    'searchReportsPersonaFilter'  : 'BITool/searchReports/persona/:username/:offset/:limit?:filter=:texttobesearched',
     'userSearchallReports'  : 'BITool/userSearch/allReports/:username/:offset/:limit?searchText=:texttobesearched',
+    'userSearchallReportsFilter'  : 'BITool/userSearch/allReports/:username/:offset/:limit?:filter=:texttobesearched',
     'feedbackPost'          : 'BITool/addFeedback',
     'feedbackList'          : 'BITool/reportFeedbacks/:reportId',
     'reportAccess'          : 'BITool/reportAccess/:reportId',

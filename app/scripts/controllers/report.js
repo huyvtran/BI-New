@@ -21,17 +21,16 @@ angular.module('myBiApp')
     };
 
     if ($stateParams.levelId && $stateParams.reportId) {
-
         if ($state.current.name === 'reports.details.report.report') {
             userDetailsService.userPromise.then(function (response) {
                 var urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.reportId);
                 $http.get(urlReports).then(function (resp) {
-
                     //Update user view count
                     var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl(response[0].emcLoginName, resp.data.sourceReportId, resp.data.sourceSystem, 'Persona');
                     $http.get(reportUpdateViewed);
 
                     if (resp.data.name) {
+                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'): '';
                         $scope.reportName = resp.data.name;
                         $scope.mainState.$current.data.displayName = resp.data.name;
                         $scope.isTableu = true;

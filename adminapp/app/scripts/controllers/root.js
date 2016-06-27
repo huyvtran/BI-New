@@ -38,6 +38,10 @@ angular.module('adminPageApp')
         $scope.searchText = '';
     });
     
+    $scope.$on('resetGroup', function() {
+        $scope.selectedAuditGroup = '';
+    });
+    
     userDetailsService.userPromise.then(function (userObject) {
         $rootScope.userObject = $scope.userObject = userObject[0];
         $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);

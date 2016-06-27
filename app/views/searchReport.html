@@ -11,10 +11,8 @@
             </span>
         </div>
     </div>
-
-
-
 </div>
+
 <div class="overlay-dark" ng-hide="model.isMinimised">
     <form ng-submit="submitSearch()" style="z-index:100" ng-hide="model.isMinimised">
         <div class="row">
@@ -49,8 +47,8 @@
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <select class="filter" ng-model="searchFilter" ng-options="filter.name for filter in model.searchFilterOptions" ng-selected="setFilterValue()">
-                            <option value="">Fitler Search</option>
+                        <select class="filter" ng-model="searchFilter" ng-options="filter.name for filter in model.searchFilterOptions" ng-change="setFilterValue()">
+                            <option value="">Filter Search</option>
                         </select>
                     </div>
                     <div id="search-parent"></div>
@@ -69,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 col-md-offset-2 col-lg-offset-2 col-xl-offset-2 v-top-offset-20px" >
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 v-top-offset-20px" >
             <!-- <jqcloud  ng-if="isCloudVisible" width=250 height=250 words="model.searchCloud" shape="elliptic" colors="['#3396da']" auto-resize="true" steps="10"></jqcloud> -->
             <jqcloud  ng-if="isCloudVisible" ng-click="minimize()" words="model.searchCloud" style="width:100%;height:400px;" shape="elliptic" colors="['#7291A6']" auto-resize="true" steps="10" font-size="{from:0.09, to:0.04}"></jqcloud>
         </div>

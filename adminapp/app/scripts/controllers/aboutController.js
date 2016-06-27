@@ -172,7 +172,6 @@ angular.module('adminPageApp')
             } else {
                 var url = 'BITool/admin/allReports/' + userObject[0].emcLoginName + '/' + offset + '/20?searchText=' + $scope.searchTextValue + '&searchTextSourceSystem=' + $scope.sourceSystem + '&searchTextReportType=' + $scope.reportType + '&searchTextFunctionalArea=' + $scope.functionalArea +'&displayType=' + $scope.displayType;
             }
-            console.log(url);
             
             var httpPromise = $http({
                 'url': url,
@@ -185,26 +184,6 @@ angular.module('adminPageApp')
                 } else {
                     $scope.myData.data = $scope.myData.data.concat(resp.data);
                 }
-                /*var newHeight =($scope.myData.data.length*30)+60;
-                 angular.element(document.getElementsByClassName('grid')[0]).css('height', newHeight + 'px');*/
-                /*var functionArea = _.chain($scope.myData.data)
-                 .pluck('functionalArea')
-                 .uniq()
-                 .value();
-                 $scope.$emit('functionalArea', functionArea);
-
-                 var owner = _.chain($scope.myData.data)
-                 .pluck('owner')
-                 .uniq()
-                 .value();
-                 $scope.$emit('owner', owner);//reportName
-
-
-                 var reportName = _.chain($scope.myData.data)
-                 .pluck('reportName')
-                 .uniq()
-                 .value();
-                 $scope.$emit('reportName', reportName);*/
 
                 $scope.gridApi.infiniteScroll.saveScrollPercentage();
                 $scope.gridApi.infiniteScroll.dataLoaded(false, resp.data && resp.data.length === 20).then(function () {

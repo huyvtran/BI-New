@@ -8,7 +8,7 @@
  * Controller of the myBiApp 
  */
 angular.module('myBiApp')
-.controller('MainCtrl', function ($scope, newsService, reportSummaryService, $q, carouselService, popularSearchService, $http, commonService, reportsFactory, userDetailsService, $window, $timeout) {
+.controller('MainCtrl', function ($scope, $rootScope, $localStorage, newsService, reportSummaryService, $q, carouselService, popularSearchService, $http, commonService, reportsFactory, userDetailsService, $window, $timeout, CONFIG) {
     $scope.myInterval = 6000;
     $scope.noWrapSlides = false;
     $scope.carouselData = [];
@@ -16,40 +16,42 @@ angular.module('myBiApp')
     $scope.personaInfo = {};
     $scope.ieFlag = true;
     $scope.winFocus = false;
-    //$scope.badge = '0%';
     
-    /**
-     *Update my level indication
-     */
-//    $scope.badgePercentage = {
-//        'Bronze': '25%',
-//        'Silver': '50%',
-//        'Gold': '75%',
-//        'Platinum': '100%'
-//    };
-
     $scope.config = {
         autoHideScrollbar: false,
         theme: 'light',
         advanced: {
             updateOnContentResize: true
         },
-        setHeight: 150,
+        setHeight: 200,
         scrollInertia: 0
     };
-
+    
+    $scope.$on('myLevelIndication', function(event, value){
+        console.log('level came here!!!')
+        $localStorage.myLevel = value
+        $scope.myLevel = $localStorage.myLevel;
+    });
+    
+    $scope.$on('myThemeSettings', function(event, theme, personalization){
+        console.log('theme came here!!!')
+        $localStorage.userTheme = theme;
+        $localStorage.personalization = personalization;
+        $scope.userTheme = $localStorage.userTheme;
+    });
+    
     $scope.panelMostViewedReports = {
         'title': 'Most Viewed Reports',
         'open': true,
         'limit': 6,
-        'class_names': 'report-tile'
+        'class_names': 'report-block report-tile'
     };
 
     $scope.panelRRReports = {
         'title': 'Recommended Reports',
         'open': true,
         'limit': 6,
-        'class_names': 'report-tile',
+        'class_names': 'report-block report-tile',
         'viewMoreUiLink': 'reports.list',
         'rr': true
     };
@@ -58,7 +60,7 @@ angular.module('myBiApp')
         'title': 'Favorite Reports',
         'open': true,
         'limit': 6,
-        'class_names': 'report-tile',
+        'class_names': 'report-block report-tile',
         'viewMoreUiLink': 'favorites'
     };
     
@@ -114,12 +116,21 @@ angular.module('myBiApp')
         $scope.refreshPanelList();
         $scope.carouselData = response[2];
         $scope.words = response[3];
-
-        /**
-         * Update my level indication
-         */
-        //$scope.badge = $scope.badgePercentage[response[5][0].userinfo.badge];
-        //console.log($scope.badge);
+    
+        var userdetails = response[5][0];
+        
+        if (userdetails.userinfo.badge === 'Bronze') {
+            $scope.myLevel = 'bronze-level';
+        } else if (userdetails.userinfo.badge === 'Silver') {
+            $scope.myLevel = 'silver-level';
+        } else if (userdetails.userinfo.badge === 'Gold') {
+            $scope.myLevel = 'gold-level';
+        } else if (userdetails.userinfo.badge === 'Platinum') {
+            $scope.myLevel = 'platinum-level';
+        }
+        console.log('Main - Set Localstorage level');
+        $localStorage.myLevel = $scope.myLevel;
+        $scope.$emit('myLevelIndication', $scope.myLevel);
     });
 
     $scope.showMyIndication = false;
@@ -168,18 +179,14 @@ angular.module('myBiApp')
     };
     
     function setUserCustomization(reportPriorityList) {
-        console.log(reportPriorityList);
-
         userDetailsService.userPromise.then(function(userObj) {
             var putObj = {
-                'userId' : userObj[0].emcLoginName,
+                'userId' : userObj[0].uid,
                 'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
                 'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
                 'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
-                'userTheme' : 0
+                'userTheme' : findThemeKey(CONFIG.userTheme, $localStorage.userTheme)
             }
-            console.log(putObj);
-
             $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
                 .then(function (resp, status, headers) {
                     console.log(resp);
@@ -189,13 +196,30 @@ angular.module('myBiApp')
         });
     }
     
+    function findThemeKey(obj, value) {
+        var key;
+        
+        _.each(_.keys(obj), function(k) {
+           if(obj[k] === value) {
+               key = k;
+           } 
+        });
+        return parseInt(key);
+    }
+    
     function setPersonalization() {
+        console.log('Main - Set Localstorage theme');
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
                 var personalization = [];
                 personalization[response.data.favorite - 1] = 'favoriteReports'; 
                 personalization[response.data.mostViewed - 1] = 'mostViewedReports';
                 personalization[response.data.recommended - 1] = 'recentViewedReports';
+                
+                $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                $scope.userTheme = $localStorage.userTheme;
+                $localStorage.personalization = personalization;
+                $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 console.log(personalization);
                 $scope.reportPriorityList = personalization;
                 $scope.reportPanelList = [];
@@ -203,6 +227,9 @@ angular.module('myBiApp')
             } else {
                 $scope.reportPriorityList = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                 $scope.reportPanelList = [];
+                $localStorage.userTheme = 'default';
+                $scope.userTheme = $localStorage.userTheme;
+                $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList);
             }
         });
     }

@@ -15,7 +15,8 @@ angular.module('adminPageApp')
         'selectedlevel': 0,
         'selectedgroup': 0
     }];
-
+    $scope.oldList = [];
+    $scope.deletedLevelAndGroupIds = [];
     $scope.updatefields = true;
     $scope.progress = false;
     $scope.saveText = '';
@@ -65,7 +66,7 @@ angular.module('adminPageApp')
     .finally(function () {
         getReportLevelGroup.then(function (response) {
             $scope.levelGroup = response.data;
-
+            console.log($scope.levelGroup);
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
                     'selectedlevel': parseInt(eachMap.levelId),
@@ -75,6 +76,7 @@ angular.module('adminPageApp')
             });
             if (maps.length > 0) {
                 $scope.levelGroupMaps = maps;
+                $scope.oldList = $scope.levelGroup.levelAndGroupIds;
             }
         });
     });
@@ -89,7 +91,24 @@ angular.module('adminPageApp')
     
     $scope.removeLevelGroup = function (index) {
         if (index > -1) {
+            var rowVal = {
+                'levelId': 0,
+                'groupId': 0,
+                'recommendedSeq':null
+            };
+            rowVal.levelId = $scope.levelGroupMaps[index].selectedlevel;
+            rowVal.groupId = $scope.levelGroupMaps[index].selectedgroup;
+            rowVal.recommendedSeq = $scope.levelGroupMaps[index].recommendedSeq;
+            $scope.deletedLevelAndGroupIds.push(rowVal);
             $scope.levelGroupMaps.splice(index, 1);
+            console.log($scope.levelGroupMaps.length);
+//            if($scope.levelGroupMaps.length === 0){
+//                $scope.levelGroupMaps.push({
+//                    'selectedlevel': 0,
+//                    'selectedgroup': 0,
+//                    'recommendedSeq': null
+//                });
+//            }
         }
     };
 
@@ -103,9 +122,10 @@ angular.module('adminPageApp')
         if ($scope.updatefields) {
             $http.put("BITool/admin/updateReport", $scope.items)
                 .then(function (updatedData, status, headers) {
-                    console.log(updatedData);
                     $scope.progress = false;
                     $scope.saveText = updatedData.data.message;
+                    $scope.items.id = updatedData.data.id;
+                    updateGroupsAndLevels($scope.items.id);
                 }, function (updatedData, status, headers, config) {
                     console.log('2 - ' +  updatedData);
                     $scope.progress = false;
@@ -115,9 +135,11 @@ angular.module('adminPageApp')
             var groupsandlevels = {
                 'sourceReportId': $scope.items.sourceReportId,
                 'sourceSystem': $scope.items.sourceSystem,
-                'levelAndGroupIds': []
+                'levelAndGroupIds': [],
+                'deletedLevelAndGroupIds':[],
+                'biReportId': ($scope.items.id)? $scope.items.id : null 
             };
-            for (var i = 0; i < $scope.levelGroupMaps.length; i++) {
+            for (var i = 0; i < $scope.levelGroupMaps.length; i++) {    
                 var levelGroupMap = {
                     'levelId': 0,
                     'groupId': 0
@@ -131,7 +153,11 @@ angular.module('adminPageApp')
                 }
             }
             
+            groupsandlevels.deletedLevelAndGroupIds = getDifference($scope.oldList, groupsandlevels.levelAndGroupIds);
+            
             $http.put("BITool/admin/updateReportGroupObj", groupsandlevels).then(function (resp) {
+                $scope.oldList = groupsandlevels.levelAndGroupIds;
+                $scope.deletedLevelAndGroupIds = [];
                 console.log(resp);
                 $scope.progress = false;
                 $scope.saveText = resp.data.message;
@@ -156,5 +182,29 @@ angular.module('adminPageApp')
         };
         $uibModalInstance.close(returnObj);
     };
-
+    
+    function getDifference(oldList, newList) {
+        return _.filter(oldList, function(val){
+            return !_.findWhere(newList,  val);
+        });
+    }
+    
+    function updateGroupsAndLevels(id) {
+        var getReportLevelGroup = $http.get('BITool/admin/getLevelAndGroup/' + $scope.items.sourceReportId + '/' + $scope.items.sourceSystem+ '?reportId=' + id);
+        getReportLevelGroup.then(function (response) {
+            $scope.levelGroup = response.data;
+            console.log($scope.levelGroup);
+            var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
+                return {
+                    'selectedlevel': parseInt(eachMap.levelId),
+                    'selectedgroup': eachMap.groupId,
+                    'recommendedSeq': eachMap.recommendedSeq
+                };
+            });
+            if (maps.length > 0) {
+                $scope.levelGroupMaps = maps;
+                $scope.oldList = $scope.levelGroup.levelAndGroupIds;
+            }
+        });
+    }
 });

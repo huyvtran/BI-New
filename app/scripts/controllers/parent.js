@@ -9,7 +9,7 @@
  * Parent/top Controller for all controllers.
  */
 angular.module('myBiApp')
-.controller('ParentCtrl', function ($scope, $rootScope, $http, $q, ngProgressFactory, $state, reportsMenu, commonService, userDetailsService, userAlertService, CONFIG) {
+.controller('ParentCtrl', function ($scope, $rootScope, $localStorage, $http, $q, ngProgressFactory, $state, reportsMenu, commonService, userDetailsService, userAlertService, CONFIG) {
     /**
      * @ngdoc property
      * @name biGroup
@@ -25,22 +25,41 @@ angular.module('myBiApp')
     $scope.showList = true;
     $scope.mainState = $state;
     $scope.setLoading(true);
-    $scope.badge = '0%';
+    $scope.reportAccess = true;
+    $scope.scrollVariable = false
     
-    /**
-     *Update my level indication
-     */
-    $scope.badgePercentage = {
-        'Bronze': '25%',
-        'Silver': '50%',
-        'Gold': '75%',
-        'Platinum': '100%'
-    };
-
+    $scope.$on('reportAccessFlag', function(event) {
+        console.log('false');
+        $scope.reportAccess = false;
+    });
+    
+    $scope.$on('myLevelIndication', function(event, value) {
+        console.log('Level here!!!')
+        $localStorage.myLevel = value
+        $scope.myLevel = $localStorage.myLevel;
+    });
+    
+    $scope.$on('myThemeSettings', function(event, theme, personalization){
+        console.log('Theme here!!!')
+        $localStorage.userTheme = theme;
+        $localStorage.personalization = personalization;
+        $scope.userTheme = $localStorage.userTheme;
+    });
+    
     userDetailsService.userPromise.then(function (userObject) {
         $scope.userObject = userObject[0];
+        
+        if($localStorage.myLevel) {
+            $scope.myLevel = $localStorage.myLevel;
+        } else {
+            console.log('no local');
+            setUserLevel($scope.userObject);
+        }
+        
         $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
-        $scope.badge = $scope.badgePercentage[$scope.userObject.userinfo.badge];
+        /**
+         * Update my level indication
+         */
         var userRoleDetailsUrl = commonService.prepareUserRoleDetailsUrl($scope.userObject.emcLoginName);
         
         $q.all([$http.get(userRoleDetailsUrl), reportsMenu.all()])
@@ -53,7 +72,6 @@ angular.module('myBiApp')
         var defer = $q.defer();
 
         userDetailsService.userPromise.then(function (userObject) {
-
             var url;
 
             if ($scope.searchin === 'persona') {
@@ -85,18 +103,23 @@ angular.module('myBiApp')
     $scope.submitSearch = function () {
         if ($scope.searchText) {
             $scope.model.isMinimised = true;
+            
             userDetailsService.userPromise.then(function (response) {
                 var addSearchTermUrl = commonService.prepareAddSearchTermUrl();
                 var postObj = {
                     'searchString': $scope.searchText,
-                    'searchFilter': $scope.searchFilter,
                     'userName': response[0].emcLoginName
                 };
-                console.log(postObj);
                 $http.post(addSearchTermUrl, postObj);
             });
+                
             $scope.chevron = false;
-            $state.go('search', {'searchText': $scope.searchText, 'persona': ($scope.searchin === 'persona') ? 'Y' : 'N', 'searchFilter': $scope.searchFilter});
+            
+            if($scope.searchFilter) {
+                $state.go('search', {'searchText': $scope.searchText, searchfilter:{'filter':$scope.searchFilter.id}, 'persona': ($scope.searchin === 'persona') ? 'Y' : 'N'});
+            } else {
+                $state.go('search', {'searchText': $scope.searchText, searchfilter:{'filter':null}, 'persona': ($scope.searchin === 'persona') ? 'Y' : 'N'});
+            } 
         }
     };
 
@@ -111,7 +134,6 @@ angular.module('myBiApp')
     });
 
     //?:embed=yes&:toolbar=no
-
     $scope.updateShowlist = function (boolValue) {
         $scope.showList = boolValue;
     };
@@ -127,6 +149,21 @@ angular.module('myBiApp')
     $scope.$on('emptySearchText', function (/*event, next, current, error*/) {
         $scope.searchText = '';
     });
+    
+    function setUserLevel(usrObj) {
+        if (usrObj.userinfo.badge === 'Bronze') {
+            $scope.myLevel = 'bronze-level';
+        } else if (usrObj.userinfo.badge === 'Silver') {
+            $scope.myLevel = 'silver-level';
+        } else if (usrObj.userinfo.badge === 'Gold') {
+            $scope.myLevel = 'gold-level';
+        } else if (usrObj.userinfo.badge === 'Platinum') {
+            $scope.myLevel = 'platinum-level';
+        }
+        console.log('Parent - Set Localstorage level');
+        $localStorage.myLevel = $scope.myLevel
+        $scope.$emit('myLevelIndication', $scope.myLevel);
+    }
 
 }).directive('errSrc', function () {
     return {

@@ -152,7 +152,8 @@ angular.module('myBiApp')
                             report.iconClass = 'class-bobj';
                         } else if (report.type.toLowerCase() === 'tableau') {
                             if (report.refreshStatus === undefined || report.refreshStatus === 'N') {
-                                report.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(report.functionalArea) + '/' + report.sourceReportId + '.png';
+                                var sourceImg = (report.sourceSystem.toString().indexOf('Enterprise') >= 0) ? report.sourceReportId + "_ent" : report.sourceReportId;
+                                report.reportLinkImg = CONFIG.tableauImagesPath + encodeURIComponent(report.functionalArea) + '/' + sourceImg + '.png';
                             }
                         }
                     }

@@ -150,6 +150,15 @@ angular.module('adminPageApp')
     /**
      * Add report Functions 
      */
+    
+    //Help pop over object
+    $scope.popAdditionalInfo = {
+        content : 'Use Hexadecimal Color Codes here. eg: #000000 for black color tile',
+        title : 'Please Note:',
+        placement:'top',
+        class:'additiona-info'
+    };
+    
     userDetailsService.userPromise.then(function(userObj){
         userObj = userObj[0];
         $scope.reportPersona = userObj.userinfo.group[0].groupId;

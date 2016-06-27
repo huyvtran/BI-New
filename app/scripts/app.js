@@ -17,6 +17,7 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
+    'ngStorage',
     'ngTouch',
     'nvd3',
     'ui.bootstrap',
@@ -40,7 +41,12 @@ angular
         fakeDelay: 800,
         //baseUrl: 'http://bipdurdev01.corp.emc.com/',
         baseUrl: '/'
-    }
+    },
+    userTheme: {
+        '0':'default',  
+        '1':'white',
+        '2':'black'
+    } 
 })
 .config(function (CONFIG, $provide) {
     //Only load mock data, if config says so
@@ -176,6 +182,9 @@ angular
                 displayName: 'Search',
                 subCaption: '',
                 classIcon: 'search-header-icon',
+            },
+            params: {
+                'searchfilter':null
             },
             ncyBreadcrumb: {
                 label: 'Search'

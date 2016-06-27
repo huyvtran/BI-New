@@ -55,14 +55,14 @@
     <div class="container">
         <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
             <div class="navbar-brand col-md-3 col-lg-3 col-sm-3">
-                <a class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft">
+                <a class="navbar-minimalize">
                     <!--span class="emc-logo">x</span -->
-                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    <span class="glyphicon glyphicon-menu-hamburger" ng-hide="true"></span>
                 </a>
                 <a href="../" style="display:inline-table; width:30px;">
                     <!--span class="emc-logo">x</span -->
                     <img class="logo"  src="images/EMCLogo.png"/>
-                    <span ng-show="!toggleLeft" class="portal-name">INSIGHTS</span>
+                    <span ng-show="!toggleLeft" class="portal-name" id="insights">INSIGHTS</span>
                 </a>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-6">
@@ -122,9 +122,9 @@
                         </a>
 
                         <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
-                            <li><a ui-sref="profile">Profile</a></li>
+                            <li><a href="../#/profile">My Profile</a></li>
                             <li class="divider"></li>
-                            <li><a href="/">Admin</a></li>
+                            <li><a href="../admin/">Administration</a></li>
                         </ul>
                     </span>
                 </div>
@@ -261,11 +261,11 @@
                                 <h2>
                                     <a class="btn dropdown-toggle nav-select-dropdown" data-toggle="dropdown" href="javascript:;">
                                         <span ng-show="state.current.name === 'contents'|| state.current.name === 'external'">Content</span>
-                                        <span ng-hide="state.current.name === 'contents'|| state.current.name === 'external'">Administrator</span>
+                                        <span ng-hide="state.current.name === 'contents'|| state.current.name === 'external'">Administration</span>
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a ui-sref="contents">Contents</a></li>
+                                        <li><a ui-sref="contents">Content</a></li>
                                         <li><a ui-sref="administration.list">Administration</a></li>
                                     </ul>
                                 </h2>
@@ -304,8 +304,8 @@
                                             <a ui-sref="administration.list.recommended">Recommended Reports</a>
                                         </li>
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
-                                            <a ui-sref="administration.list.manageExternal">Manage External Contents</a>
-                                        </li>                                   
+                                            <a ui-sref="administration.list.manageExternal">Manage External Content</a>
+                                        </li>                                 
                                     </ul>
                                 </span>
                             </li>
@@ -319,9 +319,11 @@
                     <div class="wrapper wrapper-content" ui-view></div>
                 </div>
             </div>
-            <div class="footer">
-                <div class="pull-right visible-md visible-lg hidden-sm hidden-xs">
-                    <a href="../#/faq">FAQ</a> | <a target="_blank" href="../doc/Insights%20BUAdmin%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
+            <div class="row footer-row">
+                <div class="footer">
+                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                        <a href="../#/faq">FAQ</a> | <a target="_blank" href="../doc/Insights%20BUAdmin%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
+                    </div>
                 </div>
             </div>
             <!-- end main content -->

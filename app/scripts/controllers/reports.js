@@ -8,12 +8,14 @@
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('ReportsCtrl', function ($scope, $state, $q, $http, $sce, commonService, reportsFactory, userDetailsService) {
+.controller('ReportsCtrl', function ($scope, $localStorage, $state, $q, $http, $sce, commonService, reportsFactory, userDetailsService, CONFIG) {
     $scope.setLoading(true);
     $scope.access = {};
     $scope.access.limitTo = 6;
     $scope.access.subGroupItemsId = 0;
-
+    
+    setUserPreference();
+    
     $scope.setListView = function (status) {
         if ($scope.groupsData) {
             $scope.groupsData.service['listView'] = status;
@@ -45,7 +47,8 @@ angular.module('myBiApp')
                     'pesonaError': userObject[0].personaInfo.message,
                     'rr': true
                 };
-            } else {
+            } else {  
+                setUserLevel(userObject[0]);
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
@@ -154,7 +157,60 @@ angular.module('myBiApp')
             return false;
         }
     };
+    
+    function setUserLevel(usrObj) {
+        if(!$localStorage.myLevel) {
+            console.log('Reprots IF - No Localstorage level');
+            if (usrObj.userinfo.badge === 'Bronze') {
+                $scope.myLevel = 'bronze-level';
+            } else if (usrObj.userinfo.badge === 'Silver') {
+                $scope.myLevel = 'silver-level';
+            } else if (usrObj.userinfo.badge === 'Gold') {
+                $scope.myLevel = 'gold-level';
+            } else if (usrObj.userinfo.badge === 'Platinum') {
+                $scope.myLevel = 'platinum-level';
+            }
 
+            $localStorage.myLevel = $scope.myLevel
+            $scope.$emit('myLevelIndication', $scope.myLevel);
+        } else {
+            console.log('Reports ELSE - Yes Localstorage level');
+            $scope.myLevel = $localStorage.myLevel;
+            $scope.$emit('myLevelIndication', $scope.myLevel);
+        }
+    }
+    
+    function setUserPreference() {
+        var personalization = [];
+        if(!$localStorage.userTheme || !$localStorage.personalization) {
+            console.log('Reports IF - No Localstorage theme');
+            $scope.setLoading(true);
+            $http.get('BITool/home/getUserPersonalization').then(function (response) {
+                if(response.data) {
+                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+
+                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                    $scope.userTheme = $localStorage.userTheme;
+                    $localStorage.personalization = personalization;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                } else {
+                    $localStorage.userTheme = 'default';
+                    personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    $scope.userTheme = $localStorage.userTheme;
+                    $localStorage.personalization = personalization;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                }
+            });
+            $scope.setLoading(false);
+        } else {
+            console.log('Reports ELSE - Yes Localstorage theme');
+            $scope.userTheme = $localStorage.userTheme;
+            personalization = $localStorage.personalization;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+        }
+    } 
 })
 .filter('filterReports', function () {
     return function (items, levelId) {

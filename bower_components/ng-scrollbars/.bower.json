@@ -36,7 +36,6 @@
     "commit": "2435cc3a74eb8ed8ceaf196f13786b7dc43b73f5"
   },
   "_source": "https://github.com/iominh/ng-scrollbars.git",
-  "_target": "^0.0.10",
-  "_originalSource": "ng-scrollbars",
-  "_direct": true
+  "_target": "~0.0.10",
+  "_originalSource": "ng-scrollbars"
 }

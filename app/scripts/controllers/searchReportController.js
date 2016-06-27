@@ -16,7 +16,6 @@ angular.module('myBiApp')
     };
     
     $scope.searchFilter = '';
-    
     $scope.isCloudVisible = false;
 
     popularSearchService.then(function (r) {

@@ -7,6 +7,7 @@ angular.module('adminPageApp').controller('AuditCtrl',function($scope, $q,$uibMo
     $scope.messageAlert= "";
     $scope.messageAlertError='';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     $scope.popup1 = {
         opened: false,
@@ -49,8 +50,9 @@ angular.module('adminPageApp').controller('AuditCtrl',function($scope, $q,$uibMo
             {name: 'type',displayName:'Type' ,width:'10%', cellToolTip:true},
             {name: 'reportName',displayName:'Report Name' ,width:'15%', cellToolTip:true},
             {name: 'userName',displayName:'User Name' ,width:'15%', cellToolTip:true},
-            {name: 'groupName',displayName:'Persona' ,width:'15%', cellToolTip:true},
-            {name: 'owner',displayName:'owner' ,width:'15%', cellToolTip:true}
+            {name: 'userPersona',displayName:'User Persona' ,width:'15%', cellToolTip:true},
+            {name: 'owner',displayName:'Owner' ,width:'15%', cellToolTip:true},
+            {name: 'groupName',displayName:'Audit Persona' ,width:'15%', cellToolTip:true}
         ];
     }
 
