@@ -25,22 +25,18 @@ angular.module('myBiApp')
     $scope.showList = true;
     $scope.mainState = $state;
     $scope.setLoading(true);
-    $scope.reportAccess = true;
     $scope.scrollVariable = false
     
-    $scope.$on('reportAccessFlag', function(event) {
-        console.log('false');
-        $scope.reportAccess = false;
+    $scope.$on('bredCrumValue', function(event, value){
+        $scope.pageBreadCrum = value
     });
     
     $scope.$on('myLevelIndication', function(event, value) {
-        console.log('Level here!!!')
         $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
     $scope.$on('myThemeSettings', function(event, theme, personalization){
-        console.log('Theme here!!!')
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
         $scope.userTheme = $localStorage.userTheme;
@@ -52,7 +48,6 @@ angular.module('myBiApp')
         if($localStorage.myLevel) {
             $scope.myLevel = $localStorage.myLevel;
         } else {
-            console.log('no local');
             setUserLevel($scope.userObject);
         }
         
@@ -160,7 +155,6 @@ angular.module('myBiApp')
         } else if (usrObj.userinfo.badge === 'Platinum') {
             $scope.myLevel = 'platinum-level';
         }
-        console.log('Parent - Set Localstorage level');
         $localStorage.myLevel = $scope.myLevel
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }

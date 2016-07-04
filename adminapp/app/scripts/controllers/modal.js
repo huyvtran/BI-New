@@ -66,7 +66,6 @@ angular.module('adminPageApp')
     .finally(function () {
         getReportLevelGroup.then(function (response) {
             $scope.levelGroup = response.data;
-            console.log($scope.levelGroup);
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
                     'selectedlevel': parseInt(eachMap.levelId),
@@ -101,14 +100,6 @@ angular.module('adminPageApp')
             rowVal.recommendedSeq = $scope.levelGroupMaps[index].recommendedSeq;
             $scope.deletedLevelAndGroupIds.push(rowVal);
             $scope.levelGroupMaps.splice(index, 1);
-            console.log($scope.levelGroupMaps.length);
-//            if($scope.levelGroupMaps.length === 0){
-//                $scope.levelGroupMaps.push({
-//                    'selectedlevel': 0,
-//                    'selectedgroup': 0,
-//                    'recommendedSeq': null
-//                });
-//            }
         }
     };
 
@@ -127,7 +118,6 @@ angular.module('adminPageApp')
                     $scope.items.id = updatedData.data.id;
                     updateGroupsAndLevels($scope.items.id);
                 }, function (updatedData, status, headers, config) {
-                    console.log('2 - ' +  updatedData);
                     $scope.progress = false;
                     $scope.saveText = updatedData.data.message;
                 });
@@ -158,11 +148,9 @@ angular.module('adminPageApp')
             $http.put("BITool/admin/updateReportGroupObj", groupsandlevels).then(function (resp) {
                 $scope.oldList = groupsandlevels.levelAndGroupIds;
                 $scope.deletedLevelAndGroupIds = [];
-                console.log(resp);
                 $scope.progress = false;
                 $scope.saveText = resp.data.message;
             }, function (resp) {
-                console.log('2 - ' +  resp);
                 $scope.progress = false;
                 $scope.saveText = resp.data.message;;
             });
@@ -193,7 +181,6 @@ angular.module('adminPageApp')
         var getReportLevelGroup = $http.get('BITool/admin/getLevelAndGroup/' + $scope.items.sourceReportId + '/' + $scope.items.sourceSystem+ '?reportId=' + id);
         getReportLevelGroup.then(function (response) {
             $scope.levelGroup = response.data;
-            console.log($scope.levelGroup);
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
                     'selectedlevel': parseInt(eachMap.levelId),

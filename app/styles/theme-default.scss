@@ -20,23 +20,23 @@
     .tiles-list-view {
         .report-tile {
             &:nth-child(even) {
-                background-color: #f5f5f5;
+                background-color: #F5F5F5;
                 .wrap-reportname {
-                    background: #f5f5f5;
+                    background: #F5F5F5;
                 }
             }
         }
     }    
 }
 .default-bg {
-    background-color: #ffffff;//#f5f5f5
+    background-color: #ffffff;//#E8E8E8
     padding-top:10px;
     .tiles-list-view {
         .report-tile {
             &:nth-child(even) {
-                background-color: #f5f5f5;
+                background-color: #F5F5F5;//#F5F5F5
                 .wrap-reportname {
-                    background: #f5f5f5;
+                    background: #F5F5F5;
                 }
             }
         }
@@ -91,7 +91,7 @@
         background: #333333;
     }
     .table-hover > tbody > tr:hover {
-        /* background-color: #f5f5f5; */
+        /* background-color: #E8E8E8; */
     }
 }
 .black-theme, .default-theme {
@@ -104,11 +104,11 @@
 }
 .white-theme {
     #wrapper {
-        background: #f5f5f5 !important;
+        background: #E8E8E8 !important;
         .navbar-default {
-            background: #f5f5f5 !important;
+            background: #E8E8E8 !important;
             .nav > li {
-                background-color : #f5f5f5 !important;
+                background-color : #E8E8E8 !important;
                 a {
                     color: #000 !important;
                 }
@@ -119,19 +119,19 @@
         }
         #side-menu li.reports:hover {
             .tree-view ul li:hover {
-                background:#f5f5f5 !important;
+                background:#E8E8E8 !important;
             }
         }
     }
     .nav > li:hover {
         &.active div[data-angular-treeview] {
-            background-color: #f5f5f5 !important;
-            outline-color: #f5f5f5;
+            background-color: #E8E8E8 !important;
+            outline-color: #E8E8E8;
             ul {
-                outline-color: #f5f5f5;
+                outline-color: #E8E8E8;
             }
             ul li:hover {
-                background: #f5f5f5 !important;
+                background: #E8E8E8 !important;
             }
             ul li{
                 a:hover{

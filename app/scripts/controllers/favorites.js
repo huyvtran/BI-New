@@ -10,9 +10,10 @@
 angular.module('myBiApp')
 .controller('favoritesCtrl', function ($scope, $localStorage, reportsFactory, userDetailsService, $http, CONFIG) {
     var favoriteService = new reportsFactory.reportsFactoryFunction('favorite');
+    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> My Favorites';
+    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
     
     if(!$localStorage.myLevel) {
-        console.log('Favorite IF - No Localstorage level');
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
@@ -28,7 +29,6 @@ angular.module('myBiApp')
             $scope.$emit('myLevelIndication', $scope.myLevel);
         });    
     } else {
-        console.log('Favorite ELSE - Yes Localstorage level');
         $scope.myLevel = $localStorage.myLevel;
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
@@ -63,7 +63,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Favorite IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -85,7 +84,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Favorite ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);

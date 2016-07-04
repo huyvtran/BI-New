@@ -92,9 +92,6 @@ angular.module('adminPageApp')
         });
         
         modalInstance.result.then(function (returnObj) {
-            //var returnItems = returnObj.items;
-            //defer.resolve(returnItems);
-            console.log('Modal');
             $scope.myData.data = [];
             $scope.updateReportForm();
         }, function () {
@@ -116,7 +113,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('All / Deployed');
         $scope.updateReportForm();
     });
     
@@ -125,7 +121,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('Perosna Id');
         $scope.updateReportForm();
     });
     
@@ -147,7 +142,6 @@ angular.module('adminPageApp')
         } else {
             var url = 'BITool/admin/externalrepo/searchreports/' + offset + '/20?searchText=' + $scope.searchTextValue +'&displayType=' + $scope.displayType;
         }
-        console.log(url);
         
         var httpPromise = $http({
             'url': url,

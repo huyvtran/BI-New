@@ -1,6 +1,6 @@
 <!--<div class="col-sm-12 col-xsd-12 col-md-12 col-lg-12 col-xl-12" style="height:40px;" >
     <div class="pull-right tile-list-inner" ng-hide="$stateParams.levelId && $stateParams.reportId">
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:searchTile == false}" ng-click="setTileView(false)"><span class="glyphicon glyphicon-align-left"></span></a>
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:searchTile == true}" ng-click="setTileView(true)"><span class="glyphicon glyphicon-th-large"></span></a>
+        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:groupsData.service['listView']}" ng-click="setListView(true)"><span class="glyphicon glyphicon-th-large"></span></a>
+        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:!groupsData.service['listView']}" ng-click="setListView(false)"><span class="glyphicon glyphicon-align-left"></span></a>
     </div>
 </div>--> <load-tiles-infinite-search tiles-data="groupsData" keyword="{{mainState.$current.data.subCaption}}" user-login-name="{{userObject.emcLoginName}}"></load-tiles-infinite-search>

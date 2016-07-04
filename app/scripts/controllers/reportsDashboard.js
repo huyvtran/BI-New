@@ -13,12 +13,14 @@ angular.module('myBiApp')
         $scope.operationDashboardLink = reportsMenu.operationalLink;
     });
     
+    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> Operational Dashboard';
+    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+    
     setUserPreference();
     setUserLevel();
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
-            console.log('Operational IF - No Localstorage level');
             userDetailsService.userPromise.then(function (userObject) {
                 if (userObject[0].userinfo.badge === 'Bronze') {
                     $scope.myLevel = 'bronze-level';
@@ -34,7 +36,6 @@ angular.module('myBiApp')
                 $scope.$emit('myLevelIndication', $scope.myLevel);
             });    
         } else {
-            console.log('Operational ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -43,7 +44,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Operational IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -65,7 +65,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Operational ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);

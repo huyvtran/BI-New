@@ -15,7 +15,8 @@ angular.module('myBiApp')
     $scope.tableuLink = '';
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
-
+    $scope.isCollapsed = false;
+    getBreadCrumLevel($stateParams.levelId);
     $scope.getTableuLink = function () {
         return $sce.trustAsResourceUrl($scope.tableuLink);
     };
@@ -30,7 +31,6 @@ angular.module('myBiApp')
                     $http.get(reportUpdateViewed);
 
                     if (resp.data.name) {
-                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'): '';
                         $scope.reportName = resp.data.name;
                         $scope.mainState.$current.data.displayName = resp.data.name;
                         $scope.isTableu = true;
@@ -89,4 +89,25 @@ angular.module('myBiApp')
             });
         }
     };
+    
+    function getBreadCrumLevel(levelid) {
+        $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
+            if(response.data) {
+                $scope.pageBreadCrum = '';
+                var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
+                var data = response.data;
+
+                for(var i = 0; i<data.length; i++) {
+                    var url = '#/reports/'+data[i].levelId;
+                    pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
+                }
+
+                $scope.pageBreadCrum = pageBreadCrum;
+                $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+
+            } else {
+                console.log('else');
+            }
+        });
+    }
 });

@@ -13,6 +13,12 @@ angular.module('myBiApp')
     $scope.mainState.$current.data.subCaption = $stateParams.searchText;
     $scope.groupsData = {};
     
+//    $scope.setListView = function (status) {
+//        if ($scope.groupsData) {
+//            $scope.groupsData.service['listView'] = status;
+//        }
+//    }
+    
     function doSearch(text) {
         var searchfilter = ($stateParams.searchfilter && $stateParams.searchfilter.filter)? $stateParams.searchfilter.filter : '';
         var groupService = new reportsFactory.reportsFactoryFunction('search', text, $stateParams.persona, searchfilter);
@@ -34,7 +40,6 @@ angular.module('myBiApp')
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
-            console.log('Search IF - No Localstorage level');
             userDetailsService.userPromise.then(function (userObject) {
                 if (userObject[0].userinfo.badge === 'Bronze') {
                     $scope.myLevel = 'bronze-level';
@@ -50,7 +55,6 @@ angular.module('myBiApp')
                 $scope.$emit('myLevelIndication', $scope.myLevel);
             });    
         } else {
-            console.log('Search ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -59,7 +63,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Search IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -81,7 +84,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Search ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);

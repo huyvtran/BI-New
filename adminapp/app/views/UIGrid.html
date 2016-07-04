@@ -1,4 +1,7 @@
 <button type="button" ng-click="open()">Add</button>
+<span class="pull-right" ng-show="state.current.name === 'administration.list.users'">
+    <a target="_self" class="btn btn-sm btn-info" href="{{downloadLink}}" download="UserReport.csv">Download</a>
+</span>
 <span class="text-success">{{messageAlert}}</span>
 <span class="text-danger">{{messageAlertError}}</span>
 <br>

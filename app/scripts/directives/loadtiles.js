@@ -75,7 +75,8 @@ angular.module('myBiApp')
         scope: {
             tilesData: '=',
             userLoginName: '@',
-            keyword: '@'
+            keyword: '@',
+            listView: '&'
         },
         link: function postLink(scope/*, element, attrs*/) {
             scope.$watch('tilesData', function (value) {
@@ -148,7 +149,16 @@ angular.module('myBiApp')
                     element.replaceWith(ele);
                     element = ele;
 
-                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau' || scope.report.type.toLowerCase() === 'VISILUMS') /*&& scope.report.refreshStatus === 'Y'*/) {
+                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'visilums')) {
+                    if (scope.report.type.toLowerCase() === 'visilums') {
+                        scope.report.reportLinkImg = 'images/charts/Lumira.png';
+                    }
+                    template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
+                    ele = $compile(template)(scope);
+                    element.replaceWith(ele);
+                    element = ele;
+
+                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau') /*&& scope.report.refreshStatus === 'Y'*/) {
                     template = '<div class="panel-heading class-pdf"  ng-style="{\'background-image\':\'url(images/charts/loading-icon.gif)\', \'background-size\':\'auto\'}"></div>';
                     ele = $compile(template)(scope);
                     element.replaceWith(ele);
@@ -259,7 +269,7 @@ angular.module('myBiApp')
             var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl($scope.userLoginName, report.sourceReportId, report.sourceSystem, 'Persona');
             $http.get(reportUpdateViewed);
         } else {
-            url = '../BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
+            url = 'BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
         }
         $window.open(url, '_blank');
     };

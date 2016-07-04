@@ -24,8 +24,7 @@ angular.module('adminPageApp')
         $scope.gridApi = gridApi;
         //infiniteScroll functionality for adding more rows.
         gridApi.infiniteScroll.on.needLoadMoreData($scope, $scope.updateUsers);
-    }
-    ;
+    };
 
     $scope.myData = {
         enableRowSelection: true,
@@ -53,13 +52,18 @@ angular.module('adminPageApp')
     });
     
     $scope.$on('broadcastAuditGroup', function(event, personaId){
-        if (personaId) {
-            $scope.personaId = personaId;
-        } else {
-            $scope.personaId = '';
-        }
+//        if (personaId) {
+//            $scope.personaId = personaId;
+//        } else {
+//            $scope.personaId = '';
+//        }
+        (personaId) ? $scope.personaId = personaId : $scope.personaId = ''; 
         cancelPendingPromise();
         $scope.myData.data = [];
+        
+        ($scope.searchTextValue)? $scope.searchTextValue : $scope.searchTextValue = '';
+        $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue  + '&personaId=' + $scope.personaId;
+        
         $scope.updateUsers();
     });
 
@@ -113,8 +117,8 @@ angular.module('adminPageApp')
 
             defer.resolve(selectedItem);
         }, function () {
-
         });
+        
         return defer.promise;
     };
 
@@ -306,9 +310,17 @@ angular.module('adminPageApp')
         $scope.searchTextValue = searchTxt;
         cancelPendingPromise();
         $scope.myData.data = [];
+        
+        ($scope.personaId)? $scope.personaId: $scope.personaId = '';
+        $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue + '&personaId=' + $scope.personaId;
+        
         $scope.updateUsers();
     });
-
+    
+    ($scope.searchTextValue) ? $scope.searchTextValue : $scope.searchTextValue = '';
+    ($scope.personaId) ? $scope.personaId: $scope.personaId = '';
+    $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue + '&personaId=' + $scope.personaId;
+    
     $scope.updateUsers = function () {
         var offset = $scope.myData.data.length + 1;
         var promise = $q.defer();
@@ -358,7 +370,6 @@ angular.module('adminPageApp')
             $scope.messageAlert = "";
         }, 5000);
     });
-
 //end    
 });
 

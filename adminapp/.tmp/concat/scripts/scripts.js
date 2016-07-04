@@ -302,7 +302,7 @@ angular
 
 
     $httpBackend.whenGET(/allReports\/*/).respond(function(/*method, url, data*/){
-        return [200, '[{"sourceReportId":"Aa_.CIY.1N1GgHnJWNloPs8","reportName":"VPLEX EWMA Calcs","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_.CIY.1N1GgHnJWNloPs8","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"VPLEX EWMA Calcs","linkHoverInfo":"VPLEX EWMA Calcs","createdDate":"Aug 13, 2014 11:36:17 AM","updatedDate":"Aug 26, 2014 04:31:25 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ TST","viewCount":2,"id":130198,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa_MvwrrWGpHjjlbBgGlD3w","reportName":"Rights Modifications - by Object","reportType":"CrystalReport","owner":"Administrator","reportDesc":"Rights modification and Custom access level modified events are listed by object type, including user, object name, path location, event start time, event type and status.","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_MvwrrWGpHjjlbBgGlD3w","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Rights","linkTitle":"Rights Modifications - by Object","linkHoverInfo":"Rights Modifications - by Object","createdDate":"Oct 31, 2012 14:56:25 PM","updatedDate":"Oct 31, 2012 14:56:34 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Rights","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130204,"refreshStatus":"Y","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","reportName":"onlinelabiV1","reportType":"Webi","owner":"SampaR","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","linkTitle":"onlinelabiV1","linkHoverInfo":"onlinelabiV1","createdDate":"Feb 04, 2013 22:32:15 PM","updatedDate":"Feb 05, 2013 01:16:38 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130188,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","reportName":"Income Statement","reportType":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","linkTitle":"Income Statement","linkHoverInfo":"Income Statement","createdDate":"Oct 31, 2011 14:41:07 PM","updatedDate":"Oct 31, 2011 14:41:07 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130205,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa9cWof0tYFJt967esggoAc","reportName":"GSC Accreditation","reportType":"Webi","owner":"SampaR","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9cWof0tYFJt967esggoAc","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Proven","linkTitle":"GSC Accreditation","linkHoverInfo":"GSC Accreditation","createdDate":"Aug 24, 2015 15:54:49 PM","updatedDate":"Aug 27, 2015 13:00:08 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Curriculum/Proven","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130193,"refreshStatus":"N","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"Aa9RluHR5DFNpT0gx4lG0AI","reportName":"MSPChargesbyBU PS Drill Down_Total [2]","reportType":"Webi","owner":"Administrator","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9RluHR5DFNpT0gx4lG0AI","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"MSPChargesbyBU PS Drill Down_Total [2]","linkHoverInfo":"MSPChargesbyBU PS Drill Down_Total [2]","createdDate":"Dec 11, 2014 05:44:12 AM","updatedDate":"Dec 11, 2014 05:48:06 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130216,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","reportName":"Training Unit Balance - APJ","reportType":"Webi","owner":"accrajaa","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","linkTitle":"Training Unit Balance - APJ","linkHoverInfo":"Training Unit Balance - APJ","createdDate":"Jan 09, 2015 13:18:25 PM","updatedDate":"Jan 09, 2015 13:18:26 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130217,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"Aab.BpI8FhhIqXrU5AL0L.k","reportName":"Calculated Member Cross-tab Chart","reportType":"CrystalReport","owner":"Administrator","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aab.BpI8FhhIqXrU5AL0L.k","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Feature Samples","linkTitle":"Calculated Member Cross-tab Chart","linkHoverInfo":"Calculated Member Cross-tab Chart","createdDate":"Oct 31, 2011 14:39:59 PM","updatedDate":"Oct 31, 2011 14:39:59 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Feature Samples","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130218,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aab5eW48M6RPgqjgEl8gu0Y","reportName":"Curriculum_ESC","reportType":"Webi","owner":"ruchl","reportDesc":"test sm","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aab5eW48M6RPgqjgEl8gu0Y","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Inventory","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"Curriculum_ESC","linkHoverInfo":"Curriculum_ESC","createdDate":"Aug 09, 2012 17:11:30 PM","updatedDate":"Aug 09, 2012 17:11:30 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Inventory/Ed Services Rpt","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130219,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"AaBAl1iYpdZGkeod0_sL5Wo","reportName":"FGAC_TEST_040714","reportType":"Webi","owner":"ruchl","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaBAl1iYpdZGkeod0_sL5Wo","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"FGAC_TEST_040714","linkHoverInfo":"FGAC_TEST_040714","createdDate":"Apr 07, 2014 17:00:57 PM","updatedDate":"May 09, 2014 12:21:59 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Administration/Ed Services Rpt","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaCmCd..VvNEjOGLZx7ZKPs","reportName":"PAS Milestone Invoice Forecast Results","reportType":"Webi","owner":"Administrator","reportDesc":"Full Result test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaCmCd..VvNEjOGLZx7ZKPs","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"PAS Milestone Invoice Forecast Results","linkHoverInfo":"PAS Milestone Invoice Forecast Results","createdDate":"Mar 06, 2013 12:34:36 PM","updatedDate":"Apr 23, 2014 09:37:58 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130222,"refreshStatus":"Y","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"AaDCB93DC29OgSF8GVsnyGw","reportName":"Summarized Documents","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaDCB93DC29OgSF8GVsnyGw","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"Summarized Documents","linkHoverInfo":"Summarized Documents","createdDate":"Oct 01, 2015 05:49:18 AM","updatedDate":"Dec 31, 2015 01:46:38 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","viewCount":22,"id":130207,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"AaEgTNTR43tAu1Sc12GcW1Q","reportName":"ITSM Dashboard_TEST.xlf","reportType":"XL.XcelsiusEnterprise","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaEgTNTR43tAu1Sc12GcW1Q","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"ITSM Dashboard_TEST.xlf","linkHoverInfo":"ITSM Dashboard_TEST.xlf","createdDate":"Jul 25, 2014 05:55:03 AM","updatedDate":"Sep 24, 2014 08:19:36 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaFP5hAmL1ZNg6GGZo1c4G0","reportName":"EWMA Impact Event Rate by Cause B","reportType":"Webi","owner":"Administrator","reportDesc":"Slide 5-10. Used for publication Pupose","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaFP5hAmL1ZNg6GGZo1c4G0","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"EWMA Impact Event Rate by Cause B","linkHoverInfo":"EWMA Impact Event Rate by Cause B","createdDate":"Dec 08, 2014 05:56:03 AM","updatedDate":"Dec 08, 2014 05:56:05 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ TST","viewCount":2,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaGqUsk0WyRKvPzKhabbkPQ","reportName":"Solve Task Approval","reportType":"Webi","owner":"bosew","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGqUsk0WyRKvPzKhabbkPQ","functionalArea":"Global Services","functionalAreaLvl1":"SOLVE","functionalAreaLvl2":null,"linkTitle":"Solve Task Approval","linkHoverInfo":"Solve Task Approval","createdDate":"Jan 19, 2016 08:42:37 AM","updatedDate":"Jan 19, 2016 08:42:43 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Global Services/SOLVE","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","reportName":"Objects - Events and Details - by User and Event Type","reportType":"CrystalReport","owner":"Administrator","reportDesc":"This report retrieves event data and details for any object in the system.  Parameters include event start date range, object folder path, user, event type and object type.  The data is grouped by User and event type, then start time and event ID.","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","linkTitle":"Objects - Events and Details - by User and Event Type","linkHoverInfo":"Objects - Events and Details - by User and Event Type","createdDate":"Oct 31, 2012 14:56:23 PM","updatedDate":"Oct 31, 2012 14:56:32 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130225,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"AahlPTOs679PicyffaFp4BM","reportName":"EWMA Rate, Dur, Avail by Product","reportType":"Webi","owner":"Administrator","reportDesc":"Slide 18 test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product","createdDate":"Sep 30, 2015 11:01:21 AM","updatedDate":"Sep 30, 2015 11:01:28 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","viewCount":37,"id":130221,"refreshStatus":"N","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"AaI4bMWN9RBBrU3YjxscCGI","reportName":"Users - Most Active - by Refresh Events","reportType":"CrystalReport","owner":"Administrator","reportDesc":"This report summarizes the top 10 most active users based on refresh events for the specified date range.  All users are listed thereafter with their refresh event count.","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaI4bMWN9RBBrU3YjxscCGI","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Users","linkTitle":"Users - Most Active - by Refresh Events","linkHoverInfo":"Users - Most Active - by Refresh Events","createdDate":"Oct 31, 2012 14:56:25 PM","updatedDate":"Oct 31, 2012 14:56:33 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Users","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaisS.t.93NGhd4E2ld3Gv4","reportName":"EAS Time Sheet Report - JAPAN","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaisS.t.93NGhd4E2ld3Gv4","functionalArea":"Global Services","functionalAreaLvl1":"EAS","functionalAreaLvl2":null,"linkTitle":"EAS Time Sheet Report - JAPAN","linkHoverInfo":"EAS Time Sheet Report - JAPAN","createdDate":"Aug 22, 2012 09:37:08 AM","updatedDate":"Aug 22, 2012 09:37:09 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Global Services/EAS","systemDescription":"BAAAS BOBJ TST","viewCount":10,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AajPCVE.bA1Nm_S_kOjKHTg","reportName":"Interactive Sort Detail","reportType":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AajPCVE.bA1Nm_S_kOjKHTg","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Feature Samples","linkTitle":"Interactive Sort Detail","linkHoverInfo":"Interactive Sort Detail","createdDate":"Oct 31, 2011 14:40:13 PM","updatedDate":"Oct 31, 2011 14:40:13 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Feature Samples","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null}]'];
+        return [200, '[{"sourceReportId":"Aa_.CIY.1N1GgHnJWNloPs8","reportName":"VPLEX EWMA Calcs","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_.CIY.1N1GgHnJWNloPs8","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"VPLEX EWMA Calcs","linkHoverInfo":"VPLEX EWMA Calcs","createdDate":"Aug 13, 2014 11:36:17 AM","updatedDate":"Aug 26, 2014 04:31:25 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ TST","viewCount":2,"id":130198,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa_MvwrrWGpHjjlbBgGlD3w","reportName":"Rights Modifications - by Object","reportType":"CrystalReport","owner":"Administrator","reportDesc":"Rights modification and Custom access level modified events are listed by object type, including user, object name, path location, event start time, event type and status. Report ID","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_MvwrrWGpHjjlbBgGlD3w","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Rights","linkTitle":"Rights Modifications - by Object","linkHoverInfo":"Rights Modifications - by Object","createdDate":"Oct 31, 2012 14:56:25 PM","updatedDate":"Oct 31, 2012 14:56:34 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Rights","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130204,"refreshStatus":"Y","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","reportName":"onlinelabiV1","reportType":"Webi","owner":"SampaR","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","linkTitle":"onlinelabiV1","linkHoverInfo":"onlinelabiV1","createdDate":"Feb 04, 2013 22:32:15 PM","updatedDate":"Feb 05, 2013 01:16:38 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130188,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","reportName":"Income Statement","reportType":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","linkTitle":"Income Statement","linkHoverInfo":"Income Statement","createdDate":"Oct 31, 2011 14:41:07 PM","updatedDate":"Oct 31, 2011 14:41:07 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130205,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aa9cWof0tYFJt967esggoAc","reportName":"GSC Accreditation","reportType":"Webi","owner":"SampaR","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9cWof0tYFJt967esggoAc","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Proven","linkTitle":"GSC Accreditation","linkHoverInfo":"GSC Accreditation","createdDate":"Aug 24, 2015 15:54:49 PM","updatedDate":"Aug 27, 2015 13:00:08 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Curriculum/Proven","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130193,"refreshStatus":"N","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"Aa9RluHR5DFNpT0gx4lG0AI","reportName":"MSPChargesbyBU PS Drill Down_Total [2]","reportType":"Webi","owner":"Administrator","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9RluHR5DFNpT0gx4lG0AI","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"MSPChargesbyBU PS Drill Down_Total [2]","linkHoverInfo":"MSPChargesbyBU PS Drill Down_Total [2]","createdDate":"Dec 11, 2014 05:44:12 AM","updatedDate":"Dec 11, 2014 05:48:06 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130216,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","reportName":"Training Unit Balance - APJ","reportType":"Webi","owner":"bosew","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","linkTitle":"Training Unit Balance - APJ","linkHoverInfo":"Training Unit Balance - APJ","createdDate":"Jan 09, 2015 13:18:25 PM","updatedDate":"May 09, 2016 10:42:28 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130217,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"Aab.BpI8FhhIqXrU5AL0L.k","reportName":"Calculated Member Cross-tab Chart","reportType":"CrystalReport","owner":"Administrator","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aab.BpI8FhhIqXrU5AL0L.k","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Feature Samples","linkTitle":"Calculated Member Cross-tab Chart","linkHoverInfo":"Calculated Member Cross-tab Chart","createdDate":"Oct 31, 2011 14:39:59 PM","updatedDate":"Oct 31, 2011 14:39:59 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Feature Samples","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130218,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"Aab5eW48M6RPgqjgEl8gu0Y","reportName":"Curriculum_ESC","reportType":"Webi","owner":"ruchl","reportDesc":"test sm","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aab5eW48M6RPgqjgEl8gu0Y","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Inventory","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"Curriculum_ESC","linkHoverInfo":"Curriculum_ESC","createdDate":"Aug 09, 2012 17:11:30 PM","updatedDate":"Aug 09, 2012 17:11:30 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Inventory/Ed Services Rpt","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130219,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"AaBAl1iYpdZGkeod0_sL5Wo","reportName":"FGAC_TEST_040714","reportType":"Webi","owner":"ruchl","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaBAl1iYpdZGkeod0_sL5Wo","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"FGAC_TEST_040714","linkHoverInfo":"FGAC_TEST_040714","createdDate":"Apr 07, 2014 17:00:57 PM","updatedDate":"May 09, 2014 12:21:59 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Education Services and Dev/Administration/Ed Services Rpt","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130228,"refreshStatus":"N","tabbedViews":"N","recommended":null},{"sourceReportId":"AaCmCd..VvNEjOGLZx7ZKPs","reportName":"PAS Milestone Invoice Forecast Results","reportType":"Webi","owner":"Administrator","reportDesc":"Full Result test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaCmCd..VvNEjOGLZx7ZKPs","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"PAS Milestone Invoice Forecast Results","linkHoverInfo":"PAS Milestone Invoice Forecast Results","createdDate":"Mar 06, 2013 12:34:36 PM","updatedDate":"Apr 23, 2014 09:37:58 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130222,"refreshStatus":"Y","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"AaDCB93DC29OgSF8GVsnyGw","reportName":"Summarized Documents","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaDCB93DC29OgSF8GVsnyGw","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"Summarized Documents","linkHoverInfo":"Summarized Documents","createdDate":"Oct 01, 2015 05:49:18 AM","updatedDate":"Dec 31, 2015 01:46:38 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","viewCount":22,"id":130207,"refreshStatus":"N","tabbedViews":"Y","recommended":"N"},{"sourceReportId":"AaEgTNTR43tAu1Sc12GcW1Q","reportName":"ITSM Dashboard_TEST.xlf","reportType":"XL.XcelsiusEnterprise","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaEgTNTR43tAu1Sc12GcW1Q","functionalArea":"Backup","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"ITSM Dashboard_TEST.xlf","linkHoverInfo":"ITSM Dashboard_TEST.xlf","createdDate":"Jul 25, 2014 05:55:03 AM","updatedDate":"Sep 24, 2014 08:19:36 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Backup","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130266,"refreshStatus":"N","tabbedViews":"N","recommended":null},{"sourceReportId":"AaFP5hAmL1ZNg6GGZo1c4G0","reportName":"EWMA Impact Event Rate by Cause B","reportType":"Webi","owner":"Administrator","reportDesc":"Slide 5-10. Used for publication Pupose","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaFP5hAmL1ZNg6GGZo1c4G0","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"EWMA Impact Event Rate by Cause B","linkHoverInfo":"EWMA Impact Event Rate by Cause B","createdDate":"Dec 08, 2014 05:56:03 AM","updatedDate":"Dec 08, 2014 05:56:05 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ TST","viewCount":2,"id":130280,"refreshStatus":"N","tabbedViews":"N","recommended":null},{"sourceReportId":"AaGqUsk0WyRKvPzKhabbkPQ","reportName":"Solve Task Approval","reportType":"Webi","owner":"bosew","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGqUsk0WyRKvPzKhabbkPQ","functionalArea":"Global Services","functionalAreaLvl1":"SOLVE","functionalAreaLvl2":null,"linkTitle":"Solve Task Approval","linkHoverInfo":"Solve Task Approval","createdDate":"Jan 19, 2016 08:42:37 AM","updatedDate":"Jan 19, 2016 08:42:43 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Global Services/SOLVE","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","reportName":"Objects - Events and Details - by User and Event Type","reportType":"CrystalReport","owner":"Administrator","reportDesc":"Welcome","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","linkTitle":"Objects - Events and Details - by User and Event Type","linkHoverInfo":"Objects - Events and Details - by User and Event Type","createdDate":"Oct 31, 2012 14:56:23 PM","updatedDate":"Oct 31, 2012 14:56:32 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130225,"refreshStatus":"N","tabbedViews":"N","recommended":"N"},{"sourceReportId":"AahlPTOs679PicyffaFp4BM","reportName":"EWMA Rate, Dur, Avail by Product","reportType":"Webi","owner":"Administrator","reportDesc":"Slide 18 test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product","createdDate":"Sep 30, 2015 11:01:21 AM","updatedDate":"Sep 30, 2015 11:01:28 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","viewCount":37,"id":130221,"refreshStatus":"Y","tabbedViews":"Y","recommended":"Y"},{"sourceReportId":"AaI4bMWN9RBBrU3YjxscCGI","reportName":"Users - Most Active - by Refresh Events","reportType":"CrystalReport","owner":"Administrator","reportDesc":"This report summarizes the top 10 most active users based on refresh events for the specified date range.  All users are listed thereafter with their refresh event count.","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaI4bMWN9RBBrU3YjxscCGI","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Users","linkTitle":"Users - Most Active - by Refresh Events","linkHoverInfo":"Users - Most Active - by Refresh Events","createdDate":"Oct 31, 2012 14:56:25 PM","updatedDate":"Oct 31, 2012 14:56:33 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Test Audit Reports/Users","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AaisS.t.93NGhd4E2ld3Gv4","reportName":"EAS Time Sheet Report - JAPAN","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaisS.t.93NGhd4E2ld3Gv4","functionalArea":"Global Services","functionalAreaLvl1":"EAS","functionalAreaLvl2":null,"linkTitle":"EAS Time Sheet Report - JAPAN","linkHoverInfo":"EAS Time Sheet Report - JAPAN","createdDate":"Aug 22, 2012 09:37:08 AM","updatedDate":"Aug 22, 2012 09:37:09 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Global Services/EAS","systemDescription":"BAAAS BOBJ TST","viewCount":10,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null},{"sourceReportId":"AajPCVE.bA1Nm_S_kOjKHTg","reportName":"Interactive Sort Detail","reportType":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AajPCVE.bA1Nm_S_kOjKHTg","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Feature Samples","linkTitle":"Interactive Sort Detail","linkHoverInfo":"Interactive Sort Detail","createdDate":"Oct 31, 2011 14:40:13 PM","updatedDate":"Oct 31, 2011 14:40:13 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Feature Samples","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130229,"refreshStatus":"N","tabbedViews":"N","recommended":null}]'];
     });
     
 //    $httpBackend.whenGET(/Communications\/*/).respond(function(/*method, url, data*/){
@@ -351,17 +351,17 @@ angular
         return [200, '{"recommendedCount":4,"biReportDTOList":[{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Education Services and Dev","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":45,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":1},{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Education Services and Dev","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":46,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":3},{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Education Services and Dev","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":51,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":2},{"id":130207,"name":"Summarized Documents","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"GBS Command Center","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":43,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null},{"id":130217,"name":"Training Unit Balance - APJ","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Education Services and Dev","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":51,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null},{"id":130221,"name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"TCE","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":51,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null},{"id":130224,"name":"SLA Metrics","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"GBS Command Center","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":51,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null},{"id":130225,"name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Miscellaneous","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":50,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null},{"id":130226,"name":"PAS Report","type":"Webi","owner":null,"reportDesc":null,"reportLink":null,"functionalArea":"Global Services","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":null,"sourceReportId":null,"additionalInfo":null,"systemDescription":null,"createDate":null,"updateDate":null,"favorite":null,"levelId":50,"reportAccessStatus":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":2,"recommendedSeq":null}],"biGroupDTOList":[{"groupId":1,"groupName":"Manufacturing","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":2,"groupName":"Global Service","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":3,"groupName":"Sales AM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":4,"groupName":"Sales DM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":5,"groupName":"Sales DVP","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":6,"groupName":"Sales Non Core","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":7,"groupName":"Sales Exec","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":8,"groupName":"Sales Rep","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":11,"groupName":"Sales Rep New","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":20,"groupName":"SapnaTesting","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":21,"groupName":"SapnaTestGroup","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":23,"groupName":"Test Personna","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":24,"groupName":"Unit test Persona","numberOfLevels":null,"levels":null,"levelMaps":null}],"deletedBIReportDTOList":null}'];
     });
     $httpBackend.whenGET(/getReport\/*/).respond(function(/*method, url, data*/){
-        return [200, '{"sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","reportName":"Income Statement","reportType":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","linkTitle":"Income Statement","linkHoverInfo":"Income Statement","createdDate":"Oct 31, 2011 14:41:07 PM","updatedDate":"Oct 31, 2011 14:41:07 PM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","viewCount":0,"id":130205,"refreshStatus":"N","tabbedViews":"Y","recommended":null}'];
+        return [200, '{"sourceReportId":"Aa_.CIY.1N1GgHnJWNloPs8","reportName":"VPLEX EWMA Calcs","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_.CIY.1N1GgHnJWNloPs8","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"VPLEX EWMA Calcs","linkHoverInfo":"VPLEX EWMA Calcs","createdDate":"Aug 13, 2014 11:36:17 AM","updatedDate":"Aug 26, 2014 04:31:25 AM","sourceSystem":"BAAAS BOBJ TST","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ TST","viewCount":2,"id":130198,"refreshStatus":"N","tabbedViews":"Y","recommended":null}'];
     });
     $httpBackend.whenGET(/externalrepo\/searchreports\/*/).respond(function(/*method, url, data*/){
-        return [200, '[{"sourceReportId":"EXTERNAL0","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"External Repo test","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"test1 report","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"","additionalInfo":null,"createdDate":"May 25, 2016 08:03:12 AM","updatedDate":"May 27, 2016 07:33:31 AM","createdBy":1047,"updatedBy":1047,"groupId":1,"groupName":"Manufacturing","id":130253,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL1","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test2_sm","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"tesrt_sm  vdffdd","reportLink":"//BIPdurdev01/colleacterla/test.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"terst","linkHoverInfo":"sdfsdf","additionalInfo":null,"createdDate":"May 25, 2016 08:10:52 AM","updatedDate":"Jun 03, 2016 07:44:35 AM","createdBy":1047,"updatedBy":912,"groupId":1,"groupName":"Manufacturing","id":130256,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL10","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":"test description sda","reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test sm","linkHoverInfo":"dfgf","additionalInfo":null,"createdDate":"Jun 01, 2016 05:16:20 AM","updatedDate":"Jun 03, 2016 06:44:30 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130263,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL11","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"sdfsdsdffsd","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 05:16:56 AM","updatedDate":"Jun 01, 2016 05:16:56 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130267,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL12","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"fsdsgdfgsdg","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 05:20:07 AM","updatedDate":"Jun 01, 2016 05:20:07 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130269,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL13","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"sdfgfg","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 06:48:51 AM","updatedDate":"Jun 01, 2016 06:48:51 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130268,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL14","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Testing","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"Test description","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"test func","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test title","linkHoverInfo":"hover","additionalInfo":"#DFDFDF","createdDate":"Jun 01, 2016 08:17:11 AM","updatedDate":"Jun 01, 2016 08:17:11 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130265,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL15","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Changed Name","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 08:41:27 AM","updatedDate":"Jun 01, 2016 10:29:56 AM","createdBy":912,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130270,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL16","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"seach tab test","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"seach tab test description","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"search tab test","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Title for test","linkHoverInfo":"hover for test","additionalInfo":"#DEDEDE","createdDate":"Jun 01, 2016 10:38:35 AM","updatedDate":"Jun 01, 2016 10:38:35 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130277,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL17","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"search test 2","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"descr","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"functional  area","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"title","linkHoverInfo":"hover","additionalInfo":"#gggggg","createdDate":"Jun 01, 2016 10:39:29 AM","updatedDate":"Jun 01, 2016 10:39:29 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130276,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL18","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":"test description","reportLink":"//bipdurdev01.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":"test FA","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test link","linkHoverInfo":"test","additionalInfo":"test","createdDate":"Jun 02, 2016 06:54:51 AM","updatedDate":"Jun 02, 2016 06:54:51 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130278,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL19","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 02, 2016 07:30:14 AM","updatedDate":"Jun 02, 2016 07:30:14 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL2","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"report3","reportType":"Unknown","owner":"Renjith Narayanan","reportDesc":"retr","reportLink":"//ter/re","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"ert yyu","additionalInfo":null,"createdDate":"May 25, 2016 08:30:06 AM","updatedDate":"May 25, 2016 08:31:00 AM","createdBy":1047,"updatedBy":1047,"groupId":1,"groupName":"Manufacturing","id":130257,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL20","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 02, 2016 08:23:40 AM","updatedDate":"Jun 02, 2016 08:23:40 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL21","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Testing 1","reportType":"CSV","owner":"Sridharan Narayanan","reportDesc":"Report Desc","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Testing","linkHoverInfo":"Testing","additionalInfo":"#ff00ee","createdDate":"Jun 02, 2016 10:24:59 AM","updatedDate":"Jun 02, 2016 10:24:59 AM","createdBy":9,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130272,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL22","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":"test","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":"ees","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"sss","linkHoverInfo":"sss","additionalInfo":"sss","createdDate":"Jun 03, 2016 06:36:58 AM","updatedDate":"Jun 03, 2016 06:36:58 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL23","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"HTTP","owner":"Sk Mahammad Saim","reportDesc":"tt","reportLink":"http://goo.com","functionalArea":"fgg","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"fgg","linkHoverInfo":"fgg","additionalInfo":"fg","createdDate":"Jun 03, 2016 07:45:12 AM","updatedDate":"Jun 03, 2016 07:45:12 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL24","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test sns","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 03, 2016 07:58:09 AM","updatedDate":"Jun 03, 2016 07:58:09 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL25","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Test sns","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 03, 2016 07:59:23 AM","updatedDate":"Jun 03, 2016 07:59:23 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL3","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Sample External Content","reportType":"CSV","owner":"Sarunkumar Moorthy","reportDesc":"Desc 2","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info","additionalInfo":"#F5A9D0","createdDate":"May 25, 2016 08:44:28 AM","updatedDate":"May 31, 2016 13:23:44 PM","createdBy":1063,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130258,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null}]'];
+        return [200, '[{"sourceReportId":"EXTERNAL0","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"What is Lorem Ipsum","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"","additionalInfo":null,"createdDate":"May 25, 2016 08:03:12 AM","updatedDate":"May 27, 2016 07:33:31 AM","createdBy":1047,"updatedBy":1047,"groupId":1,"groupName":"Manufacturing","id":130253,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL1","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test2_sm","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"tesrt_sm  vdffdd","reportLink":"//BIPdurdev01/colleacterla/test.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"terst","linkHoverInfo":"sdfsdf","additionalInfo":null,"createdDate":"May 25, 2016 08:10:52 AM","updatedDate":"Jun 03, 2016 07:44:35 AM","createdBy":1047,"updatedBy":912,"groupId":1,"groupName":"Manufacturing","id":130256,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL10","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":"test description sda","reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test sm","linkHoverInfo":"dfgf","additionalInfo":null,"createdDate":"Jun 01, 2016 05:16:20 AM","updatedDate":"Jun 03, 2016 06:44:30 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130263,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL11","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"sdfsdsdffsd","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 05:16:56 AM","updatedDate":"Jun 01, 2016 05:16:56 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130267,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL12","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"fsdsgdfgsdg","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 05:20:07 AM","updatedDate":"Jun 01, 2016 05:20:07 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130269,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL13","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"sdfgfg","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 06:48:51 AM","updatedDate":"Jun 01, 2016 06:48:51 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130268,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL14","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Testing","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"Test description","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"test func","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test title","linkHoverInfo":"hover","additionalInfo":"#DFDFDF","createdDate":"Jun 01, 2016 08:17:11 AM","updatedDate":"Jun 01, 2016 08:17:11 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130265,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL15","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Changed Name","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 01, 2016 08:41:27 AM","updatedDate":"Jun 01, 2016 10:29:56 AM","createdBy":912,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130270,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL16","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"seach tab test","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"seach tab test description","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"search tab test","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Title for test","linkHoverInfo":"hover for test","additionalInfo":"#DEDEDE","createdDate":"Jun 01, 2016 10:38:35 AM","updatedDate":"Jun 01, 2016 10:38:35 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130277,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL17","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"search test 2","reportType":"PDF","owner":"Sarunkumar Moorthy","reportDesc":"descr","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Test.pdf","functionalArea":"functional  area","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"title","linkHoverInfo":"hover","additionalInfo":"#gggggg","createdDate":"Jun 01, 2016 10:39:29 AM","updatedDate":"Jun 01, 2016 10:39:29 AM","createdBy":1063,"updatedBy":1063,"groupId":2,"groupName":"Global Service","id":130276,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL18","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":"test description","reportLink":"//bipdurdev01.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":"test FA","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"test link","linkHoverInfo":"test","additionalInfo":"test","createdDate":"Jun 02, 2016 06:54:51 AM","updatedDate":"Jun 02, 2016 06:54:51 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":130278,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL19","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 02, 2016 07:30:14 AM","updatedDate":"Jun 02, 2016 07:30:14 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL2","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"report3","reportType":"Unknown","owner":"Renjith Narayanan","reportDesc":"retr","reportLink":"//ter/re","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"ert yyu","additionalInfo":null,"createdDate":"May 25, 2016 08:30:06 AM","updatedDate":"May 25, 2016 08:31:00 AM","createdBy":1047,"updatedBy":1047,"groupId":1,"groupName":"Manufacturing","id":130257,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL20","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 02, 2016 08:23:40 AM","updatedDate":"Jun 02, 2016 08:23:40 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL21","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Testing 1","reportType":"CSV","owner":"Sridharan Narayanan","reportDesc":"Report Desc","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Testing","linkHoverInfo":"Testing","additionalInfo":"#ff00ee","createdDate":"Jun 02, 2016 10:24:59 AM","updatedDate":"Jun 02, 2016 10:24:59 AM","createdBy":9,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130272,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL22","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"xlsx","owner":"Sk Mahammad Saim","reportDesc":"test","reportLink":"//bipdurdev01.corp.emc.com/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":"ees","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"sss","linkHoverInfo":"sss","additionalInfo":"sss","createdDate":"Jun 03, 2016 06:36:58 AM","updatedDate":"Jun 03, 2016 06:36:58 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL23","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test","reportType":"HTTP","owner":"Sk Mahammad Saim","reportDesc":"tt","reportLink":"http://goo.com","functionalArea":"fgg","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"fgg","linkHoverInfo":"fgg","additionalInfo":"fg","createdDate":"Jun 03, 2016 07:45:12 AM","updatedDate":"Jun 03, 2016 07:45:12 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL24","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"test sns","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 03, 2016 07:58:09 AM","updatedDate":"Jun 03, 2016 07:58:09 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL25","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Test sns","reportType":"PDF","owner":"Sk Mahammad Saim","reportDesc":null,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/Test.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"additionalInfo":null,"createdDate":"Jun 03, 2016 07:59:23 AM","updatedDate":"Jun 03, 2016 07:59:23 AM","createdBy":912,"updatedBy":912,"groupId":2,"groupName":"Global Service","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null},{"sourceReportId":"EXTERNAL3","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"Sample External Content","reportType":"CSV","owner":"Sarunkumar Moorthy","reportDesc":"Desc 2","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info","additionalInfo":"#F5A9D0","createdDate":"May 25, 2016 08:44:28 AM","updatedDate":"May 31, 2016 13:23:44 PM","createdBy":1063,"updatedBy":9,"groupId":2,"groupName":"Global Service","id":130258,"refreshStatus":"N","tabbedViews":"N","recommended":null,"viewCount":null}]'];
     });
     $httpBackend.whenGET(/externalrepo\/searchreport\/*/).respond(function(/*method, url, data*/){
 //        return [200, '{"sourceReportId":"EXTERNAL1","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL","reportName":"ExcelData","reportType":"Excel","owner":"Sarunkumar","reportDesc":"Sales Details and the more details avaible with report","reportLink":"/bipdurdev01/ThirdPartyCollaterals/Excel Data.xlsx","functionalArea":"No functional Area","functionalAreaLvl1":"Level1","functionalAreaLvl2":"Level2","linkTitle":"Link title shows on hover over","linkHoverInfo":"Same title","additionalInfo":"#FFFDFD","createdDate":"05-19-2016  00:05","updatedDate":"05-19-2016  00:05","createdBy":"narays22","updatedBy":"narays22","groupId":1,"groupName":"Manufacturing","id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null}'];
-        return [200, '{"sourceReportId":"EXTERNAL0","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"External Repo test","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"test1 report","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"","additionalInfo":null,"createdDate":"May 25, 2016 08:03:12 AM","updatedDate":"May 27, 2016 07:33:31 AM","createdBy":null,"updatedBy":null,"groupId":1,"groupName":null,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null}'];
+        return [200, '{"sourceReportId":"EXTERNAL0","sourceSystem":"EXTERNAL","systemDescription":"EXTERNAL_SYSTEM","reportName":"What is Lorem Ipsum","reportType":"CSV","owner":"Renjith Narayanan","reportDesc":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.","reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":"","additionalInfo":null,"createdDate":"May 25, 2016 08:03:12 AM","updatedDate":"May 27, 2016 07:33:31 AM","createdBy":null,"updatedBy":null,"groupId":1,"groupName":null,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"viewCount":null}'];
     });
     $httpBackend.whenGET(/getLevelAndGroup\/*/).respond(function(/*method, url, data*/){
-        return [200, '{"reportId":130198,"levelsOfReport":[{"levelNumber":1,"parentLevelId":13,"levelId":13,"levelDesc":"Manufacturing"},{"levelNumber":2,"parentLevelId":45,"levelId":45,"levelDesc":"GS Sub Level 1a"},{"levelNumber":3,"parentLevelId":3,"levelId":3,"levelDesc":"Quality"}],"levelAndGroupIds":[{"groupId":1,"levelId":13,"recommendedSeq":null},{"groupId":2,"levelId":45,"recommendedSeq":null},{"groupId":3,"levelId":3,"recommendedSeq":null}],"groups":[{"groupId":1,"groupName":"Manufacturing","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":2,"groupName":"Global Service","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":3,"groupName":"Sales AM","numberOfLevels":null,"levels":null,"levelMaps":null}],"allLevels":[{"levelNumber":4,"parentLevelId":1,"levelId":1,"levelDesc":"Plan0000000211313"},{"levelNumber":3,"parentLevelId":2,"levelId":2,"levelDesc":"Predictive_Analytics"},{"levelNumber":3,"parentLevelId":3,"levelId":3,"levelDesc":"Quality"},{"levelNumber":3,"parentLevelId":4,"levelId":4,"levelDesc":"Deliver Unit Test"},{"levelNumber":3,"parentLevelId":5,"levelId":5,"levelDesc":"Source"},{"levelNumber":3,"parentLevelId":6,"levelId":6,"levelDesc":"Make"},{"levelNumber":3,"parentLevelId":8,"levelId":8,"levelDesc":"Operational Excellence"},{"levelNumber":3,"parentLevelId":9,"levelId":9,"levelDesc":"Finance"},{"levelNumber":3,"parentLevelId":10,"levelId":10,"levelDesc":"Sustain"},{"levelNumber":2,"parentLevelId":12,"levelId":12,"levelDesc":"GPO_BI"},{"levelNumber":1,"parentLevelId":13,"levelId":13,"levelDesc":"Manufacturing"},{"levelNumber":1,"parentLevelId":14,"levelId":14,"levelDesc":"Sales"},{"levelNumber":2,"parentLevelId":15,"levelId":15,"levelDesc":"Bookings"},{"levelNumber":2,"parentLevelId":16,"levelId":16,"levelDesc":"Billings Reports"},{"levelNumber":3,"parentLevelId":24,"levelId":24,"levelDesc":"Test1"},{"levelNumber":2,"parentLevelId":25,"levelId":25,"levelDesc":"test12"},{"levelNumber":2,"parentLevelId":26,"levelId":26,"levelDesc":"TestLevel"},{"levelNumber":null,"parentLevelId":27,"levelId":27,"levelDesc":"test level"},{"levelNumber":3,"parentLevelId":29,"levelId":29,"levelDesc":"test"},{"levelNumber":3,"parentLevelId":30,"levelId":30,"levelDesc":"testsm"},{"levelNumber":56,"parentLevelId":34,"levelId":34,"levelDesc":"testsappy"},{"levelNumber":2,"parentLevelId":35,"levelId":35,"levelDesc":"sub sales"},{"levelNumber":1,"parentLevelId":36,"levelId":36,"levelDesc":"ParentLevel"},{"levelNumber":2,"parentLevelId":37,"levelId":37,"levelDesc":"ChildLevel"},{"levelNumber":2,"parentLevelId":38,"levelId":38,"levelDesc":"ChildLevel2"},{"levelNumber":3,"parentLevelId":39,"levelId":39,"levelDesc":"SubChild"},{"levelNumber":1,"parentLevelId":40,"levelId":40,"levelDesc":"SapnaParentLevel"},{"levelNumber":100,"parentLevelId":41,"levelId":41,"levelDesc":"SapnaChildLevel"},{"levelNumber":100,"parentLevelId":42,"levelId":42,"levelDesc":"Level100"},{"levelNumber":1,"parentLevelId":43,"levelId":43,"levelDesc":"Global Services 1"},{"levelNumber":1,"parentLevelId":44,"levelId":44,"levelDesc":"Global Services 2"},{"levelNumber":2,"parentLevelId":45,"levelId":45,"levelDesc":"GS Sub Level 1a"},{"levelNumber":2,"parentLevelId":46,"levelId":46,"levelDesc":"GS Sub Level 1b"},{"levelNumber":2,"parentLevelId":47,"levelId":47,"levelDesc":"Global Services 2a"},{"levelNumber":2,"parentLevelId":48,"levelId":48,"levelDesc":"Test Level"},{"levelNumber":2,"parentLevelId":49,"levelId":49,"levelDesc":"unit test level"},{"levelNumber":3,"parentLevelId":50,"levelId":50,"levelDesc":"GS Sub Level 1aa"},{"levelNumber":3,"parentLevelId":51,"levelId":51,"levelDesc":"GS Sub Level 1bb"}],"allGroups":[{"groupId":1,"groupName":"Manufacturing","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":2,"groupName":"Global Service","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":3,"groupName":"Sales AM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":4,"groupName":"Sales DM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":5,"groupName":"Sales DVP","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":6,"groupName":"Sales Non Core","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":7,"groupName":"Sales Exec","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":8,"groupName":"Sales Rep","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":11,"groupName":"Sales Rep New","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":20,"groupName":"SapnaTesting","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":21,"groupName":"SapnaTestGroup","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":23,"groupName":"Test Personna","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":24,"groupName":"Unit test Persona","numberOfLevels":null,"levels":null,"levelMaps":null}]}'];
+        return [200, '{"reportId":130198,"levelsOfReport":null,"levelAndGroupIds":[{"groupId":1,"levelId":13,"recommendedSeq":3},{"groupId":2,"levelId":43,"recommendedSeq":null},{"groupId":3,"levelId":13,"recommendedSeq":3},{"groupId":7,"levelId":3,"recommendedSeq":null},{"groupId":7,"levelId":13,"recommendedSeq":3}],"groups":null,"allLevels":[{"levelNumber":4,"parentLevelId":1,"levelId":1,"levelDesc":"Plan0000000211313"},{"levelNumber":3,"parentLevelId":2,"levelId":2,"levelDesc":"Predictive_Analytics"},{"levelNumber":3,"parentLevelId":3,"levelId":3,"levelDesc":"Quality"},{"levelNumber":3,"parentLevelId":4,"levelId":4,"levelDesc":"Deliver Unit Test"},{"levelNumber":3,"parentLevelId":5,"levelId":5,"levelDesc":"Source"},{"levelNumber":3,"parentLevelId":6,"levelId":6,"levelDesc":"Make"},{"levelNumber":3,"parentLevelId":8,"levelId":8,"levelDesc":"Operational Excellence"},{"levelNumber":3,"parentLevelId":9,"levelId":9,"levelDesc":"Finance"},{"levelNumber":3,"parentLevelId":10,"levelId":10,"levelDesc":"Sustain"},{"levelNumber":2,"parentLevelId":12,"levelId":12,"levelDesc":"GPO_BI"},{"levelNumber":1,"parentLevelId":13,"levelId":13,"levelDesc":"Manufacturing"},{"levelNumber":1,"parentLevelId":14,"levelId":14,"levelDesc":"Sales"},{"levelNumber":2,"parentLevelId":15,"levelId":15,"levelDesc":"Bookings"},{"levelNumber":2,"parentLevelId":16,"levelId":16,"levelDesc":"Billings Reports"},{"levelNumber":3,"parentLevelId":24,"levelId":24,"levelDesc":"Test1"},{"levelNumber":2,"parentLevelId":25,"levelId":25,"levelDesc":"test12"},{"levelNumber":2,"parentLevelId":26,"levelId":26,"levelDesc":"TestLevel"},{"levelNumber":null,"parentLevelId":27,"levelId":27,"levelDesc":"test level"},{"levelNumber":3,"parentLevelId":29,"levelId":29,"levelDesc":"test"},{"levelNumber":3,"parentLevelId":30,"levelId":30,"levelDesc":"testsm"},{"levelNumber":56,"parentLevelId":34,"levelId":34,"levelDesc":"testsappy"},{"levelNumber":2,"parentLevelId":35,"levelId":35,"levelDesc":"sub sales"},{"levelNumber":1,"parentLevelId":36,"levelId":36,"levelDesc":"ParentLevel"},{"levelNumber":2,"parentLevelId":37,"levelId":37,"levelDesc":"ChildLevel"},{"levelNumber":2,"parentLevelId":38,"levelId":38,"levelDesc":"ChildLevel2"},{"levelNumber":3,"parentLevelId":39,"levelId":39,"levelDesc":"SubChild"},{"levelNumber":1,"parentLevelId":40,"levelId":40,"levelDesc":"SapnaParentLevel"},{"levelNumber":100,"parentLevelId":41,"levelId":41,"levelDesc":"SapnaChildLevel"},{"levelNumber":100,"parentLevelId":42,"levelId":42,"levelDesc":"Level100"},{"levelNumber":1,"parentLevelId":43,"levelId":43,"levelDesc":"Global Services 1"},{"levelNumber":1,"parentLevelId":44,"levelId":44,"levelDesc":"Global Services 2"},{"levelNumber":2,"parentLevelId":45,"levelId":45,"levelDesc":"GS Sub Level 1a"},{"levelNumber":2,"parentLevelId":46,"levelId":46,"levelDesc":"GS Sub Level 1b"},{"levelNumber":2,"parentLevelId":47,"levelId":47,"levelDesc":"Global Services 2a"},{"levelNumber":2,"parentLevelId":48,"levelId":48,"levelDesc":"Test Level"},{"levelNumber":2,"parentLevelId":49,"levelId":49,"levelDesc":"unit test level"},{"levelNumber":3,"parentLevelId":50,"levelId":50,"levelDesc":"GS Sub Level 1aa"},{"levelNumber":3,"parentLevelId":51,"levelId":51,"levelDesc":"GS Sub Level 1bb"},{"levelNumber":2,"parentLevelId":52,"levelId":52,"levelDesc":"dfsdfs"}],"allGroups":[{"groupId":1,"groupName":"Manufacturing","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":2,"groupName":"Global Service","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":3,"groupName":"Sales AM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":4,"groupName":"Sales DM","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":5,"groupName":"Sales DVP","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":6,"groupName":"Sales Non Core","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":7,"groupName":"Sales Exec","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":8,"groupName":"Sales Rep","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":11,"groupName":"Sales Rep New","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":20,"groupName":"SapnaTesting","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":21,"groupName":"SapnaTestGroup","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":23,"groupName":"Test Personna","numberOfLevels":null,"levels":null,"levelMaps":null},{"groupId":24,"groupName":"Unit test Persona","numberOfLevels":null,"levels":null,"levelMaps":null}]}'];
     });
     $httpBackend.whenGET(/imageExistInServer\/*/).respond(function(/*method, url, data*/){
         return [200, '{"status":"Success","message":"The uploaded image does not exist in the server"}'];
@@ -472,9 +472,6 @@ angular.module('adminPageApp')
         });
         
         modalInstance.result.then(function (returnObj) {
-            //var returnItems = returnObj.items;
-            //defer.resolve(returnItems);
-            console.log('Modal');
             $scope.myData.data = [];
             $scope.updateReportForm();
         }, function () {
@@ -523,7 +520,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('All / Deployed');
         $scope.updateReportForm();
     });
     
@@ -532,7 +528,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('Perosna Id');
         $scope.updateReportForm();
     });
     
@@ -551,7 +546,6 @@ angular.module('adminPageApp')
             } else {
                 var url = 'BITool/admin/allReports/' + userObject[0].emcLoginName + '/' + offset + '/20?searchText=' + $scope.searchTextValue + '&searchTextSourceSystem=' + $scope.sourceSystem + '&searchTextReportType=' + $scope.reportType + '&searchTextFunctionalArea=' + $scope.functionalArea +'&displayType=' + $scope.displayType;
             }
-            console.log(url);
             
             var httpPromise = $http({
                 'url': url,
@@ -564,26 +558,6 @@ angular.module('adminPageApp')
                 } else {
                     $scope.myData.data = $scope.myData.data.concat(resp.data);
                 }
-                /*var newHeight =($scope.myData.data.length*30)+60;
-                 angular.element(document.getElementsByClassName('grid')[0]).css('height', newHeight + 'px');*/
-                /*var functionArea = _.chain($scope.myData.data)
-                 .pluck('functionalArea')
-                 .uniq()
-                 .value();
-                 $scope.$emit('functionalArea', functionArea);
-
-                 var owner = _.chain($scope.myData.data)
-                 .pluck('owner')
-                 .uniq()
-                 .value();
-                 $scope.$emit('owner', owner);//reportName
-
-
-                 var reportName = _.chain($scope.myData.data)
-                 .pluck('reportName')
-                 .uniq()
-                 .value();
-                 $scope.$emit('reportName', reportName);*/
 
                 $scope.gridApi.infiniteScroll.saveScrollPercentage();
                 $scope.gridApi.infiniteScroll.dataLoaded(false, resp.data && resp.data.length === 20).then(function () {
@@ -603,7 +577,6 @@ angular.module('adminPageApp')
     
     $scope.updateReportForm();
 }]);
-
 'use strict';
 
 /**
@@ -614,22 +587,18 @@ angular.module('adminPageApp')
  * Service in the adminPageApp.
  */
 angular.module('adminPageApp')
-  .service('aboutService', ["$q", "$http", function ($q, $http) {
-        var defer = $q.defer();
-      
-        var myData='[{"sourceReportId":"101123","reportName":"TBxxx_Introduction","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_Introduction","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101124","reportName":"TBxxx_Scheduling Guidance Tool","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101125","reportName":"TBxxx_Scheduling Guidance Tool 2","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool2","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101126","reportName":"TBxxx_Scheduling Guidance Tool 3","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool3","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":2},{"sourceReportId":"101127","reportName":"TBxxx_Scheduling Guidance Tool 4","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool4","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":2},{"sourceReportId":"101998","reportName":"TB097_Introduction","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_Introduction","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":9},{"sourceReportId":"101999","reportName":"TB097_Introduction Continued","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_IntroductionContinued","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":4},{"sourceReportId":"102000","reportName":"TB097_KCS SR Metrics","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSSRMetrics","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":17},{"sourceReportId":"102001","reportName":"TB097_KCS Snapshot","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSSnapshot","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":14},{"sourceReportId":"102002","reportName":"TB097_KCS RO Exception","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSROException","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":10}]';
-        
-        defer.resolve({
-            'data': myData,
-            'config': [],
-        });
-        
-        
-        
-         //return defer.promise
-        
-        return $http.get('BITool/admin/allReports/saxenr3/1/10?searchText=site&searchTextOwner=martim29');
-  }]);
+.service('aboutService', ["$q", "$http", function ($q, $http) {
+    var defer = $q.defer();
+    var myData = '[{"sourceReportId":"101123","reportName":"TBxxx_Introduction","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_Introduction","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101124","reportName":"TBxxx_Scheduling Guidance Tool","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101125","reportName":"TBxxx_Scheduling Guidance Tool 2","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool2","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":3},{"sourceReportId":"101126","reportName":"TBxxx_Scheduling Guidance Tool 3","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool3","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":2},{"sourceReportId":"101127","reportName":"TBxxx_Scheduling Guidance Tool 4","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/SchedulingToolMock1212015/TBxxx_SchedulingGuidanceTool4","functionalArea":"GS_BI","functionalAreaLvl1":"Development","functionalAreaLvl2":"Scheduling Tool Mock 1 21 2015","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 23, 2015 00:00:00 AM","updatedDate":"Jan 23, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17947","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":2},{"sourceReportId":"101998","reportName":"TB097_Introduction","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_Introduction","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":9},{"sourceReportId":"101999","reportName":"TB097_Introduction Continued","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_IntroductionContinued","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":4},{"sourceReportId":"102000","reportName":"TB097_KCS SR Metrics","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSSRMetrics","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":17},{"sourceReportId":"102001","reportName":"TB097_KCS Snapshot","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSSnapshot","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":14},{"sourceReportId":"102002","reportName":"TB097_KCS RO Exception","reportType":"active","owner":"martim29","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GS_BI/views/TB097_KCSDashboard_0/TB097_KCSROException","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB097_KCS Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 28, 2015 00:00:00 AM","updatedDate":"Mar 30, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"18123","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":10}]';
+
+    defer.resolve({
+        'data': myData,
+        'config': [],
+    });
+    
+    //return defer.promise
+    return $http.get('BITool/admin/allReports/saxenr3/1/10?searchText=site&searchTextOwner=martim29');
+}]);
 
 'use strict';
 
@@ -648,7 +617,8 @@ angular.module('adminPageApp')
         'selectedlevel': 0,
         'selectedgroup': 0
     }];
-
+    $scope.oldList = [];
+    $scope.deletedLevelAndGroupIds = [];
     $scope.updatefields = true;
     $scope.progress = false;
     $scope.saveText = '';
@@ -698,7 +668,6 @@ angular.module('adminPageApp')
     .finally(function () {
         getReportLevelGroup.then(function (response) {
             $scope.levelGroup = response.data;
-
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
                     'selectedlevel': parseInt(eachMap.levelId),
@@ -708,6 +677,7 @@ angular.module('adminPageApp')
             });
             if (maps.length > 0) {
                 $scope.levelGroupMaps = maps;
+                $scope.oldList = $scope.levelGroup.levelAndGroupIds;
             }
         });
     });
@@ -722,6 +692,15 @@ angular.module('adminPageApp')
     
     $scope.removeLevelGroup = function (index) {
         if (index > -1) {
+            var rowVal = {
+                'levelId': 0,
+                'groupId': 0,
+                'recommendedSeq':null
+            };
+            rowVal.levelId = $scope.levelGroupMaps[index].selectedlevel;
+            rowVal.groupId = $scope.levelGroupMaps[index].selectedgroup;
+            rowVal.recommendedSeq = $scope.levelGroupMaps[index].recommendedSeq;
+            $scope.deletedLevelAndGroupIds.push(rowVal);
             $scope.levelGroupMaps.splice(index, 1);
         }
     };
@@ -736,11 +715,11 @@ angular.module('adminPageApp')
         if ($scope.updatefields) {
             $http.put("BITool/admin/updateReport", $scope.items)
                 .then(function (updatedData, status, headers) {
-                    console.log(updatedData);
                     $scope.progress = false;
                     $scope.saveText = updatedData.data.message;
+                    $scope.items.id = updatedData.data.id;
+                    updateGroupsAndLevels($scope.items.id);
                 }, function (updatedData, status, headers, config) {
-                    console.log('2 - ' +  updatedData);
                     $scope.progress = false;
                     $scope.saveText = updatedData.data.message;
                 });
@@ -748,9 +727,11 @@ angular.module('adminPageApp')
             var groupsandlevels = {
                 'sourceReportId': $scope.items.sourceReportId,
                 'sourceSystem': $scope.items.sourceSystem,
-                'levelAndGroupIds': []
+                'levelAndGroupIds': [],
+                'deletedLevelAndGroupIds':[],
+                'biReportId': ($scope.items.id)? $scope.items.id : null 
             };
-            for (var i = 0; i < $scope.levelGroupMaps.length; i++) {
+            for (var i = 0; i < $scope.levelGroupMaps.length; i++) {    
                 var levelGroupMap = {
                     'levelId': 0,
                     'groupId': 0
@@ -764,12 +745,14 @@ angular.module('adminPageApp')
                 }
             }
             
+            groupsandlevels.deletedLevelAndGroupIds = getDifference($scope.oldList, groupsandlevels.levelAndGroupIds);
+            
             $http.put("BITool/admin/updateReportGroupObj", groupsandlevels).then(function (resp) {
-                console.log(resp);
+                $scope.oldList = groupsandlevels.levelAndGroupIds;
+                $scope.deletedLevelAndGroupIds = [];
                 $scope.progress = false;
                 $scope.saveText = resp.data.message;
             }, function (resp) {
-                console.log('2 - ' +  resp);
                 $scope.progress = false;
                 $scope.saveText = resp.data.message;;
             });
@@ -789,7 +772,30 @@ angular.module('adminPageApp')
         };
         $uibModalInstance.close(returnObj);
     };
-
+    
+    function getDifference(oldList, newList) {
+        return _.filter(oldList, function(val){
+            return !_.findWhere(newList,  val);
+        });
+    }
+    
+    function updateGroupsAndLevels(id) {
+        var getReportLevelGroup = $http.get('BITool/admin/getLevelAndGroup/' + $scope.items.sourceReportId + '/' + $scope.items.sourceSystem+ '?reportId=' + id);
+        getReportLevelGroup.then(function (response) {
+            $scope.levelGroup = response.data;
+            var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
+                return {
+                    'selectedlevel': parseInt(eachMap.levelId),
+                    'selectedgroup': eachMap.groupId,
+                    'recommendedSeq': eachMap.recommendedSeq
+                };
+            });
+            if (maps.length > 0) {
+                $scope.levelGroupMaps = maps;
+                $scope.oldList = $scope.levelGroup.levelAndGroupIds;
+            }
+        });
+    }
 }]);
 'use strict';
 
@@ -829,6 +835,10 @@ angular.module('adminPageApp')
     
     $scope.$on('resetSearchText', function() {
         $scope.searchText = '';
+    });
+    
+    $scope.$on('resetGroup', function() {
+        $scope.selectedAuditGroup = '';
     });
     
     userDetailsService.userPromise.then(function (userObject) {
@@ -999,7 +1009,7 @@ angular.module('adminPageApp')
  * Constant in the myBiApp.
  */
 angular.module('adminPageApp')
-  .constant('WEBSERVICEURL', {
+.constant('WEBSERVICEURL', {
     'getUserDetails'        : 'BITool/getUserDetails',//
     'userInfo'              : 'BITool/userinfo/:username',//
     'dashboard'             : 'BITool/dashboard/:username',//
@@ -1016,39 +1026,39 @@ angular.module('adminPageApp')
  * Service in the myBiApp.
  */
 angular.module('adminPageApp')
-  .service('commonService', ["WEBSERVICEURL", function commonService(WEBSERVICEURL) {
+.service('commonService', ["WEBSERVICEURL", function commonService(WEBSERVICEURL) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     /**
-    *prepare the user profile Url
-    */
-    this.prepareUserProfilePicUrl = function(entityId)  {
-        return  this.replaceStringWithValues(WEBSERVICEURL.userProfilePic, {'entityId':entityId});   
+     *prepare the user profile Url
+     */
+    this.prepareUserProfilePicUrl = function (entityId) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.userProfilePic, {'entityId': entityId});
     };
-    
+
     /**
-    *prepare the user Info Url
-    */
-    this.prepareUserInfoUrl = function(username)  {
-        return  this.replaceStringWithValues(WEBSERVICEURL.userInfo, {'username':username});   
+     *prepare the user Info Url
+     */
+    this.prepareUserInfoUrl = function (username) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.userInfo, {'username': username});
     };
-    
-    
+
+
     /**
-    *prepare the user Role Details Url
-    */
-    this.prepareUserRoleDetailsUrl = function(username) {
-        return  this.replaceStringWithValues(WEBSERVICEURL.dashboard, {'username':username});
+     *prepare the user Role Details Url
+     */
+    this.prepareUserRoleDetailsUrl = function (username) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.dashboard, {'username': username});
     };
-    
-    
+
+
     /**
-    *Replace matching object keys in string with its values.
-    */
-    this.replaceStringWithValues = function(rString, replaceObject) {
-        _.map(_.keys(replaceObject), function(key){
-            rString = rString.replace(new RegExp(':'+key,'g'), replaceObject[key]);
+     *Replace matching object keys in string with its values.
+     */
+    this.replaceStringWithValues = function (rString, replaceObject) {
+        _.map(_.keys(replaceObject), function (key) {
+            rString = rString.replace(new RegExp(':' + key, 'g'), replaceObject[key]);
         });
-      return rString;  
+        return rString;
     };
 }]);
 
@@ -1062,35 +1072,36 @@ angular.module('adminPageApp')
  * Service in the myBiApp.
  */
 angular.module('adminPageApp')
-  .service('userDetailsService', ["WEBSERVICEURL", "$http", "$q", "commonService", function userDetailsService(WEBSERVICEURL, $http, $q, commonService) {
+.service('userDetailsService', ["WEBSERVICEURL", "$http", "$q", "commonService", function userDetailsService(WEBSERVICEURL, $http, $q, commonService) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var userObject, userPromise = $q.defer();
-    $http.get(WEBSERVICEURL.getUserDetails).then(function(resp){
+    $http.get(WEBSERVICEURL.getUserDetails).then(function (resp) {
         userObject = resp.data;
-        $http.get(commonService.prepareUserInfoUrl(userObject[0].emcLoginName)).then(function(response){
+        $http.get(commonService.prepareUserInfoUrl(userObject[0].emcLoginName)).then(function (response) {
             userObject[0].userinfo = response.data;
             userPromise.resolve(userObject);
         });
-    }, function(){
-      //failed
-      userObject = [{"uid":"975409","userFullName":"Vidyadhar Guttikonda","emcIdentityType":"V","title":"Mobile Developer","mail":"Vidyadhar.Guttikonda@emc.com","emcCostCenter":"IN1218315","emcGeography":null,"emcOrgCode":null,"emcOrgName":"IT","emcEntitlementsCountry":"IN","emcLoginName":"guttiv","emctelephoneextension":null,"telephonenumber":"91  7702466463"}];
-      userObject[0].userinfo = {"group":[{"groupId":1,"groupName":"Manufacturing"}],"role":"User","badge":"Bronze"};
-      userPromise.reject(userObject);
+    }, function () {
+        //failed
+        userObject = [{"uid": "975409", "userFullName": "Vidyadhar Guttikonda", "emcIdentityType": "V", "title": "Mobile Developer", "mail": "Vidyadhar.Guttikonda@emc.com", "emcCostCenter": "IN1218315", "emcGeography": null, "emcOrgCode": null, "emcOrgName": "IT", "emcEntitlementsCountry": "IN", "emcLoginName": "guttiv", "emctelephoneextension": null, "telephonenumber": "91  7702466463"}];
+        userObject[0].userinfo = {"group": [{"groupId": 1, "groupName": "Manufacturing"}], "role": "User", "badge": "Bronze"};
+        userPromise.reject(userObject);
     });
     return {
-        'userObject' : userObject,
+        'userObject': userObject,
         'userPromise': userPromise.promise
-    };   
-  }]);
+    };
+}]);
 
 'use strict';
 
 angular.module('adminPageApp').controller('BICommunicationCtrl',["$scope", "userDetailsService", "$http", "$uibModal", "$q", "$timeout", function($scope, userDetailsService, $http, $uibModal, $q, $timeout){
     var groups = []; 
-    $scope.myData = {}; 
+    $scope.myData = {};
     $scope.messageAlert= "";
     $scope.messageAlertError='';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     function columnDefs(){
         return[
@@ -2236,6 +2247,7 @@ angular.module('adminPageApp')
     $scope.messageAlertError = '';
     $scope.personaId= '';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     function columnDefs() {
         return [
@@ -2251,8 +2263,7 @@ angular.module('adminPageApp')
         $scope.gridApi = gridApi;
         //infiniteScroll functionality for adding more rows.
         gridApi.infiniteScroll.on.needLoadMoreData($scope, $scope.updateUsers);
-    }
-    ;
+    };
 
     $scope.myData = {
         enableRowSelection: true,
@@ -2280,13 +2291,18 @@ angular.module('adminPageApp')
     });
     
     $scope.$on('broadcastAuditGroup', function(event, personaId){
-        if (personaId) {
-            $scope.personaId = personaId;
-        } else {
-            $scope.personaId = '';
-        }
+//        if (personaId) {
+//            $scope.personaId = personaId;
+//        } else {
+//            $scope.personaId = '';
+//        }
+        (personaId) ? $scope.personaId = personaId : $scope.personaId = ''; 
         cancelPendingPromise();
         $scope.myData.data = [];
+        
+        ($scope.searchTextValue)? $scope.searchTextValue : $scope.searchTextValue = '';
+        $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue  + '&personaId=' + $scope.personaId;
+        
         $scope.updateUsers();
     });
 
@@ -2340,8 +2356,8 @@ angular.module('adminPageApp')
 
             defer.resolve(selectedItem);
         }, function () {
-
         });
+        
         return defer.promise;
     };
 
@@ -2533,9 +2549,17 @@ angular.module('adminPageApp')
         $scope.searchTextValue = searchTxt;
         cancelPendingPromise();
         $scope.myData.data = [];
+        
+        ($scope.personaId)? $scope.personaId: $scope.personaId = '';
+        $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue + '&personaId=' + $scope.personaId;
+        
         $scope.updateUsers();
     });
-
+    
+    ($scope.searchTextValue) ? $scope.searchTextValue : $scope.searchTextValue = '';
+    ($scope.personaId) ? $scope.personaId: $scope.personaId = '';
+    $scope.downloadLink = '/BITool/admin/downloadUserReport?searchText=' + $scope.searchTextValue + '&personaId=' + $scope.personaId;
+    
     $scope.updateUsers = function () {
         var offset = $scope.myData.data.length + 1;
         var promise = $q.defer();
@@ -2585,7 +2609,6 @@ angular.module('adminPageApp')
             $scope.messageAlert = "";
         }, 5000);
     });
-
 //end    
 }]);
 
@@ -2728,6 +2751,7 @@ angular.module('adminPageApp').controller('AuditCtrl',["$scope", "$q", "$uibModa
     $scope.messageAlert= "";
     $scope.messageAlertError='';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetGroup');
     
     $scope.popup1 = {
         opened: false,
@@ -2770,8 +2794,9 @@ angular.module('adminPageApp').controller('AuditCtrl',["$scope", "$q", "$uibModa
             {name: 'type',displayName:'Type' ,width:'10%', cellToolTip:true},
             {name: 'reportName',displayName:'Report Name' ,width:'15%', cellToolTip:true},
             {name: 'userName',displayName:'User Name' ,width:'15%', cellToolTip:true},
-            {name: 'groupName',displayName:'Persona' ,width:'15%', cellToolTip:true},
-            {name: 'owner',displayName:'owner' ,width:'15%', cellToolTip:true}
+            {name: 'userPersona',displayName:'User Persona' ,width:'15%', cellToolTip:true},
+            {name: 'owner',displayName:'Owner' ,width:'15%', cellToolTip:true},
+            {name: 'groupName',displayName:'Audit Persona' ,width:'15%', cellToolTip:true}
         ];
     }
 
@@ -3296,9 +3321,6 @@ angular.module('adminPageApp')
         });
         
         modalInstance.result.then(function (returnObj) {
-            //var returnItems = returnObj.items;
-            //defer.resolve(returnItems);
-            console.log('Modal');
             $scope.myData.data = [];
             $scope.updateReportForm();
         }, function () {
@@ -3320,7 +3342,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('All / Deployed');
         $scope.updateReportForm();
     });
     
@@ -3329,7 +3350,6 @@ angular.module('adminPageApp')
         $scope.personaId = personaId;
         cancelPendingPromise();
         $scope.myData.data = [];
-        console.log('Perosna Id');
         $scope.updateReportForm();
     });
     
@@ -3351,7 +3371,6 @@ angular.module('adminPageApp')
         } else {
             var url = 'BITool/admin/externalrepo/searchreports/' + offset + '/20?searchText=' + $scope.searchTextValue +'&displayType=' + $scope.displayType;
         }
-        console.log(url);
         
         var httpPromise = $http({
             'url': url,
@@ -3533,6 +3552,15 @@ angular.module('adminPageApp')
     /**
      * Add report Functions 
      */
+    
+    //Help pop over object
+    $scope.popAdditionalInfo = {
+        content : 'Use Hexadecimal Color Codes here. eg: #000000 for black color tile',
+        title : 'Please Note:',
+        placement:'top',
+        class:'additiona-info'
+    };
+    
     userDetailsService.userPromise.then(function(userObj){
         userObj = userObj[0];
         $scope.reportPersona = userObj.userinfo.group[0].groupId;
@@ -3638,11 +3666,9 @@ angular.module('adminPageApp')
         
         $http.put("BITool/admin/updateReport?isManageExternalUpdate=true", $scope.items)
             .then(function (updatedData, status, headers) {
-                console.log(updatedData);
                 $scope.progress = false;
                 $scope.saveText = updatedData.data.message;
             }, function (updatedData, status, headers, config) {
-                console.log('2 - ' +  updatedData);
                 $scope.progress = false;
                 $scope.saveText = updatedData.data.message;
             });
@@ -3666,18 +3692,18 @@ angular.module('adminPageApp')
  * # ngFiles
  */
 angular.module('adminPageApp')
-  .directive('ngFiles', ["$parse", function ($parse) {
+.directive('ngFiles', ["$parse", function ($parse) {
     function fn_link(scope, element, attrs) {
-      var onChange = $parse(attrs.ngFiles);
-      element.on('change', function (event) {
-          onChange(scope, { $files: event.target.files });
-      });
+        var onChange = $parse(attrs.ngFiles);
+        element.on('change', function (event) {
+            onChange(scope, {$files: event.target.files});
+        });
     };
 
     return {
         link: fn_link
     };
-  }]);
+}]);
 
 'use strict';
 
@@ -3688,36 +3714,36 @@ angular.module('adminPageApp')
  * # ngFiles
  */
 angular.module('adminPageApp')
-  .directive('validFile',function(){
-  var validFormats = ['csv'];  
-  return {
-    require:'ngModel',
-    link: function (scope, elem, attrs, ngModel) {
-        elem.bind('change', function () {
-            validImage(false);
-            scope.$apply(function () {
-                ngModel.$render();
+.directive('validFile', function () {
+    var validFormats = ['csv'];
+    return {
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ngModel) {
+            elem.bind('change', function () {
+                validImage(false);
+                scope.$apply(function () {
+                    ngModel.$render();
+                });
             });
-        });
-        ngModel.$render = function () {
-            ngModel.$setViewValue(elem.val());
-        };
-        function validImage(bool) {
-            ngModel.$setValidity('extension', bool);
-        }
-        ngModel.$parsers.push(function(value) {
-            var ext = value.substr(value.lastIndexOf('.')+1);
-            if(ext=='') return;
-            if(validFormats.indexOf(ext) == -1){
-                return value;
+            ngModel.$render = function () {
+                ngModel.$setViewValue(elem.val());
+            };
+            function validImage(bool) {
+                ngModel.$setValidity('extension', bool);
             }
-            validImage(true);
-            return value;
-        });
-    }
-  };
+            ngModel.$parsers.push(function (value) {
+                var ext = value.substr(value.lastIndexOf('.') + 1);
+                if (ext == '')
+                    return;
+                if (validFormats.indexOf(ext) == -1) {
+                    return value;
+                }
+                validImage(true);
+                return value;
+            });
+        }
+    };
 });
-
 'use strict';
 
 /**
@@ -3737,16 +3763,16 @@ angular.module('adminPageApp')
             //dropdownTitle: '@'
         },
         template: "<div class='btn-group' data-ng-class='{open: open}'>" +
-                    "<button class='btn btn-small'  data-ng-click='toggleDropdown()'>{{getButtonText()}}&nbsp;</button>" +
-                    "<button class='btn btn-small dropdown-toggle' data-ng-click='toggleDropdown()'><span class='caret'></span></button>" +
-                    "<ul class='dropdown-menu scrollable-menu' aria-labelledby='dropdownMenu'>" +
-                        "<li><input type='checkbox' data-ng-change='checkAllClicked()' data-ng-model=checkAll> Check All</li>" +
-                        "<li class='divider'></li>" +
-                        "<li data-ng-repeat='option in options'><div class='checkbox'><label for=''><input type='checkbox' data-ng-change='setSelectedItem(option.groupId)' ng-model='selectedItems[option.groupId]'>{{option.groupName}}</label></div></li>" +
-                    "</ul>" +
+                "<button class='btn btn-small'  data-ng-click='toggleDropdown()'>{{getButtonText()}}&nbsp;</button>" +
+                "<button class='btn btn-small dropdown-toggle' data-ng-click='toggleDropdown()'><span class='caret'></span></button>" +
+                "<ul class='dropdown-menu scrollable-menu' aria-labelledby='dropdownMenu'>" +
+                "<li><input type='checkbox' data-ng-change='checkAllClicked()' data-ng-model=checkAll> Check All</li>" +
+                "<li class='divider'></li>" +
+                "<li data-ng-repeat='option in options'><div class='checkbox'><label for=''><input type='checkbox' data-ng-change='setSelectedItem(option.groupId)' ng-model='selectedItems[option.groupId]'>{{option.groupName}}</label></div></li>" +
+                "</ul>" +
                 "</div>",
         link: function (scope, element, attr) {
-            
+
             scope.selectedItems = {};
             scope.checkAll = false;
             scope.texts = {
@@ -3756,20 +3782,20 @@ angular.module('adminPageApp')
                 buttonDefaultText: 'Select',
                 dynamicButtonTextSuffix: 'checked'
             };
-            
-            $(document).bind('click', function(event){
+
+            $(document).bind('click', function (event) {
                 var isClickedElementChildOfPopup = element
-                    .find(event.target)
-                    .length > 0;
+                        .find(event.target)
+                        .length > 0;
 
                 if (isClickedElementChildOfPopup)
                     return;
 
-                scope.$apply(function(){
+                scope.$apply(function () {
                     scope.open = false;
                 });
             });
-            
+
             init();
 
             function init() {
@@ -3778,21 +3804,21 @@ angular.module('adminPageApp')
                     scope.selectedItems[scope.options[i].id] = true;
                 }
             };
-            
+
             scope.toggleDropdown = function () {
                 scope.open = !scope.open;
                 scope.openState = scope.open;
             };
-            
+
             scope.openDropDown = function () {
                 console.log('hi');
             };
-            
+
             scope.checkBoxClick = function (id) {
                 scope.setSelectedItem(id);
                 $event.stopImmediatePropagation();
             };
-            
+
             scope.checkAllClicked = function () {
                 if (scope.checkAll) {
                     selectAll();
@@ -3804,19 +3830,21 @@ angular.module('adminPageApp')
             function selectAll() {
                 scope.model = [];
                 scope.selectedItems = {};
-                
+
                 angular.forEach(scope.options, function (option) {
                     scope.model.push(option.groupId);
                 });
                 angular.forEach(scope.model, function (id) {
                     scope.selectedItems[id] = true;
                 });
-            };
+            }
+            ;
 
             function deselectAll() {
                 scope.model = [];
                 scope.selectedItems = {};
-            };
+            }
+            ;
 
             scope.setSelectedItem = function (id) {
                 var filteredArray = [];
@@ -3831,15 +3859,15 @@ angular.module('adminPageApp')
                 }
                 return false;
             };
-            
+
             scope.getButtonText = function () {
                 if ((scope.selectedItems.length > 0 || (angular.isObject(scope.selectedItems) && _.keys(scope.selectedItems).length > 0))) {
-                        var totalSelected = angular.isDefined(scope.model) ? scope.model.length : 0;
-                        if (totalSelected === 0) {
-                            return scope.texts.buttonDefaultText;
-                        } else {
-                            return totalSelected + ' ' + scope.texts.dynamicButtonTextSuffix;
-                        }
+                    var totalSelected = angular.isDefined(scope.model) ? scope.model.length : 0;
+                    if (totalSelected === 0) {
+                        return scope.texts.buttonDefaultText;
+                    } else {
+                        return totalSelected + ' ' + scope.texts.dynamicButtonTextSuffix;
+                    }
                 } else {
                     return scope.texts.buttonDefaultText;
                 }
@@ -3893,7 +3921,7 @@ angular.module('adminPageApp').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/UIGrid.html',
-    "<button type=\"button\" ng-click=\"open()\">Add</button> <span class=\"text-success\">{{messageAlert}}</span> <span class=\"text-danger\">{{messageAlertError}}</span> <br> <span ui-view=\"audit\"></span> <br> <div id=\"grid3\" ui-grid-infinite-scroll ui-grid=\"myData\" class=\"grid\"></div>"
+    "<button type=\"button\" ng-click=\"open()\">Add</button> <span class=\"pull-right\" ng-show=\"state.current.name === 'administration.list.users'\"> <a target=\"_self\" class=\"btn btn-sm btn-info\" href=\"{{downloadLink}}\" download=\"users-list.csv\">Download</a> </span> <span class=\"text-success\">{{messageAlert}}</span> <span class=\"text-danger\">{{messageAlertError}}</span> <br> <span ui-view=\"audit\"></span> <br> <div id=\"grid3\" ui-grid-infinite-scroll ui-grid=\"myData\" class=\"grid\"></div>"
   );
 
 
@@ -3928,17 +3956,23 @@ angular.module('adminPageApp').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/manageExternal.html',
-    "<div class=\"container-fluid\"> <div class=\"row\"> <div class=\"col-md-12\"> <span class=\"text-success\">{{messageAlert}}</span> <span class=\"text-danger\">{{messageAlertError}}</span> </div> </div> <div class=\"row margin-top-md\" ng-show=\"displayForm == 'edit'\"> <div class=\"container-fluid padding-zero\"> <div class=\"col-xs-12 margin-top-md\"> <div id=\"grid1\" ui-grid=\"myData\" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class=\"grid\"></div> </div> </div> </div> <div class=\"row\" ng-show=\"displayForm == 'add'\"> <form class=\"form-horizontal margin-top-md\" name=\"externalReport\" novalidate autocomplete=\"off\"> <div class=\"form-group\"> <label for=\"reportName\" class=\"col-sm-2 control-label\">Report Name * : </label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportName\" class=\"form-control\" ng-model=\"external.reportName\" ng-class=\"{'has-error' :externalReport.reportName.$invalid && externalReport.reportName.$pristine }\" required> <!--<p ng-show=\"externalReport.reportName.$error\"></p>--> </div> </div> <div class=\"form-group\"> <label for=\"reportDesc\" class=\"col-sm-2 control-label\">Report Description :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportDesc\" class=\"form-control\" ng-model=\"external.reportDesc\" ng-class=\"{'has-error' :externalReport.reportDesc.$invalid && externalReport.reportDesc.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"reportLink\" class=\"col-sm-2 control-label\">Report Link * :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportLink\" class=\"form-control\" ng-model=\"external.reportLink\" ng-class=\"{'has-error' :externalReport.reportLink.$invalid && externalReport.reportLink.$pristine && urlValid}\" ng-change=\"validateUrl(external.reportLink)\" required> <p class=\"error urlValidation\" ng-show=\"!externalReport.reportLink.$pristine && !urlValid\">Invalid URL</p> </div> </div> <div class=\"form-group\"> <label for=\"functionalArea\" class=\"col-sm-2 control-label\">Functional Area :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"functionalArea\" class=\"form-control\" ng-model=\"external.functionalArea\" ng-class=\"{'has-error' :externalReport.functionalArea.$invalid && externalReport.functionalArea.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"linkTitle\" class=\"col-sm-2 control-label\">Link Title :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"linkTitle\" class=\"form-control\" ng-model=\"external.linkTitle\" ng-class=\"{'has-error' :externalReport.linkTitle.$invalid && externalReport.linkTitle.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"linkHoverInfo\" class=\"col-sm-2 control-label\">Link Hover Info :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"linkHoverInfo\" class=\"form-control\" ng-model=\"external.linkHoverInfo\" ng-class=\"{'has-error' :externalReport.linkHoverInfo.$invalid && externalReport.linkHoverInfo.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"additionalInfo\" class=\"col-sm-2 control-label\">Tile Color :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"additionalInfo\" class=\"form-control\" ng-model=\"external.additionalInfo\" ng-class=\"{'has-error' :externalReport.additionalInfo.$invalid && externalReport.additionalInfo.$pristine }\"> </div> </div> <div class=\"form-group\"> <div class=\"col-sm-offset-4 col-sm-8\"> <button name=\"add\" class=\"btn btn-info\" type=\"submit\" ng-disabled=\"externalReport.$invalid || !urlValid\" ng-click=\"addExternal(external)\">Add Report</button> <button name=\"clear\" class=\"btn btn-warning\" type=\"reset\">Reset</button> </div> </div> </form> </div> </div>"
+    "<div class=\"container-fluid\"> <div class=\"row\"> <div class=\"col-md-12\"> <span class=\"text-success\">{{messageAlert}}</span> <span class=\"text-danger\">{{messageAlertError}}</span> </div> </div> <div class=\"row margin-top-md\" ng-show=\"displayForm == 'edit'\"> <div class=\"container-fluid padding-zero\"> <div class=\"col-xs-12 margin-top-md\"> <div id=\"grid1\" ui-grid=\"myData\" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class=\"grid\"></div> </div> </div> </div> <div class=\"row\" ng-show=\"displayForm == 'add'\"> <form class=\"form-horizontal margin-top-md\" name=\"externalReport\" novalidate autocomplete=\"off\"> <div class=\"form-group\"> <label for=\"reportName\" class=\"col-sm-2 control-label\">Report Name * : </label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportName\" class=\"form-control\" ng-model=\"external.reportName\" ng-class=\"{'has-error' :externalReport.reportName.$invalid && externalReport.reportName.$pristine }\" required> <!--<p ng-show=\"externalReport.reportName.$error\"></p>--> </div> </div> <div class=\"form-group\"> <label for=\"reportDesc\" class=\"col-sm-2 control-label\">Report Description :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportDesc\" class=\"form-control\" ng-model=\"external.reportDesc\" ng-class=\"{'has-error' :externalReport.reportDesc.$invalid && externalReport.reportDesc.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"reportLink\" class=\"col-sm-2 control-label\">Report Link * :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"reportLink\" class=\"form-control\" ng-model=\"external.reportLink\" ng-class=\"{'has-error' :externalReport.reportLink.$invalid && externalReport.reportLink.$pristine && urlValid}\" ng-change=\"validateUrl(external.reportLink)\" required> <p class=\"error urlValidation\" ng-show=\"!externalReport.reportLink.$pristine && !urlValid\">Invalid URL</p> </div> </div> <div class=\"form-group\"> <label for=\"functionalArea\" class=\"col-sm-2 control-label\">Functional Area :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"functionalArea\" class=\"form-control\" ng-model=\"external.functionalArea\" ng-class=\"{'has-error' :externalReport.functionalArea.$invalid && externalReport.functionalArea.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"linkTitle\" class=\"col-sm-2 control-label\">Link Title :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"linkTitle\" class=\"form-control\" ng-model=\"external.linkTitle\" ng-class=\"{'has-error' :externalReport.linkTitle.$invalid && externalReport.linkTitle.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"linkHoverInfo\" class=\"col-sm-2 control-label\">Link Hover Info :</label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"linkHoverInfo\" class=\"form-control\" ng-model=\"external.linkHoverInfo\" ng-class=\"{'has-error' :externalReport.linkHoverInfo.$invalid && externalReport.linkHoverInfo.$pristine }\"> </div> </div> <div class=\"form-group\"> <label for=\"additionalInfo\" class=\"col-sm-2 control-label additional-info\">Tile Color : <a href=\"javascript:void(0)\" class=\"glyphicon glyphicon-question-sign font-Iconsize\" popover-animation=\"true\" uib-popover=\"{{popAdditionalInfo.content}}\" popover-placement=\"{{popAdditionalInfo.placement}}\" popover-class=\"{{popAdditionalInfo.class}}\" popover-trigger=\"focus\"></a> </label> <div class=\"col-sm-6\"> <input type=\"text\" name=\"additionalInfo\" class=\"form-control\" ng-model=\"external.additionalInfo\" ng-class=\"{'has-error' :externalReport.additionalInfo.$invalid && externalReport.additionalInfo.$pristine }\"> </div> </div> <div class=\"form-group\"> <div class=\"col-sm-offset-4 col-sm-8\"> <button name=\"add\" class=\"btn btn-info\" type=\"submit\" ng-disabled=\"externalReport.$invalid || !urlValid\" ng-click=\"addExternal(external)\">Add Report</button> <button name=\"clear\" class=\"btn btn-warning\" type=\"reset\">Reset</button> </div> </div> </form> </div> </div>"
   );
 
 
   $templateCache.put('views/modal.html',
-    "<div class=\"modal-header\"> <button type=\"button\" class=\"close\" ng-click=\"cancel()\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button> <h3 class=\"modal-title\">Reports</h3> </div> <!-- Code for Tab1--> <div class=\"modal-body\" style=\"margin-left: 20px\"> <!--Code for Nav Tabs--> <ul class=\"nav nav-pills\"> <li ng-class=\"{'active':updatefields}\"> <a href=\"javascript:void(0);\" ng-click=\"tabchange(true)\"> Update Fields </a> </li> <li ng-class=\"{'active':!updatefields}\"> <a href=\"javascript:void(0);\" ng-click=\"tabchange(false)\"> Report Visibility </a> </li> </ul> <!--End of Code for Nav Tabs--> <br> <form name=\"reportForm\" ng-show=\"updatefields\"> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created Date</div> <div class=\"col-xs-8\"> {{items.createdDate}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Updated Date </div> <div class=\"col-xs-6\">{{items.updatedDate}} </div> </div> </div> </div> <hr> <!--End of row1--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\" ng-hide=\"exFlag\"> Owner</div> <div class=\"col-xs-4\" ng-show=\"exFlag\"> Created By</div> <div class=\"col-xs-8\">{{items.owner}}</div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> System Description </div> <div class=\"col-xs-8\">{{ items.systemDescription}} </div> </div> </div> </div> <hr> <!--End of row2--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source System</div> <div class=\"col-xs-8\"> <!--input type=\"text\" name=\"sourceSystem\" ng-model=\"items.sourceSystem\" readonly--> {{items.sourceSystem}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Name </div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"reportName\" ng-model=\"items.reportName\" ng-readonly=\"exFlag\"> </div> </div> </div> </div> <hr> <!--End of row4--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source Report Id</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"sourceReport\" ng-model=\"items.sourceReportId\" --> {{items.sourceReportId}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Description </div> <div class=\"col-xs-8\"> <textarea name=\"reportDesc\" ng-model=\"items.reportDesc\" ng-readonly=\"exFlag\">{{items.reportDesc}}</textarea> <!--<input type=\"text\" name=\"reportDesc\" ng-model=\"items.reportDesc\" ng-readonly=\"exFlag\">--> </div> </div> </div> </div> <hr> <!--End of row5--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Type</div> <div class=\"col-xs-6\"> <!-- input type=\"text\" name=\"reportType\" ng-model=\"items.reportType\" --> {{items.reportType}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\" ng-hide=\"exFlag\"> Additional Information </div> <div class=\"col-xs-4\" ng-show=\"exFlag\"> Tile Color </div> <div class=\"col-xs-6\"> <!-- input type=\"text\" name=\"additionalInfo\" ng-model=\"items.additionalInfo\" --> {{items.additionalInfo}} </div> </div> </div> </div> <hr> <!--End of row6--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Link </div> <div class=\"col-xs-8\" style=\"word-wrap: break-word\"> <!-- input type=\"text\" name=\"reportLink\" ng-model=\"items.reportLink\" --> {{items.reportLink}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> View Count </div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"viewCount\" ng-model=\"items.viewCount\" --> {{items.viewCount}} </div> </div> </div> </div> <hr> <!--End of row7--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Functional Area</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"functionalArea\" ng-model=\"items.functionalArea\" --> {{items.functionalArea}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> Refresh Status </div> <div class=\"col-xs-8\"> <select ng-model=\"items.refreshStatus\"> <option value=\"N\">N</option> <option value=\"Y\">Y</option> </select> </div> </div> </div> </div> <hr> <!--End of row8--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Title</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"titleLink\" ng-model=\"items.linkTitle\" ng-readonly=\"exFlag\"> </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> View Tabs </div> <div class=\"col-xs-8\"> <select ng-model=\"items.tabbedViews\"> <option value=\"N\">N</option> <option value=\"Y\">Y</option> </select> </div> </div> </div> </div> <hr> <!--End of row9--> <div class=\"row\"> <div class=\"col-md-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Hover Information</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"linkHoverInfo\" ng-model=\"items.linkHoverInfo\" ng-readonly=\"exFlag\"> </div> </div> </div> <div class=\"col-md-6\"></div> </div> </form> </div> <!-- End of Code for Tab2--> <!-- Code for Tab2--> <form ng-hide=\"updatefields\" style=\"margin-left: 30px\"> <div> <b>Permissions</b> - Reports to give access </div> <hr> <div class=\"row\"> <div class=\"col-xs-3\">Set Level</div> <div class=\"col-xs-3\">Select Persona</div> </div> <hr> <div class=\"row\" ng-repeat=\"levelGroupMap in levelGroupMaps\"> <div class=\"col-xs-3\"> <select ng-model=\"levelGroupMap.selectedlevel\" ng-options=\"level.levelId as level.levelDesc  for level in levelGroup.allLevels\"></select> </div> <div class=\"col-xs-3\"> <select ng-model=\"levelGroupMap.selectedgroup\" ng-options=\"group.groupId as group.groupName for group in levelGroup.allGroups\"></select> </div> <div class=\"col-xs-6\" style=\"margin-bottom: 10px\"> <button class=\"btn\" type=\"button\" ng-click=\"addLevelGroup()\">+Add</button> <button class=\"btn\" type=\"button\" ng-click=\"removeLevelGroup($index)\">-Remove</button> </div> </div> <br> </form> <!-- End of Code for Tab2--> <!--End of row10   --> <div class=\"modal-footer\"> <span class=\"text-success\">{{saveText}}</span> <button class=\"btn btn-primary\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">Cancel</button> </div>"
+    "<div class=\"modal-header\"> <button type=\"button\" class=\"close\" ng-click=\"cancel()\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button> <button class=\"btn btn-primary save\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button> <!--Code for Nav Tabs--> <ul class=\"nav nav-pills\"> <li ng-class=\"{'active':updatefields}\"> <a href=\"javascript:void(0);\" ng-click=\"tabchange(true)\"> Update Report </a> </li> <li ng-class=\"{'active':!updatefields}\"> <a href=\"javascript:void(0);\" ng-click=\"tabchange(false)\"> Report Visibility </a> </li> </ul> <!--End of Code for Nav Tabs--> </div> <!-- Code for Tab1--> <div class=\"modal-body\"> <span class=\"text-success\">{{saveText}}</span> <form name=\"reportForm\" ng-show=\"updatefields\" class=\"report-modal-form\"> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created Date</div> <div class=\"col-xs-8\"> {{items.createdDate}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Updated Date </div> <div class=\"col-xs-6\">{{items.updatedDate}} </div> </div> </div> </div> <!--End of row1--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\" ng-hide=\"exFlag\"> Owner</div> <div class=\"col-xs-4\" ng-show=\"exFlag\"> Created By</div> <div class=\"col-xs-8\">{{items.owner}}</div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> System Description </div> <div class=\"col-xs-8\">{{ items.systemDescription}} </div> </div> </div> </div> <!--End of row2--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source System</div> <div class=\"col-xs-8\"> {{items.sourceSystem}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Name </div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"reportName\" ng-model=\"items.reportName\" ng-hide=\"exFlag\"> <p ng-show=\"exFlag\">{{items.reportName}}</p> </div> </div> </div> </div> <!--End of row4--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source Report Id</div> <div class=\"col-xs-8\"> {{items.sourceReportId}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Description </div> <div class=\"col-xs-8\"> <textarea name=\"reportDesc\" ng-model=\"items.reportDesc\" ng-hide=\"exFlag\">{{items.reportDesc}}</textarea> <p ng-show=\"exFlag\">{{items.reportDesc | limitTo:100}}<span ng-show=\"items.reportDesc.length > 100\">...</span></p> </div> </div> </div> </div> <!--End of row5--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Type</div> <div class=\"col-xs-6\"> {{items.reportType}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\" ng-hide=\"exFlag\"> Additional Information </div> <div class=\"col-xs-4\" ng-show=\"exFlag\"> Tile Color </div> <div class=\"col-xs-6\"> {{items.additionalInfo}} </div> </div> </div> </div> <!--End of row6--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Link </div> <div class=\"col-xs-8\" style=\"word-wrap: break-word\"> {{items.reportLink}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> View Count </div> <div class=\"col-xs-8\"> {{items.viewCount}} </div> </div> </div> </div> <!--End of row7--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Functional Area</div> <div class=\"col-xs-8\"> {{items.functionalArea}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> Refresh Status </div> <div class=\"col-xs-8\"> <select ng-model=\"items.refreshStatus\"> <option value=\"N\">N</option> <option value=\"Y\">Y</option> </select> </div> </div> </div> </div> <!--End of row8--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Title</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"titleLink\" ng-model=\"items.linkTitle\" ng-hide=\"exFlag\"> <p ng-show=\"exFlag\">{{items.linkTitle}}</p> </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\" ng-hide=\"exFlag\"> <div class=\"col-xs-4\"> View Tabs </div> <div class=\"col-xs-8\"> <select ng-model=\"items.tabbedViews\"> <option value=\"N\">N</option> <option value=\"Y\">Y</option> </select> </div> </div> </div> </div> <!--End of row9--> <div class=\"row\"> <div class=\"col-md-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Hover Information</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"linkHoverInfo\" ng-model=\"items.linkHoverInfo\" ng-hide=\"exFlag\"> <p ng-show=\"exFlag\">{{items.linkHoverInfo}}</p> </div> </div> </div> <div class=\"col-md-6\"></div> </div> </form> <!-- Code for Tab2--> <form ng-hide=\"updatefields\" style=\"margin-left: 30px\"> <div> <b>Permissions</b> - Reports to give access </div> <hr> <div class=\"row\"> <div class=\"col-xs-3\">Set Level</div> <div class=\"col-xs-3\">Select Persona</div> </div> <hr> <div class=\"row\" ng-repeat=\"levelGroupMap in levelGroupMaps\"> <div class=\"col-xs-3\"> <select ng-model=\"levelGroupMap.selectedlevel\" ng-options=\"level.levelId as level.levelDesc  for level in levelGroup.allLevels\"></select> </div> <div class=\"col-xs-3\"> <select ng-model=\"levelGroupMap.selectedgroup\" ng-options=\"group.groupId as group.groupName for group in levelGroup.allGroups\"></select> </div> <div class=\"col-xs-6\" style=\"margin-bottom: 10px\"> <button class=\"btn\" type=\"button\" ng-click=\"addLevelGroup()\">+Add</button> <button class=\"btn\" type=\"button\" ng-click=\"removeLevelGroup($index)\">-Remove</button> </div> </div> <br> </form> <!-- End of Code for Tab2--> </div> <!-- End of Code for Tab2--> <div class=\"modal-footer\"> <!--<span class=\"text-success\">{{saveText}}</span>--> <!--    <button class=\"btn btn-primary save\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button>\r" +
+    "\n" +
+    "    <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">Cancel</button>--> </div>"
   );
 
 
   $templateCache.put('views/modalExternal.html',
-    "<div class=\"modal-header\"> <button type=\"button\" class=\"close\" ng-click=\"cancel()\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button> <h3 class=\"modal-title\">External Reports</h3> </div> <div class=\"modal-body\" style=\"margin-left: 20px\"> <form name=\"reportForm\"> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created Date</div> <div class=\"col-xs-8\"> {{items.createdDate}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Updated Date </div> <div class=\"col-xs-6\">{{items.updatedDate}} </div> </div> </div> </div> <hr> <!--End of row1--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created By</div> <div class=\"col-xs-8\">{{items.owner}}</div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> System Description </div> <div class=\"col-xs-8\">{{ items.systemDescription}} </div> </div> </div> </div> <hr> <!--End of row2--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source System</div> <div class=\"col-xs-8\"> <!--input type=\"text\" name=\"sourceSystem\" ng-model=\"items.sourceSystem\" readonly--> {{items.sourceSystem}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Name </div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"reportName\" ng-model=\"items.reportName\"> </div> </div> </div> </div> <hr> <!--End of row4--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source Report Id</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"sourceReport\" ng-model=\"items.sourceReportId\" --> {{items.sourceReportId}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Description </div> <div class=\"col-xs-8\"> <textarea name=\"reportDesc\" ng-model=\"items.reportDesc\">{{items.reportDesc}}</textarea> <!--<input type=\"text\" name=\"reportDesc\" ng-model=\"items.reportDesc\" ng-readonly=\"exFlag\">--> </div> </div> </div> </div> <hr> <!--End of row5--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Type</div> <div class=\"col-xs-6\"> <!-- input type=\"text\" name=\"reportType\" ng-model=\"items.reportType\" --> {{items.reportType}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Tile Color </div> <div class=\"col-xs-6\"> <input type=\"text\" name=\"additionalInfo\" ng-model=\"items.additionalInfo\"> </div> </div> </div> </div> <hr> <!--End of row6--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Link </div> <div class=\"col-xs-8\" style=\"word-wrap: break-word\"> <input type=\"text\" name=\"reportLink\" ng-model=\"items.reportLink\"> </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> View Count </div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"viewCount\" ng-model=\"items.viewCount\" --> {{items.viewCount}} </div> </div> </div> </div> <hr> <!--End of row7--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Functional Area</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"functionalArea\" ng-model=\"items.functionalArea\" --> {{items.functionalArea}} </div> </div> </div> <div class=\"col-xs-6\"></div> </div> <hr> <!--End of row8--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Title</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"titleLink\" ng-model=\"items.linkTitle\"> </div> </div> </div> <div class=\"col-xs-6\"></div> </div> <hr> <!--End of row9--> <div class=\"row\"> <div class=\"col-md-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Hover Information</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"linkHoverInfo\" ng-model=\"items.linkHoverInfo\"> </div> </div> </div> <div class=\"col-md-6\"></div> </div> </form> </div> <!--End of row10   --> <div class=\"modal-footer\"> <span class=\"text-success\">{{saveText}}</span> <button class=\"btn btn-primary\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">Cancel</button> </div>"
+    "<div class=\"modal-header\"> <button type=\"button\" class=\"close\" ng-click=\"cancel()\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button> <button class=\"btn btn-primary save\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button> <h3 class=\"modal-title\">External Reports</h3> </div> <div class=\"modal-body\"> <span class=\"text-success\">{{saveText}}</span> <form name=\"reportForm\" class=\"report-modal-form\"> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created Date</div> <div class=\"col-xs-8\"> {{items.createdDate}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Updated Date </div> <div class=\"col-xs-6\">{{items.updatedDate}} </div> </div> </div> </div> <!--End of row1--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Created By</div> <div class=\"col-xs-8\">{{items.owner}}</div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> System Description </div> <div class=\"col-xs-8\">{{ items.systemDescription}} </div> </div> </div> </div> <!--End of row2--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source System</div> <div class=\"col-xs-8\"> <!--input type=\"text\" name=\"sourceSystem\" ng-model=\"items.sourceSystem\" readonly--> {{items.sourceSystem}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Name </div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"reportName\" ng-model=\"items.reportName\"> </div> </div> </div> </div> <!--End of row4--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Source Report Id</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"sourceReport\" ng-model=\"items.sourceReportId\" --> {{items.sourceReportId}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Description </div> <div class=\"col-xs-8\"> <textarea name=\"reportDesc\" ng-model=\"items.reportDesc\">{{items.reportDesc}}</textarea> <!--<input type=\"text\" name=\"reportDesc\" ng-model=\"items.reportDesc\" ng-readonly=\"exFlag\">--> </div> </div> </div> </div> <!--End of row5--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Type</div> <div class=\"col-xs-6\"> <!-- input type=\"text\" name=\"reportType\" ng-model=\"items.reportType\" --> {{items.reportType}} </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Tile Color </div> <div class=\"col-xs-6\"> <input type=\"text\" name=\"additionalInfo\" ng-model=\"items.additionalInfo\"> </div> </div> </div> </div> <!--End of row6--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Report Link </div> <div class=\"col-xs-8\" style=\"word-wrap: break-word\"> <input type=\"text\" name=\"reportLink\" ng-model=\"items.reportLink\"> </div> </div> </div> <div class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> View Count </div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"viewCount\" ng-model=\"items.viewCount\" --> {{items.viewCount}} </div> </div> </div> </div> <!--End of row7--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Functional Area</div> <div class=\"col-xs-8\"> <!-- input type=\"text\" name=\"functionalArea\" ng-model=\"items.functionalArea\" --> {{items.functionalArea}} </div> </div> </div> <div class=\"col-xs-6\"></div> </div> <!--End of row8--> <div class=\"row\"> <div style=\"\" class=\"col-xs-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Title</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"titleLink\" ng-model=\"items.linkTitle\"> </div> </div> </div> <div class=\"col-xs-6\"></div> </div> <!--End of row9--> <div class=\"row\"> <div class=\"col-md-6\"> <div class=\"row\"> <div class=\"col-xs-4\"> Link Hover Information</div> <div class=\"col-xs-8\"> <input type=\"text\" name=\"linkHoverInfo\" ng-model=\"items.linkHoverInfo\"> </div> </div> </div> <div class=\"col-md-6\"></div> </div> </form> </div> <!--End of row10   --> <div class=\"modal-footer\"> <!--<span class=\"text-success\">{{saveText}}</span>\r" +
+    "\n" +
+    "    <button class=\"btn btn-primary\" type=\"button\" ng-disabled=\"progress\" ng-click=\"ok()\">Save</button>\r" +
+    "\n" +
+    "    <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">Cancel</button>--> </div>"
   );
 
 

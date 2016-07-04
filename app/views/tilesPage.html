@@ -14,7 +14,7 @@
                 </h5>
             </div>
         </div>
-        <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
+        <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1 align-right">
             <a class="btn btn-md bordered" href="javascript:;" ng-show="panel.open" ng-click="collapseOpen();"><span class="glyphicon glyphicon-minus"></span></a>
             <a class="btn btn-md bordered" href="javascript:;" ng-hide="panel.open" ng-click="collapseOpen();"><span class="glyphicon glyphicon-plus"></span></a>
         </div>
@@ -57,7 +57,10 @@
 
                 <p ng-show="panel.data.length === 0" class="text-center">
                     <span ng-show="panel.rr">
-                        There are no available reports for this persona.
+                        There are no recommended reports for this persona.
+                    </span>
+                    <span ng-show="panel.title === 'Favorite Reports'">
+                        There are currently no favorite reports.
                     </span>
                 </p>
             </div>

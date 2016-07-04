@@ -29,7 +29,6 @@ angular.module('myBiApp')
     
     function setUserLevel(usrObj) {
         if(!$localStorage.myLevel) {
-            console.log('Profile IF - No Localstorage level');
             if (usrObj.userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
             } else if (usrObj.userinfo.badge === 'Silver') {
@@ -44,7 +43,6 @@ angular.module('myBiApp')
             $localStorage.myLevel = $scope.myLevel
             $scope.$emit('myLevelIndication', $scope.myLevel);
         } else {
-            console.log('Profile ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.userBadgeImage = "images/"+$scope.myLevel+"-badge.png";
             $scope.$emit('myLevelIndication', $scope.myLevel);
@@ -54,7 +52,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Profile IF - No Localstorage theme');
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
                     personalization[response.data.favorite - 1] = 'favoriteReports'; 
@@ -74,14 +71,13 @@ angular.module('myBiApp')
                 }
             });
         } else {
-            console.log('Profile ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
     }
     
-    $scope.setUserTheme = function(theme) {
+//    $scope.setUserTheme = function(theme) {
 //        if($localStorage.userTheme === theme) {
 //            return;
 //        }
@@ -107,7 +103,7 @@ angular.module('myBiApp')
 //            });
 //    
 //        $scope.setLoading(false);    
-    };
+//    };
     
     function findThemeKey(obj, value) {
         var key;

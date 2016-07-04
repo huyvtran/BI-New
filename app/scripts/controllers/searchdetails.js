@@ -11,6 +11,7 @@ angular.module('myBiApp')
 .controller('SearchdetailsCtrl', function ($scope, $rootScope, $stateParams, $state, searchservice, userDetailsService, commonService, $http) {
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
+    $scope.isCollapsed = false;
     
     if ($stateParams.sourceReportId) {
 
@@ -36,7 +37,6 @@ angular.module('myBiApp')
                     $http.get(reportUpdateViewed);
 
                     $scope.mainState.$current.data.displayName = resp.data.name;
-                    (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'):'';
                     $scope.isTableu = true;
                     var placeholderDiv = document.getElementById('tableu_report3');
                     //placeholderDiv.setAttribute('fixT',Math.random());
@@ -69,16 +69,15 @@ angular.module('myBiApp')
                 $scope.reportAccessData = resp;
             });
         } else if ($state.current.name === 'search.details.feedback') {
-
             $scope.feedbackArray = [];
             searchservice.loadFeedbacks($stateParams.searchId).then(function (resp) {
                 $scope.feedbackArray = resp;
             });
         }
-
     }
 
     $scope.feedback = '';
+    
     $scope.postFeedback = function () {
         if ($scope.feedback.trim() !== '') {
             $scope.setLoading(true);

@@ -18,11 +18,11 @@
 }
 /* line 22, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) {
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
 }
 /* line 24, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
-  background: #f5f5f5;
+  background: #F5F5F5;
 }
 
 /* line 31, ../../app/styles/theme-default.scss */
@@ -32,11 +32,11 @@
 }
 /* line 36, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .report-tile:nth-child(even) {
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
 }
 /* line 38, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
-  background: #f5f5f5;
+  background: #F5F5F5;
 }
 
 /* line 46, ../../app/styles/theme-default.scss */
@@ -82,7 +82,7 @@
 }
 /* line 93, ../../app/styles/theme-default.scss */
 .black-bg .table-hover > tbody > tr:hover {
-  /* background-color: #f5f5f5; */
+  /* background-color: #E8E8E8; */
 }
 
 /* line 98, ../../app/styles/theme-default.scss */
@@ -97,15 +97,15 @@
 
 /* line 106, ../../app/styles/theme-default.scss */
 .white-theme #wrapper {
-  background: #f5f5f5 !important;
+  background: #E8E8E8 !important;
 }
 /* line 108, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default {
-  background: #f5f5f5 !important;
+  background: #E8E8E8 !important;
 }
 /* line 110, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li {
-  background-color: #f5f5f5 !important;
+  background-color: #E8E8E8 !important;
 }
 /* line 112, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li a {
@@ -117,20 +117,20 @@
 }
 /* line 121, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li.reports:hover .tree-view ul li:hover {
-  background: #f5f5f5 !important;
+  background: #E8E8E8 !important;
 }
 /* line 127, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] {
-  background-color: #f5f5f5 !important;
-  outline-color: #f5f5f5;
+  background-color: #E8E8E8 !important;
+  outline-color: #E8E8E8;
 }
 /* line 130, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul {
-  outline-color: #f5f5f5;
+  outline-color: #E8E8E8;
 }
 /* line 133, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li:hover {
-  background: #f5f5f5 !important;
+  background: #E8E8E8 !important;
 }
 /* line 137, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a:hover {

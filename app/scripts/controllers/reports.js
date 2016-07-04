@@ -13,7 +13,6 @@ angular.module('myBiApp')
     $scope.access = {};
     $scope.access.limitTo = 6;
     $scope.access.subGroupItemsId = 0;
-    
     setUserPreference();
     
     $scope.setListView = function (status) {
@@ -49,6 +48,8 @@ angular.module('myBiApp')
                 };
             } else {  
                 setUserLevel(userObject[0]);
+                getBreadCrumLevel(false);
+                
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
@@ -80,8 +81,10 @@ angular.module('myBiApp')
 
     $scope.access.subGroupItems = function (levelid) {
         $scope.biGroup.all().then(function () {
+            getBreadCrumLevel(levelid);
             $scope.setLoading(false);
             $scope.dataObj = [];
+            
             function getLevelObj(obj) {
                 var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
                 if (filter) {
@@ -127,16 +130,10 @@ angular.module('myBiApp')
             getLevelObj($scope.biGroup.biGroups);
         });
 
-        //$scope.access.catGroups = true; 
         $scope.access.subGroupItemsId = levelid;
     };
 
     $scope.access.groupItems = function (groupid) {
-        /*$scope.access.catRecent= false;
-         $scope.access.catSales= false;
-         $scope.access.catPreSales= false;
-         $scope.access.catPopular= false;
-         $scope.access.limitTo = undefined;*/
         $scope.biGroup.all().then(function () {
             _.map($scope.biGroup.biGroups, function (firstLevel) {
                 if (firstLevel.levelId.toString() === groupid) {
@@ -160,7 +157,6 @@ angular.module('myBiApp')
     
     function setUserLevel(usrObj) {
         if(!$localStorage.myLevel) {
-            console.log('Reprots IF - No Localstorage level');
             if (usrObj.userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
             } else if (usrObj.userinfo.badge === 'Silver') {
@@ -174,7 +170,6 @@ angular.module('myBiApp')
             $localStorage.myLevel = $scope.myLevel
             $scope.$emit('myLevelIndication', $scope.myLevel);
         } else {
-            console.log('Reports ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -182,8 +177,8 @@ angular.module('myBiApp')
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Reports IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -205,12 +200,39 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Reports ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
     } 
+    
+    function getBreadCrumLevel(levelid) {
+        if(levelid) {
+            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
+                if(response.data) {
+                    $scope.pageBreadCrum = '';
+                    var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
+                    var data = response.data;
+
+                    for(var i = 0; i<data.length; i++) {
+                        var url = '#/reports/'+data[i].levelId;
+                        pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
+                    }
+
+                    $scope.pageBreadCrum = pageBreadCrum;
+                    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+
+                } else {
+                    console.log('else');
+                }
+            });
+        } else {
+            $scope.pageBreadCrum ='';
+            var pageBreadCrum = '<a href="#/">Home</a>  -> Available Reports';
+            $scope.pageBreadCrum = pageBreadCrum;
+            $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+        }
+    }
 })
 .filter('filterReports', function () {
     return function (items, levelId) {

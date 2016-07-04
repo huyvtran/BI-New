@@ -27,14 +27,15 @@ angular.module('myBiApp')
         scrollInertia: 0
     };
     
+    $scope.$on('bredCrumValue', function(event, value){
+        $scope.pageBreadCrum = value
+    });
+    
     $scope.$on('myLevelIndication', function(event, value){
-        console.log('level came here!!!')
-        $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
     $scope.$on('myThemeSettings', function(event, theme, personalization){
-        console.log('theme came here!!!')
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
         $scope.userTheme = $localStorage.userTheme;
@@ -128,7 +129,6 @@ angular.module('myBiApp')
         } else if (userdetails.userinfo.badge === 'Platinum') {
             $scope.myLevel = 'platinum-level';
         }
-        console.log('Main - Set Localstorage level');
         $localStorage.myLevel = $scope.myLevel;
         $scope.$emit('myLevelIndication', $scope.myLevel);
     });
@@ -189,9 +189,9 @@ angular.module('myBiApp')
             }
             $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
                 .then(function (resp, status, headers) {
-                    console.log(resp);
+                    
                 }, function (resp, status, headers, config) {
-                    console.log(resp);
+                
                 });
         });
     }
@@ -208,7 +208,6 @@ angular.module('myBiApp')
     }
     
     function setPersonalization() {
-        console.log('Main - Set Localstorage theme');
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
                 var personalization = [];
@@ -220,7 +219,6 @@ angular.module('myBiApp')
                 $scope.userTheme = $localStorage.userTheme;
                 $localStorage.personalization = personalization;
                 $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
-                console.log(personalization);
                 $scope.reportPriorityList = personalization;
                 $scope.reportPanelList = [];
                 $scope.refreshPanelList($scope.reportPriorityList);

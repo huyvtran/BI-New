@@ -450,7 +450,6 @@ angular
                     controller: ["$scope", "$stateParams", function ($scope, $stateParams) {
                         $scope.access.groupItems($stateParams.groupId);
                     }]
-
                 }
             },
             data: {
@@ -561,7 +560,7 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/userinfo\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"group":[{"groupId":1,"groupName":"Manufacturing"}],"role":"Admin","badge":"Platinum"}'];
+        return [200, '{"group":[{"groupId":1,"groupName":"Manufacturing"}],"role":"Admin","badge":"Gold"}'];
     });
 
     $httpBackend.whenGET(/userExistInBITool\/*/).respond(function (/*method, url, data*/) {
@@ -589,8 +588,7 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/reportSummary\/*/).respond(function (/*method, url, data*/) {
-        //return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"userName":"moorts5","name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"id":26048,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"addToGallery":null,"viewCount":null,"lastViewed":1462800233900,"favorite":"N","levelId":46,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1462800197397,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1462796835217,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1462800290487,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":null,"lastViewed":1462892465140,"favorite":"N","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"recentViewedReports":[{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":0,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":1,"linkTitle":"Training Unit Balance - APJ","linkHoverInfo":"Training Unit Balance - APJ"},{"userName":"moorts5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":37,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product"},{"userName":"moorts5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":589,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"}],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"moorts5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1462800197397,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1462796835217,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1462800290487,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
-//        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"userName":"MOORTS5","name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"id":26048,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"addToGallery":null,"viewCount":null,"lastViewed":1463058672200,"favorite":"N","levelId":46,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"GSC Accreditation","type":"Webi","owner":"SampaR","reportDesc":null,"id":130193,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9cWof0tYFJt967esggoAc","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Proven","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa9cWof0tYFJt967esggoAc","additionalInfo":"Education Services and Dev/Curriculum/Proven","systemDescription":"BAAAS BOBJ TST","createDate":1440446089000,"updateDate":1440694808000,"addToGallery":null,"viewCount":null,"lastViewed":1464257593400,"favorite":"N","levelId":26,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Income Statement","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130205,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","createDate":1320086467000,"updateDate":1320086467000,"addToGallery":null,"viewCount":null,"lastViewed":1464257584777,"favorite":"N","levelId":0,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":null,"lastViewed":1464257616807,"favorite":"N","levelId":51,"refreshStatus":"Y","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":null,"lastViewed":1464014075197,"favorite":"N","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"recentViewedReports":[{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":37,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"Y","recommendedSeq":1,"linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product"},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":596,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"},{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":37,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"Y","recommendedSeq":1,"linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product"},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":596,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"},{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":37,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"Y","recommendedSeq":1,"linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product"},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":596,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"},{"userName":"MOORTS5","name":"Sample Http","type":"HTTP","owner":null,"reportDesc":null,"id":130259,"reportLink":"https://bipdurdev01.corp.emc.com/BITool/report/pdf.pdf","functionalArea":"Yes this is the functional area","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#31B404","systemDescription":"EXTERNAL_SYSTEM","createDate":1464181841000,"updateDate":1464181841000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"Yes this is title","linkHoverInfo":"This is hover"},{"userName":"MOORTS5","name":"Sample External Content","type":"CSV","owner":null,"reportDesc":null,"id":130258,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#93FFFE","systemDescription":"EXTERNAL_SYSTEM","createDate":1464180268000,"updateDate":1464347785000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":4,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info"}],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+//        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[],"recentViewedReports":[],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
         return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"userName":"MOORTS5","name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"id":26048,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"addToGallery":null,"viewCount":null,"lastViewed":1463058672200,"favorite":"N","levelId":46,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"GSC Accreditation","type":"Webi","owner":"SampaR","reportDesc":null,"id":130193,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9cWof0tYFJt967esggoAc","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Proven","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa9cWof0tYFJt967esggoAc","additionalInfo":"Education Services and Dev/Curriculum/Proven","systemDescription":"BAAAS BOBJ TST","createDate":1440446089000,"updateDate":1440694808000,"addToGallery":null,"viewCount":null,"lastViewed":1464257593400,"favorite":"N","levelId":26,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Income Statement","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130205,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","createDate":1320086467000,"updateDate":1320086467000,"addToGallery":null,"viewCount":null,"lastViewed":1464257584777,"favorite":"N","levelId":0,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":null,"lastViewed":1464257616807,"favorite":"N","levelId":51,"refreshStatus":"Y","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":null,"lastViewed":1464014075197,"favorite":"N","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"recentViewedReports":[{"userName":"moorts5","name":"ART System","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"URL to the ART System","id":132,"reportLink":"http://art.cit.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL8","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996358000,"updateDate":1465996358000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":1,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"ScaleIO","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"ScaleIO Inside EMC Link","id":133,"reportLink":"https://inside.emc.com/community/active/scaleio","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL9","additionalInfo":"#526663","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996418000,"updateDate":1465996769000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"EMEA - Forecast Dashboard","type":"HTTP","owner":"John Murray","reportDesc":"EMEA SalesForce Forecast Dashboard","id":129,"reportLink":"https://emc.my.salesforce.com/01Z70000000n6wh","functionalArea":"Sales","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0066ff","systemDescription":"EXTERNAL_SYSTEM","createDate":1465985965000,"updateDate":1465987494000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"EMEA - Forecast Dashboard","linkHoverInfo":"Dashboard"},{"userName":"moorts5","name":"Unity Link","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Service Now HTTP Link","id":131,"reportLink":"https://emc.service-now.com","functionalArea":"EMC IT","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL7","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996329000,"updateDate":1465996329000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":4,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Sample External Content","type":"CSV","owner":null,"reportDesc":"Desc 2","id":130258,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#F5A9D0","systemDescription":"EXTERNAL_SYSTEM","createDate":1464180268000,"updateDate":1464715408000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info"},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":596,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"},{"userName":"MOORTS5","name":"Sample Http","type":"HTTP","owner":null,"reportDesc":null,"id":130259,"reportLink":"https://bipdurdev01.corp.emc.com/BITool/report/pdf.pdf","functionalArea":"Yes this is the functional area","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#31B404","systemDescription":"EXTERNAL_SYSTEM","createDate":1464181841000,"updateDate":1464181841000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"Yes this is title","linkHoverInfo":"This is hover"},{"userName":"MOORTS5","name":"Sample External Content","type":"CSV","owner":null,"reportDesc":null,"id":130258,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#93FFFE","systemDescription":"EXTERNAL_SYSTEM","createDate":1464180268000,"updateDate":1464347785000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":4,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info"}],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
     });
 
@@ -612,7 +610,7 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/favoriteReports\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"moorts5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1462800197397,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1462796835217,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1462800290487,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"moorts5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1462800197397,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"VISILUMS","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1462796835217,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1462800290487,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
     });
 
     $httpBackend.whenGET(/userSearch\/*/).respond(function (/*method, url, data*/) {
@@ -648,6 +646,11 @@ angular.module('myBiApp')
     $httpBackend.whenGET(/home\/getUserPersonalization\/*/).respond(function (/*method, url, data*/) {
         return [200, '{"userId": 990865, "recommended": 3, "favorite": 1, "mostViewed": 2, "userTheme":0}'];
     });
+    
+    $httpBackend.whenGET(/home\/getBreadCrumbsDetails\/*/).respond(function (/*method, url, data*/) {
+//        return [200, '[{"levelId":14,"levelNumber":1,"levelDesc":"Sales","parentLevelId":0}]'];
+        return [200, '[{"levelId":14,"levelNumber":1,"levelDesc":"Sales","parentLevelId":0},{"levelId":15,"levelNumber":2,"levelDesc":"Bookings","parentLevelId":14}]'];
+    });
 }]);
 'use strict';
 
@@ -678,14 +681,15 @@ angular.module('myBiApp')
         scrollInertia: 0
     };
     
+    $scope.$on('bredCrumValue', function(event, value){
+        $scope.pageBreadCrum = value
+    });
+    
     $scope.$on('myLevelIndication', function(event, value){
-        console.log('level came here!!!')
-        $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
     $scope.$on('myThemeSettings', function(event, theme, personalization){
-        console.log('theme came here!!!')
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
         $scope.userTheme = $localStorage.userTheme;
@@ -779,7 +783,6 @@ angular.module('myBiApp')
         } else if (userdetails.userinfo.badge === 'Platinum') {
             $scope.myLevel = 'platinum-level';
         }
-        console.log('Main - Set Localstorage level');
         $localStorage.myLevel = $scope.myLevel;
         $scope.$emit('myLevelIndication', $scope.myLevel);
     });
@@ -840,9 +843,9 @@ angular.module('myBiApp')
             }
             $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
                 .then(function (resp, status, headers) {
-                    console.log(resp);
+                    
                 }, function (resp, status, headers, config) {
-                    console.log(resp);
+                
                 });
         });
     }
@@ -859,7 +862,6 @@ angular.module('myBiApp')
     }
     
     function setPersonalization() {
-        console.log('Main - Set Localstorage theme');
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
                 var personalization = [];
@@ -871,7 +873,6 @@ angular.module('myBiApp')
                 $scope.userTheme = $localStorage.userTheme;
                 $localStorage.personalization = personalization;
                 $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
-                console.log(personalization);
                 $scope.reportPriorityList = personalization;
                 $scope.reportPanelList = [];
                 $scope.refreshPanelList($scope.reportPriorityList);
@@ -902,7 +903,8 @@ angular.module('myBiApp')
     $scope.tableuLink = '';
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
-
+    $scope.isCollapsed = false;
+    getBreadCrumLevel($stateParams.levelId);
     $scope.getTableuLink = function () {
         return $sce.trustAsResourceUrl($scope.tableuLink);
     };
@@ -917,7 +919,6 @@ angular.module('myBiApp')
                     $http.get(reportUpdateViewed);
 
                     if (resp.data.name) {
-                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'): '';
                         $scope.reportName = resp.data.name;
                         $scope.mainState.$current.data.displayName = resp.data.name;
                         $scope.isTableu = true;
@@ -976,6 +977,27 @@ angular.module('myBiApp')
             });
         }
     };
+    
+    function getBreadCrumLevel(levelid) {
+        $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
+            if(response.data) {
+                $scope.pageBreadCrum = '';
+                var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
+                var data = response.data;
+
+                for(var i = 0; i<data.length; i++) {
+                    var url = '#/reports/'+data[i].levelId;
+                    pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
+                }
+
+                $scope.pageBreadCrum = pageBreadCrum;
+                $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+
+            } else {
+                console.log('else');
+            }
+        });
+    }
 }]);
 'use strict';
 
@@ -992,7 +1014,6 @@ angular.module('myBiApp')
     $scope.access = {};
     $scope.access.limitTo = 6;
     $scope.access.subGroupItemsId = 0;
-    
     setUserPreference();
     
     $scope.setListView = function (status) {
@@ -1028,6 +1049,8 @@ angular.module('myBiApp')
                 };
             } else {  
                 setUserLevel(userObject[0]);
+                getBreadCrumLevel(false);
+                
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
@@ -1059,8 +1082,10 @@ angular.module('myBiApp')
 
     $scope.access.subGroupItems = function (levelid) {
         $scope.biGroup.all().then(function () {
+            getBreadCrumLevel(levelid);
             $scope.setLoading(false);
             $scope.dataObj = [];
+            
             function getLevelObj(obj) {
                 var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
                 if (filter) {
@@ -1106,16 +1131,10 @@ angular.module('myBiApp')
             getLevelObj($scope.biGroup.biGroups);
         });
 
-        //$scope.access.catGroups = true; 
         $scope.access.subGroupItemsId = levelid;
     };
 
     $scope.access.groupItems = function (groupid) {
-        /*$scope.access.catRecent= false;
-         $scope.access.catSales= false;
-         $scope.access.catPreSales= false;
-         $scope.access.catPopular= false;
-         $scope.access.limitTo = undefined;*/
         $scope.biGroup.all().then(function () {
             _.map($scope.biGroup.biGroups, function (firstLevel) {
                 if (firstLevel.levelId.toString() === groupid) {
@@ -1139,7 +1158,6 @@ angular.module('myBiApp')
     
     function setUserLevel(usrObj) {
         if(!$localStorage.myLevel) {
-            console.log('Reprots IF - No Localstorage level');
             if (usrObj.userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
             } else if (usrObj.userinfo.badge === 'Silver') {
@@ -1153,7 +1171,6 @@ angular.module('myBiApp')
             $localStorage.myLevel = $scope.myLevel
             $scope.$emit('myLevelIndication', $scope.myLevel);
         } else {
-            console.log('Reports ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -1161,8 +1178,8 @@ angular.module('myBiApp')
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Reports IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -1184,12 +1201,39 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Reports ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
     } 
+    
+    function getBreadCrumLevel(levelid) {
+        if(levelid) {
+            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
+                if(response.data) {
+                    $scope.pageBreadCrum = '';
+                    var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
+                    var data = response.data;
+
+                    for(var i = 0; i<data.length; i++) {
+                        var url = '#/reports/'+data[i].levelId;
+                        pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
+                    }
+
+                    $scope.pageBreadCrum = pageBreadCrum;
+                    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+
+                } else {
+                    console.log('else');
+                }
+            });
+        } else {
+            $scope.pageBreadCrum ='';
+            var pageBreadCrum = '<a href="#/">Home</a>  -> Available Reports';
+            $scope.pageBreadCrum = pageBreadCrum;
+            $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+        }
+    }
 }])
 .filter('filterReports', function () {
     return function (items, levelId) {
@@ -1225,22 +1269,18 @@ angular.module('myBiApp')
     $scope.showList = true;
     $scope.mainState = $state;
     $scope.setLoading(true);
-    $scope.reportAccess = true;
     $scope.scrollVariable = false
     
-    $scope.$on('reportAccessFlag', function(event) {
-        console.log('false');
-        $scope.reportAccess = false;
+    $scope.$on('bredCrumValue', function(event, value){
+        $scope.pageBreadCrum = value
     });
     
     $scope.$on('myLevelIndication', function(event, value) {
-        console.log('Level here!!!')
         $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
     $scope.$on('myThemeSettings', function(event, theme, personalization){
-        console.log('Theme here!!!')
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
         $scope.userTheme = $localStorage.userTheme;
@@ -1252,7 +1292,6 @@ angular.module('myBiApp')
         if($localStorage.myLevel) {
             $scope.myLevel = $localStorage.myLevel;
         } else {
-            console.log('no local');
             setUserLevel($scope.userObject);
         }
         
@@ -1360,7 +1399,6 @@ angular.module('myBiApp')
         } else if (usrObj.userinfo.badge === 'Platinum') {
             $scope.myLevel = 'platinum-level';
         }
-        console.log('Parent - Set Localstorage level');
         $localStorage.myLevel = $scope.myLevel
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
@@ -1468,12 +1506,14 @@ angular.module('myBiApp')
         $scope.operationDashboardLink = reportsMenu.operationalLink;
     });
     
+    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> Operational Dashboard';
+    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+    
     setUserPreference();
     setUserLevel();
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
-            console.log('Operational IF - No Localstorage level');
             userDetailsService.userPromise.then(function (userObject) {
                 if (userObject[0].userinfo.badge === 'Bronze') {
                     $scope.myLevel = 'bronze-level';
@@ -1489,7 +1529,6 @@ angular.module('myBiApp')
                 $scope.$emit('myLevelIndication', $scope.myLevel);
             });    
         } else {
-            console.log('Operational ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -1498,7 +1537,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Operational IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -1520,7 +1558,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Operational ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -1540,9 +1577,10 @@ angular.module('myBiApp')
 angular.module('myBiApp')
 .controller('favoritesCtrl', ["$scope", "$localStorage", "reportsFactory", "userDetailsService", "$http", "CONFIG", function ($scope, $localStorage, reportsFactory, userDetailsService, $http, CONFIG) {
     var favoriteService = new reportsFactory.reportsFactoryFunction('favorite');
+    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> My Favorites';
+    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
     
     if(!$localStorage.myLevel) {
-        console.log('Favorite IF - No Localstorage level');
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
@@ -1558,7 +1596,6 @@ angular.module('myBiApp')
             $scope.$emit('myLevelIndication', $scope.myLevel);
         });    
     } else {
-        console.log('Favorite ELSE - Yes Localstorage level');
         $scope.myLevel = $localStorage.myLevel;
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
@@ -1593,7 +1630,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Favorite IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -1615,7 +1651,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Favorite ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -2260,7 +2295,6 @@ angular.module('myBiApp')
     
     function setUserLevel(usrObj) {
         if(!$localStorage.myLevel) {
-            console.log('Profile IF - No Localstorage level');
             if (usrObj.userinfo.badge === 'Bronze') {
                 $scope.myLevel = 'bronze-level';
             } else if (usrObj.userinfo.badge === 'Silver') {
@@ -2275,7 +2309,6 @@ angular.module('myBiApp')
             $localStorage.myLevel = $scope.myLevel
             $scope.$emit('myLevelIndication', $scope.myLevel);
         } else {
-            console.log('Profile ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.userBadgeImage = "images/"+$scope.myLevel+"-badge.png";
             $scope.$emit('myLevelIndication', $scope.myLevel);
@@ -2285,7 +2318,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Profile IF - No Localstorage theme');
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
                     personalization[response.data.favorite - 1] = 'favoriteReports'; 
@@ -2305,14 +2337,13 @@ angular.module('myBiApp')
                 }
             });
         } else {
-            console.log('Profile ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
     }
     
-    $scope.setUserTheme = function(theme) {
+//    $scope.setUserTheme = function(theme) {
 //        if($localStorage.userTheme === theme) {
 //            return;
 //        }
@@ -2338,7 +2369,7 @@ angular.module('myBiApp')
 //            });
 //    
 //        $scope.setLoading(false);    
-    };
+//    };
     
     function findThemeKey(obj, value) {
         var key;
@@ -2535,7 +2566,8 @@ angular.module('myBiApp')
         scope: {
             tilesData: '=',
             userLoginName: '@',
-            keyword: '@'
+            keyword: '@',
+            listView: '&'
         },
         link: function postLink(scope/*, element, attrs*/) {
             scope.$watch('tilesData', function (value) {
@@ -2608,7 +2640,16 @@ angular.module('myBiApp')
                     element.replaceWith(ele);
                     element = ele;
 
-                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau' || scope.report.type.toLowerCase() === 'VISILUMS') /*&& scope.report.refreshStatus === 'Y'*/) {
+                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'visilums')) {
+                    if (scope.report.type.toLowerCase() === 'visilums') {
+                        scope.report.reportLinkImg = 'images/charts/Lumira.png';
+                    }
+                    template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
+                    ele = $compile(template)(scope);
+                    element.replaceWith(ele);
+                    element = ele;
+
+                } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau') /*&& scope.report.refreshStatus === 'Y'*/) {
                     template = '<div class="panel-heading class-pdf"  ng-style="{\'background-image\':\'url(images/charts/loading-icon.gif)\', \'background-size\':\'auto\'}"></div>';
                     ele = $compile(template)(scope);
                     element.replaceWith(ele);
@@ -2719,7 +2760,7 @@ angular.module('myBiApp')
             var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl($scope.userLoginName, report.sourceReportId, report.sourceSystem, 'Persona');
             $http.get(reportUpdateViewed);
         } else {
-            url = '../BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
+            url = 'BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
         }
         $window.open(url, '_blank');
     };
@@ -2933,6 +2974,12 @@ angular.module('myBiApp')
     $scope.mainState.$current.data.subCaption = $stateParams.searchText;
     $scope.groupsData = {};
     
+//    $scope.setListView = function (status) {
+//        if ($scope.groupsData) {
+//            $scope.groupsData.service['listView'] = status;
+//        }
+//    }
+    
     function doSearch(text) {
         var searchfilter = ($stateParams.searchfilter && $stateParams.searchfilter.filter)? $stateParams.searchfilter.filter : '';
         var groupService = new reportsFactory.reportsFactoryFunction('search', text, $stateParams.persona, searchfilter);
@@ -2954,7 +3001,6 @@ angular.module('myBiApp')
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
-            console.log('Search IF - No Localstorage level');
             userDetailsService.userPromise.then(function (userObject) {
                 if (userObject[0].userinfo.badge === 'Bronze') {
                     $scope.myLevel = 'bronze-level';
@@ -2970,7 +3016,6 @@ angular.module('myBiApp')
                 $scope.$emit('myLevelIndication', $scope.myLevel);
             });    
         } else {
-            console.log('Search ELSE - Yes Localstorage level');
             $scope.myLevel = $localStorage.myLevel;
             $scope.$emit('myLevelIndication', $scope.myLevel);
         }
@@ -2979,7 +3024,6 @@ angular.module('myBiApp')
     function setUserPreference() {
         var personalization = [];
         if(!$localStorage.userTheme || !$localStorage.personalization) {
-            console.log('Search IF - No Localstorage theme');
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
@@ -3001,7 +3045,6 @@ angular.module('myBiApp')
             });
             $scope.setLoading(false);
         } else {
-            console.log('Search ELSE - Yes Localstorage theme');
             $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -3068,6 +3111,7 @@ angular.module('myBiApp')
 .controller('SearchdetailsCtrl', ["$scope", "$rootScope", "$stateParams", "$state", "searchservice", "userDetailsService", "commonService", "$http", function ($scope, $rootScope, $stateParams, $state, searchservice, userDetailsService, commonService, $http) {
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
+    $scope.isCollapsed = false;
     
     if ($stateParams.sourceReportId) {
 
@@ -3093,7 +3137,6 @@ angular.module('myBiApp')
                     $http.get(reportUpdateViewed);
 
                     $scope.mainState.$current.data.displayName = resp.data.name;
-                    (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('reportAccessFlag'):'';
                     $scope.isTableu = true;
                     var placeholderDiv = document.getElementById('tableu_report3');
                     //placeholderDiv.setAttribute('fixT',Math.random());
@@ -3126,16 +3169,15 @@ angular.module('myBiApp')
                 $scope.reportAccessData = resp;
             });
         } else if ($state.current.name === 'search.details.feedback') {
-
             $scope.feedbackArray = [];
             searchservice.loadFeedbacks($stateParams.searchId).then(function (resp) {
                 $scope.feedbackArray = resp;
             });
         }
-
     }
 
     $scope.feedback = '';
+    
     $scope.postFeedback = function () {
         if ($scope.feedback.trim() !== '') {
             $scope.setLoading(true);

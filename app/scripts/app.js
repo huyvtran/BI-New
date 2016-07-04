@@ -450,7 +450,6 @@ angular
                     controller: function ($scope, $stateParams) {
                         $scope.access.groupItems($stateParams.groupId);
                     }
-
                 }
             },
             data: {

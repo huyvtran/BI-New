@@ -57,11 +57,9 @@ angular.module('adminPageApp')
         
         $http.put("BITool/admin/updateReport?isManageExternalUpdate=true", $scope.items)
             .then(function (updatedData, status, headers) {
-                console.log(updatedData);
                 $scope.progress = false;
                 $scope.saveText = updatedData.data.message;
             }, function (updatedData, status, headers, config) {
-                console.log('2 - ' +  updatedData);
                 $scope.progress = false;
                 $scope.saveText = updatedData.data.message;
             });

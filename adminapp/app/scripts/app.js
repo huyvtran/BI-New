@@ -31,7 +31,7 @@ angular
     limit: 20,
     tableauImagesPath: '../PreviewImages/',
     API: {
-        useMocks: true,
+        useMocks: false,
         fakeDelay: 800,
         // baseUrl: 'http://bipdurdev01.corp.emc.com/',
         baseUrl: '/'
