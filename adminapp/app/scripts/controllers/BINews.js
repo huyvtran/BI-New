@@ -5,6 +5,7 @@ angular.module('adminPageApp').controller('BINewsCtrl',function($scope,$http,$ui
     $scope.messageAlertError='';
     $scope.myData={};
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetIconFlag', false);
     
     function columnDefs(){
         return[ 

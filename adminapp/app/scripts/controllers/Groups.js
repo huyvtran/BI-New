@@ -5,6 +5,7 @@ angular.module('adminPageApp').controller('GroupCtrl',function($scope, $http, $u
     $scope.messageAlert= "";
     $scope.messageAlertError='';
     $scope.$emit('resetSearchText');
+    $scope.$emit('resetIconFlag', false);
     
     function columnDefs(){
         return[

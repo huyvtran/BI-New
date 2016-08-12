@@ -1,7 +1,7 @@
 <div class=" row myprofile picture-bg">
-    <div class="col-md-12 col-lg-12 col-sm-12 v-offset-bottom-10px">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 v-offset-bottom-10px">
         <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                 <div class="profile-logo">
                     <img alt="image" class="usr-image" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
                 </div>
@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8 col-lg-8 col-sm-8">
+    <div class="col-lg-8 col-md-8 col-sm-10 col-xs-11">
         <div class="color-white  v-offset-bottom-10px margin-top-left">My usage Level Indication</div>
         <div class="row margin-top-left" style="border-bottom:0;">
             <div class="progress">
@@ -40,67 +40,69 @@
 </div>
 <br>
 <div class="row">
-    <ul class="list-unstyled">
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Persona:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <span ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}} </span>
-            </div>
-        </li>
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Badge:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                {{userObject.uid}}
-            </div>
-        </li>
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Designation:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                {{userObject.title}}
-            </div>
-        </li>
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Phone Number:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                {{userObject.telephonenumber}}
-            </div>
-        </li>
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Email:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                {{userObject.mail}}
-            </div>
-        </li>
-        <li>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                Role:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                {{userObject.userinfo.role}}
-            </div>
-        </li>
-    </ul>
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <ul class="list-unstyled background-box no-padding">
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Persona:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    <span ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}} </span>
+                </div>
+            </li>
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Badge:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    {{userObject.uid}}
+                </div>
+            </li>
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Designation:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    {{userObject.title}}
+                </div>
+            </li>
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Phone Number:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    {{userObject.telephonenumber}}
+                </div>
+            </li>
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Email:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    {{userObject.mail}}
+                </div>
+            </li>
+            <li>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    Role:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    {{userObject.userinfo.role}}
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
-<div class="col-md-12 col-lg-12 col-sm-12 v-offset-top-10px ng-scope" ng-show="userObject.userinfo.role.toLowerCase() === 'admin'">
-    <h3 style="color:#D7D7D7">Color Schemes</h3>
-    <hr/>
-    <div class="col-lg-3 col-md-3 col-lg-3">
-        <a class="theme-select" ng-click="setUserTheme('default')" ng-class="{active : userTheme === 'default'}"><img src="images/color-2.png" /></a>
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 v-offset-top-10px v-offset-bottom-10px ng-scope" ng-show="userObject.userinfo.role.toLowerCase() === 'admin'">
+    <h3>Color Schemes</h3><!-- style="color:#D7D7D7"-->
+    <hr />
+    <div class="col-lg-3 col-md-3 col-lg-3 col-sm-5 col-xs-5">
+        <a class="theme-select" ng-click="setUserTheme('default')" ng-class="{'active' : userTheme === 'default'}"><img src="images/color-2.png" /></a>
     </div>
-    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+<!--    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
         <a class="theme-select" ng-click="setUserTheme('white')" ng-class="{active : userTheme === 'white'}"><img src="images/color-3.png" ng-disabled="userTheme === 'white'" /></a>
-    </div>
-    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
-        <a class="theme-select" ng-click="setUserTheme('black')" ng-class="{active : userTheme === 'black'}"><img src="images/color-1.png" /></a>
+    </div>-->
+    <div class="col-lg-3 col-md-3 col-lg-3 col-sm-5 col-xs-5 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+        <a class="theme-select" ng-click="setUserTheme('black')" ng-class="{'active' : userTheme === 'black'}"><img src="images/color-1.png" /></a>
     </div>
 </div>

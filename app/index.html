@@ -53,36 +53,30 @@
         }
     </style>
 </head>
-<body ng-app="myBiApp" ng-controller="ParentCtrl" ng-class="{'mini-navbar':toggleLeft}">
+<body ng-app="myBiApp" ng-controller="ParentCtrl" ng-class="{'mini-navbar':toggleLeft, 'no-navbar':noNavBar}">
     <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
+    <!-- Header Starts -->
     <header id="header" ng-class="userTheme+'-theme-header'">
-    <!--<header id="header">-->    
         <div class="container">
             <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
                 <div class="navbar-brand col-md-3 col-lg-3 col-sm-3">
                     <a class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft">
-                        <!--span class="emc-logo">x</span -->
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </a>
                     <a href="#/" style="display:inline-table; width:30px;">
-                        <!--span class="emc-logo">x</span -->
                         <img class="logo"  src="images/EMCLogo.png"/>
-                        <!--<span ng-show="!toggleLeft" class="portal-name" scroll=''>INSIGHTS</span>-->
                         <span ng-show="!toggleLeft && !scrollVariable" class="portal-name" scroll=''>INSIGHTS</span>
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6">
                     <search-report></search-report>
                 </div>
-
                 <div class="col-md-3 col-lg-3 col-sm-3">
                     <div class="row">
                         <span class="header-right pull-right" ng-show="userObject.userFullName != ''">
-                            <!--  userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin' -->
                             <a ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'" data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
                                 <div class="top-header-title">
                                     <span class="pull-left">
@@ -129,58 +123,59 @@
                             </ul>
                         </span>
                     </div>
-
                 </div>   
             </div>
             <div class="row hidden-md hidden-lg hidden-sm visible-xs">
-                <div class="col-xs-10 margin-padding-zero ">
-                    <a class="navbar-brand" href="#/"><img class="logo" src="images/EMCLogo.png" alt="logo"></a> 
-                    <a class="navbar-brand" href="#/"><img class="logo" src="images/EMCLogo.png" alt="logo"></a> 
-                    <div class="portal-name">Insights 
-                        <span ng-show="showPage" class="xs-report-header"> | Reports
-                            <button ng-click="showIcons()" class="reports-type button-icon glyphicon glyphicon-th-large"></button>
-                            <button ng-click="hideIcons()" class="button-icon glyphicon glyphicon-th-list"></button>
-                        </span>
-                    </div>
+                <div class="col-xs-7 no-padding no-margins">
+                    <a class="navbar-minimalize" ng-click="hideNavBar();">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </a>
+                    <a href="#/" style="display:inline-table; width:30px;">
+                        <img class="logo"  src="images/EMCLogo.png"/>
+                    </a>
                 </div>
-                <div class="col-xs-2 text-right">
+                <div class="col-xs-2 glb-search-mob">
+                    <search-report></search-report>
+                </div>
+                <div class="col-xs-3 text-right">
                     <ul class="nav">
                         <li class="nav-header" ng-show="userObject.userFullName != ''" aria-hidden="false">
                             <div class="dropdown text-center profile-element" title="{{userObject.userFullName}}"> 
-                                <a data-toggle="dropdown" class="dropdown-toggle user-icon-nav-header" href="javascript:void(0)" aria-expanded="false">
+                                <a class="dropdown-toggle user-icon-nav-header" ui-sref="profile">
                                     <span><img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png"></span>
                                 </a>
-                            </div>
-                            <div class="logo-element">
-                                Insights
+                                <!--<a data-toggle="dropdown" class="dropdown-toggle user-icon-nav-header" href="javascript:void(0)" aria-expanded="false">
+                                    <span><img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png"></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
+                                    <li><a ui-sref="profile">My Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="admin">Administration</a></li>
+                                </ul>-->
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="row hidden-md hidden-lg hidden-sm visible-xs">
-                <div class="col-xs-12 glb-search-mob">
-                    <input class="form-control globle-search-input" type="text" name="mob-search" >
-                </div>
-            </div>
-        </div><!--/.container-->
+        </div>
     </header>
-    <!--     <div class="container"> -->
+    <!-- Header Ends -->
+    
+    <!-- Pace Done Starts-->
     <div class="pace-done" ng-class="userTheme+'-theme'">
-    <!--<div class="pace-done">-->    
         <div id="wrapper" class="container-fluid no-padding">
-        <!--<div id="wrapper" class="container-fluid no-padding" ng-class="userTheme+'-wrapper'">-->    
-            <nav class="navbar-default navbar-static-side" role="navigation">
-                <!--<div class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft" ></div>-->
+            <!-- Side Menu Starts -->
+            <nav class="navbar-default navbar-static-side" role="navigation" ng-class="{'showMenu':!noNavBar, 'hideMenu':noNavBar}">
                 <div class="sidebar-collapse">
+                    <span class="hidden-md hidden-lg hidden-sm visible-xs  insight-text">INSIGHTS</span>
                     <ul class="nav metismenu" id="side-menu" style="display: block;margin-top:60px;">
                         <li ui-sref-active="active" class="home">
                             <a ui-sref="home" title="Home">
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4">
+                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
                                         <img src="images/default-homeIcon.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
                                         <label class="nav-label">Home</label>
                                     </div>
                                 </div>
@@ -189,10 +184,10 @@
                         <li ui-sref-active="active" class="dashboard">
                             <a ui-sref="reportsDashboard" title="Operational Dashboard"> 
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4">
+                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
                                         <img src="images/default-reportDashboardIcon_leftNavigation.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
                                         <label class="nav-label">Operational Dashboard</label>
                                     </div>
                                 </div>
@@ -201,15 +196,14 @@
                         <li ng-class="{'active': mainState.includes('reports')}" class="reports">
                             <a ui-sref="reports.list" title="Available Reports">
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4">
+                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
                                         <img src="images/default-iconReports.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
                                         <label class="nav-label">Available Reports</label>
                                     </div>
                                 </div>
                             </a>
-
                             <div class="tree-view"
                                  data-angular-treeview="true"
                                  data-tree-model="biGroup.biGroups"
@@ -217,16 +211,14 @@
                                  data-node-label="levelDesc"
                                  data-node-children="children" ng-show="!toggleLeft">
                             </div>
-
-
                         </li>
                         <li ui-sref-active="active" class="favorites" title="My Favorites">
                             <a ui-sref="favorites" >
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4">
+                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
                                         <img src="images/default-iconFavorites.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
                                         <label class="nav-label">My Favorites</label>
                                     </div>
                                 </div>
@@ -235,94 +227,136 @@
                     </ul>
                 </div>
             </nav>
+            <!-- Side Menu Ends -->
+            <!-- Page Wrapper Starts -->
             <div id="page-wrapper" class="dashbard-1">
-                <!--<div class="row picture-bg" ng-class="{'ng-hide':['home-header-icon','myprofile-header-icon'].indexOf(mainState.$current.data.classIcon)!=-1}">-->
+                <!-- Inner Page header Starts -->
                 <div class="row picture-bg" 
                     ng-class="{'ng-hide':['home-header-icon', 'myprofile-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1, 
-                            'banner-height':['search-header-icon', 'recommended-header-icon', 'operation-header-icon', 'myfavorites-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1}">
-                    <nav role="navigation" style="margin-bottom: 0" ng-hide="['home-header-icon','myprofile-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1">
-                        <!-- a class="navbar-minimalize minimalize-styl-2 btn" href="#/"><img class="expand-collapse" src="images/expandCollapseHandle.png"/> </a -->
-                        <ul class="heading-banner clearfix"><!-- ng-style="{'background-image': 'url('+mainState.$current.data.bgIcon+ ')'}" -->
+                            'banner-height':['recommended-header-icon', 'operation-header-icon', 'myfavorites-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1,
+                            'banner-height-search':['search-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1}">
+                    <nav role="navigation" style="margin-bottom: 0" ng-hide="['home-header-icon','myprofile-header-icon','search-header-icon'].indexOf(mainState.$current.data.classIcon)!==-1">
+                        <ul class="heading-banner clearfix">
                             <li>
-                                <h2 ng-bind="mainState.$current.data.displayName"></h2>
-                                <div class="navbar-header-breadcrum">
-                                    <div class="breadcrum" ng-bind-html="pageBreadCrum"></div>
+                                <h2 ng-bind="mainState.$current.data.displayName"
+                                    ng-hide="mainState.current.name.indexOf('reports.details.report') === 0 ||
+                                            mainState.current.name.indexOf('search.details') === 0"></h2>
+                                <h2 ng-class="{'search-header-margin':mainState.current.name.indexOf('search.details') === 0}"
+                                ng-show="mainState.current.name.indexOf('search.details') === 0"
+                                ng-bind="searchDisplayName">&nbsp;</h2>
+                                <div class="navbar-header-breadcrumb"
+                                    ng-show="mainState.current.name.indexOf('reports.details.report') === 0">
+                                    <div class="breadcrumb" ng-bind-html="pageBreadCrumb"></div>
                                 </div>
-                                <!--<h5  ng-show="mainState.current.name.indexOf('search.details') === -1 && mainState.current.name.indexOf('reports.details.report') === -1">Keyword: <span ng-bind="mainState.$current.data.subCaption"></span></h5>-->
                                 <span ng-show="mainState.current.name.indexOf('search.details') === 0">
-                                    <ul class="col-lg-8 col-xl-8 col-md-8 col-sm-8 col-xs-8 col-lg-offset-4 col-xl-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-4 subHeaderMenu" ng-cloak>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3"  ui-sref-active="active">
+                                    <ul class="col-lg-8 col-xl-8 col-md-8 col-sm-12 col-xs-12 col-lg-offset-4 col-xl-offset-4 col-md-offset-4 subHeaderMenu" ng-cloak>
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3"  ui-sref-active="active">
                                             <a ui-sref="search.details.report({'searchId':searchId})">
-                                                <span><div class="icon report"></div> Report</span>
+                                                <span title="Report">
+                                                    <span class="icon report"></span>
+                                                    <span class="hidden-xs hidden-sm">Report</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3" ui-sref-active="active">
                                             <a ui-sref="search.details.about({'searchId':searchId})">
-                                                <span><div class="icon about"></div> About</span>
+                                                <span title="About the Report">
+                                                    <span class="icon about"></span>
+                                                    <span class="hidden-xs hidden-sm">About</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ui-sref-active="active" ng-show='reportAccess'>
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ui-sref-active="active" ng-show='reportAccess'>
                                             <a ui-sref="search.details.access({'searchId':searchId})">
-                                                <span><div class="icon request"></div> How to Request</span>
+                                                <span title="How to Request">
+                                                    <span class="icon request"></span>
+                                                    <span class="hidden-xs hidden-sm">Request</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active" ng-show='reportAccess'>
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active" ng-show='reportAccess'>
                                             <a ui-sref="search.details.feedback({'searchId':searchId})">
-                                                <span><div class="icon feedback"></div> User Feedback</span>
+                                                <span title="User Feedback">
+                                                    <span class="icon feedback"></span>
+                                                    <span class="hidden-xs hidden-sm">Feedback</span>
+                                                </span>
                                             </a>
                                         </li>
                                     </ul>
                                 </span> 
                                 <span ng-show="mainState.current.name.indexOf('reports.details.report') === 0">
-                                    <ul class="col-lg-8 col-xl-8 col-md-8 col-sm-8 col-xs-8 col-lg-offset-4 col-xl-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-4 subHeaderMenu" ng-cloak>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3" ui-sref-active="active">
+                                    <ul class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-xs-12 col-xl-offset-2 col-lg-offset-2 subHeaderMenu" ng-cloak>
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.report({'searchId':searchId})">
-                                                <span><div class="icon report"></div> Report</span>
+                                                <span title="Report">
+                                                    <span class="icon report"></span>
+                                                    <span class="hidden-xs hidden-sm">Report</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.about({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
-                                                <span><div class="icon about"></div> About</span>
+                                                <span title="About the Report">
+                                                    <span class="icon about"></span>
+                                                    <span class="hidden-xs hidden-sm">About</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.access({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
-                                                <span><div class="icon request"></div> How to Request</span>
+                                                <span title="How to Request">
+                                                    <span class="icon request"></span>
+                                                    <span class="hidden-xs hidden-sm">Request</span>
+                                                </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-3 col-xs-3 align-center" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.feedback({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
-                                                <span><div class="icon feedback"></div> User Feedback</span>
+                                                <span title="User Feedback">
+                                                    <span class="icon feedback"></span>
+                                                    <span class="hidden-xs hidden-sm">Feedback</span>
+                                                </span>
                                             </a>
                                         </li>
-
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                            <a ui-sref="reports.details.report.reportmeta({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
+                                                <span title="Report Meta">
+                                                    <span class="icon reportmeta"></span>
+                                                    <span class="hidden-xs hidden-sm">Metadata</span>
+                                                </span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </span>
                             </li>
                         </ul>  
                     </nav>
                 </div>
-                <!-- main content -->
-                <!--<div class="row white-bg">-->
+                <!-- Inner Page header Ends -->
+                
+                <!-- View Content Here -->
                 <div class="row" ng-class="userTheme+'-bg'">    
                     <div class="col-md-12">
                         <div class="wrapper wrapper-content " ui-view></div>
                     </div>
                 </div>
+                <!-- View Content Here -->
+                <!-- Footer Starts -->
                 <div class="row footer-row">
                     <div class="footer">
                         <div class="align-center visible-md visible-lg hidden-sm hidden-xs">
                             <a ui-sref="faq">FAQ</a> | <a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
                         </div>
-                        <div class="pull-left">
-                            <!-- strong>Copyright 2015</strong> - All rights reserved. -->
-                        </div>
+                        <div class="pull-left"></div>
                     </div>
-                </div>    
+                </div>
+                <!-- Footer Ends -->
             </div> 
-            <!-- end main content -->
+            <!-- Page Wrapper Starts -->
         </div>
     </div>
+    <!-- Pace Done Ends -->
+    
     <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
     <!--pre>
       $state = {{$state.current.name}}
@@ -408,6 +442,7 @@
     <script src="scripts/services/useralertservice.js"></script>
     <script src="scripts/directives/loadtiles.js"></script>
     <script src="scripts/directives/searchreport.js"></script>
+    <script src="scripts/directives/dendrogramma.js"></script>
     <script src="scripts/services/reportsfactory.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/searchReportController.js"></script>

@@ -59,13 +59,14 @@
                     <a href="javascript:void(0)" class="glyphicon glyphicon-question-sign font-Iconsize" popover-animation="true" uib-popover="{{popAdditionalInfo.content}}" popover-placement="{{popAdditionalInfo.placement}}" popover-class="{{popAdditionalInfo.class}}" popover-trigger="focus"></a>
                 </label>
                 <div class="col-sm-6">
-                    <input type="text" name="additionalInfo" class="form-control" ng-model="external.additionalInfo" ng-class="{'has-error' :externalReport.additionalInfo.$invalid && externalReport.additionalInfo.$pristine }">
+                    <color-picker ng-model="external.additionalInfo" color-picker-format="'hex'" color-picker-on-change="onSelectAColor($event, color)"></color-picker>
+                    <!--<input type="text" name="additionalInfo" class="form-control" ng-model="external.additionalInfo" ng-class="{'has-error' :externalReport.additionalInfo.$invalid && externalReport.additionalInfo.$pristine }">-->
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
                     <button name="add" class="btn btn-info" type="submit" ng-disabled="externalReport.$invalid || !urlValid" ng-click="addExternal(external)">Add Report</button>
-                    <button name="clear" class="btn btn-warning" type="reset">Reset</button>
+                    <button name="clear" class="btn btn-warning" type="button" ng-click="clearForm();">Reset</button>
                 </div>
             </div>
         </form>

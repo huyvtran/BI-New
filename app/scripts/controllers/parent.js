@@ -16,6 +16,7 @@ angular.module('myBiApp')
      * @description Will have object of service reportsMenu which basically have the menu or group levels of users.
      * 
      */
+    $scope.noNavBar = true; 
     $scope.biGroup = reportsMenu;
     $scope.chevron = false;
     $scope.searchParent = '#search-parent';//id of div which append typeahead popup 
@@ -27,9 +28,17 @@ angular.module('myBiApp')
     $scope.setLoading(true);
     $scope.scrollVariable = false
     
-    $scope.$on('bredCrumValue', function(event, value){
-        $scope.pageBreadCrum = value
+    $scope.$on('bredCrumbValue', function(event, value){
+        $scope.pageBreadCrumb = value
     });
+    
+    $scope.$on('setNavBar', function(event, value){
+        $scope.noNavBar = true;
+    });
+    
+    $scope.hideNavBar = function() {
+        ($scope.noNavBar) ? $scope.noNavBar = false: $scope.noNavBar = true;
+    };
     
     $scope.$on('myLevelIndication', function(event, value) {
         $localStorage.myLevel = value
@@ -40,6 +49,10 @@ angular.module('myBiApp')
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
         $scope.userTheme = $localStorage.userTheme;
+    });
+    
+    $scope.$on('setSearchDisplayName', function(event, value){
+        $scope.searchDisplayName = value;
     });
     
     userDetailsService.userPromise.then(function (userObject) {
@@ -65,23 +78,14 @@ angular.module('myBiApp')
 
     $scope.getSearchSuggest = function (val) {
         var defer = $q.defer();
-
-        userDetailsService.userPromise.then(function (userObject) {
-            var url;
-
-            if ($scope.searchin === 'persona') {
-                url = commonService.prepareSearchUrlPersona(userObject[0].emcLoginName, 1, CONFIG.limit, val);
-            } else {
-                url = commonService.prepareSearchUrl(userObject[0].emcLoginName, 1, CONFIG.limit, val);
-            }
-
-            $http.get(url).then(function (response) {
-                defer.resolve(_.uniq(response.data.map(function (item) {
-                    return ($scope.searchin === 'persona') ? item.name : item.reportName;
-                })));
-            });
+        var filter = ($scope.searchFilter && $scope.searchFilter.id) ? $scope.searchFilter.id : 'searchText';
+        var url = 'BITool/home/getAutoSuggestionList/1/20?searchType=' + $scope.searchin + '&' + filter + '=' + val;
+            
+        $http.get(url).then(function (response) {
+            defer.resolve(_.uniq(response.data.map(function (item) {
+                return item;
+            })));
         });
-
         return defer.promise;
     };
     

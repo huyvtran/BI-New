@@ -8,16 +8,25 @@
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('searchReportController', ['$scope', 'popularSearchService', '$timeout', function ($scope, popularSearchService, $timeout) {
+.controller('searchReportController', ['$scope', 'popularSearchService', '$timeout', '$window', function ($scope, popularSearchService, $timeout, $window) {
     $scope.model = {
         isMinimised: true,
         searchCloud: '',
         searchFilterOptions: [{name: 'Report Name', id: 'searchTextReportName'}, {name: 'Report Description', id: 'searchTextReportDesc'}, {name: 'Functional Area', id: 'searchTextFunctionalArea'}, {name: 'Owner', id: 'searchTextOwner'}]
     };
-    
+//    $scope.noNavBar = true;
     $scope.searchFilter = '';
     $scope.isCloudVisible = false;
-
+    $scope.showIcon = false;
+    
+    $scope.showIconFlag = function() {
+        ($scope.searchText) ? $scope.showIcon = true : $scope.showIcon = false; 
+    }
+    
+    $scope.GetDataWithHtml = function () {
+        console.log('hi');
+    }
+    
     popularSearchService.then(function (r) {
         $scope.model.searchCloud = r;
         $scope.isCloudVisible = true;
@@ -35,8 +44,4 @@ angular.module('myBiApp')
             $scope.isCloudVisible = false;
         }
     });
-
-    $scope.minimize = function () {
-        $scope.model.isMinimised = true;
-    }
 }]);

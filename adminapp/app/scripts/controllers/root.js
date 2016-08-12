@@ -12,8 +12,11 @@ angular.module('adminPageApp')
     $scope.state = $state;
     $scope.displayType = 'All';
     $scope.displayForm = 'edit';
-    $scope.selectedReportGroup = '';
+    $scope.selectedAuditGroup  = {};
+    $scope.selectedUserGroup = {};
+    $scope.selectedReportGroup ={};
     $scope.badge = '0%';
+    $scope.showIcon = false;
     
     /**
      *Update my level indication
@@ -25,9 +28,10 @@ angular.module('adminPageApp')
         'Platinum': '100%'
     };
     
+    
     $scope.$on('resetDisplayType', function(event, value) {
         $scope.displayType = value;
-        $scope.selectedReportGroup = '';
+        $scope.selectedReportGroup = {};
     });
     
     $scope.$on('resetDisplayForm', function(event, value) {
@@ -36,12 +40,22 @@ angular.module('adminPageApp')
     
     $scope.$on('resetSearchText', function() {
         $scope.searchText = '';
+        $scope.showIcon = false;
     });
     
     $scope.$on('resetGroup', function() {
-        $scope.selectedAuditGroup = '';
+        $scope.selectedAuditGroup  = {};
     });
     
+    $scope.showIconFlag = function() {
+        ($scope.searchText && $scope.searchText !== '') ? $scope.showIcon = true : $scope.showIcon = false; 
+    }
+    
+    $scope.resetSearch = function() {
+        $scope.showIcon = false;
+        $scope.searchText = '';
+        $scope.submitSearch($state.current.name)
+    }
     userDetailsService.userPromise.then(function (userObject) {
         $rootScope.userObject = $scope.userObject = userObject[0];
         $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
@@ -57,7 +71,7 @@ angular.module('adminPageApp')
         url = url+$scope.userObject.emcLoginName;
         
         $http.get(url).then(function(resp){
-            $scope.reportGroup = resp.data;
+            $scope.reportGroup = _.sortBy(resp.data, 'groupName');
         });
     });
 
@@ -107,33 +121,50 @@ angular.module('adminPageApp')
     $scope.changeAuditPersona = function () {
         $scope.$broadcast('broadcastAuditPersona', $scope.selectedAuditPersona);
     };
-
-    $scope.changeAuditGroup = function () {
-        $scope.$broadcast('broadcastAuditGroup', $scope.selectedAuditGroup);
+    
+//    $scope.changeAuditGroup = function ( {
+//        $scope.$broadcast('broadcastAuditGroup', $scope.selectedAuditGroup);
+//    };
+    
+    $scope.changeAuditGroup = function (a, b) {
+        $scope.$broadcast('broadcastAuditGroup', a.groupId);
     };
 
     $scope.$on('emitAuditGroup', function (event, auditGroups) {
         $scope.auditGroups = auditGroups;
     });
 
-    $scope.changeUserGroup = function () {
-        $scope.$broadcast('broadcastUserGroup', $scope.selectedUserGroup);
+//    $scope.changeUserGroup = function () {
+//        $scope.$broadcast('broadcastUserGroup', $scope.selectedUserGroup);
+//    };
+//
+//    $scope.$on('emitUserGroup', function (event, userGroup, defaultUserGroup) {
+//        $scope.userGroup = userGroup;
+//        $scope.selectedUserGroup = defaultUserGroup.groupId;
+//    });
+    
+    $scope.changeUserGroup = function (a,b) {
+        $scope.$broadcast('broadcastUserGroup', a.groupId);
     };
 
     $scope.$on('emitUserGroup', function (event, userGroup, defaultUserGroup) {
         $scope.userGroup = userGroup;
-        $scope.selectedUserGroup = defaultUserGroup.groupId;
+        $scope.selectedUserGroup = {selected  : defaultUserGroup};
     });
     
     $scope.displayContent = function(val) {
         $scope.displayType = val;
-        $scope.selectedReportGroup = '';
+        $scope.selectedReportGroup = {}
         resetDropdown();
-        $scope.$broadcast('broadcastDeployedSelection', $scope.displayType, $scope.selectedReportGroup);
+        $scope.$broadcast('broadcastDeployedSelection', $scope.displayType, '');
     };
     
-    $scope.changeReportGroup = function() {
-        $scope.$broadcast('broadcastDeployedReportGroup', $scope.displayType, $scope.selectedReportGroup);
+//    $scope.changeReportGroup = function() {
+//        $scope.$broadcast('broadcastDeployedReportGroup', $scope.displayType, $scope.selectedReportGroup);
+//    };
+    
+    $scope.changeReportGroup = function(a, b) {
+        $scope.$broadcast('broadcastDeployedReportGroup', $scope.displayType, a.groupId);
     };
     
     $scope.showForm = function(displayForm) {
@@ -179,13 +210,18 @@ angular.module('adminPageApp')
         if (type === 'func') {
             $scope.$broadcast('funcAreaUpdate', '');
             $scope.selectedFuncArea = {};
-
         } else if (type === 'report') {
             $scope.$broadcast('reportTypeUpdate', '');
             $scope.selectedReportType = {};
         } else if (type === 'source') {
             $scope.$broadcast('sourceSystemUpdate', '');
             $scope.selectedSourceSystem = {};
+        } else if (type === 'auditPersona') {
+            $scope.$broadcast('broadcastAuditGroup', '')
+            $scope.selectedAuditGroup = {};
+        } else if (type === 'reportPersona') {
+            $scope.$broadcast('broadcastDeployedReportGroup', $scope.displayType, '');
+            $scope.selectedReportGroup = {};
         }
     };
 

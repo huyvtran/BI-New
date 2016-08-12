@@ -37,15 +37,14 @@ angular
     tableauImagesPath: '../PreviewImages/',
     API: {
         //Set useMocks to true to simulate/mock actual webservice.
-        useMocks: false,
+        useMocks: true,
         fakeDelay: 800,
         //baseUrl: 'http://bipdurdev01.corp.emc.com/',
         baseUrl: '/'
     },
     userTheme: {
         '0':'default',  
-        '1':'white',
-        '2':'black'
+        '1':'black'
     } 
 })
 .config(function (CONFIG, $provide) {
@@ -310,6 +309,12 @@ angular
             abstract: true,
             templateUrl: 'views/reports.html',
             controller: 'ReportsCtrl',
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: 'Available Reports'
+            }
             /*resolve: {
              reportsMenuResolve: ['reportsMenu',
              function( reportsMenu){
@@ -362,13 +367,16 @@ angular
             abstract: true,
             data: {
                 displayName: 'Available Reports',
-                subCaption: '',
+                subCaption: '---',
                 classIcon: 'recommended-header-icon',
                 breadcrumName: '{{reportName}}'
             },
             ncyBreadcrumb: {
                 label: '{{reportName}}'
-            }
+            },
+            params: {
+                'reportName':null
+            },
 
         })
         .state('reports.details.report.report', {
@@ -429,6 +437,24 @@ angular
             url: '/feedback',
             views: {'report@reports': {
                     templateUrl: 'views/search.feedback.html',
+                    controller: 'ReportCtrl'
+                }
+            },
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: '{{reportName}}'
+            },
+            ncyBreadcrumb: {
+                label: '{{reportName}}'
+            }
+
+        })
+        .state('reports.details.report.reportmeta', {
+            url: '/reportmeta',
+            views: {'report@reports': {
+                    templateUrl: 'views/search.reportmeta.html',
                     controller: 'ReportCtrl'
                 }
             },

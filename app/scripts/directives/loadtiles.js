@@ -102,6 +102,7 @@ angular.module('myBiApp')
         link: function (scope, element/*, attrs*/) {
             var template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}}), url(images/charts/not-found.png)\'}"></div>';
             var ele;
+            scope.iconClass = 'icon-default';
             scope.externalUrl = false;
             if (scope.report.sourceSystem === 'EXTERNAL') {
                 scope.externalUrl = true;
@@ -118,7 +119,7 @@ angular.module('myBiApp')
                 /* report type 'webi' & RefreshStatus is Y tile should be loaded with bobj report in iframe*/
                 if (scope.report.type && scope.report.type.toLowerCase() === 'webi' && scope.report.refreshStatus === 'Y') {
                     scope.report.iframeUrl = $sce.trustAsResourceUrl(scope.report.reportLinkImg);
-
+                    scope.iconClass = 'icon-webi';    
                     $timeout(function () {
                         //sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
                         var sandbox = '';
@@ -142,6 +143,7 @@ angular.module('myBiApp')
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'pdf' || scope.report.type.toLowerCase() === 'excel' || scope.report.type.toLowerCase() === 'webi')) {
                     if (scope.report.type.toLowerCase() === 'webi') {
+                        scope.iconClass = 'icon-webi';
                         scope.report.reportLinkImg = 'images/charts/bobj-icon.png';
                     }
                     template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
@@ -151,6 +153,7 @@ angular.module('myBiApp')
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'visilums')) {
                     if (scope.report.type.toLowerCase() === 'visilums') {
+                        scope.iconClass = 'icon-visilums';
                         scope.report.reportLinkImg = 'images/charts/Lumira.png';
                     }
                     template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
@@ -159,6 +162,7 @@ angular.module('myBiApp')
                     element = ele;
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau') /*&& scope.report.refreshStatus === 'Y'*/) {
+                    scope.iconClass = 'icon-tableau';
                     template = '<div class="panel-heading class-pdf"  ng-style="{\'background-image\':\'url(images/charts/loading-icon.gif)\', \'background-size\':\'auto\'}"></div>';
                     ele = $compile(template)(scope);
                     element.replaceWith(ele);
@@ -195,7 +199,7 @@ angular.module('myBiApp')
  * # tilesController
  * Controller of the tiles. 
  */
-.controller('tilesController', function ($scope, commonService, $http, CONFIG, $sce, $window) {
+.controller('tilesController', function ($scope, commonService, $http, userDetailsService, CONFIG, $sce, $window) {
     $scope.panel = $scope.tilesData;
     $scope.$watch('panel.data', function (value) {
         _.map(value, function (report) {
@@ -244,8 +248,40 @@ angular.module('myBiApp')
         }
     });
 
-    $scope.collapseOpen = function () {
+    $scope.collapseOpen = function (tileName) {
         $scope.panel.open = !$scope.panel.open;
+        
+        if(tileName) {            
+            userDetailsService.userPromise.then(function(userObj) {
+                var putObj = '';
+                
+                if(tileName === 'Recommended Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isRecommendedCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                } else if(tileName === 'Favorite Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isFavoriteCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                } else if(tileName === 'Most Viewed Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isMostViewedCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                }
+                
+                console.log(putObj);
+                
+                $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                    .then(function (resp, status, headers) {
+
+                    }, function (resp, status, headers, config) {
+
+                    });
+            });
+        }
     };
     
     $scope.highlight = function(text, search) {
@@ -261,6 +297,18 @@ angular.module('myBiApp')
         }
     };
     
+    $scope.showIcons = false;
+    
+    $scope.showHideIcon = function(status, id) {
+        if (id) {
+            if(status === true) {
+                $scope.showIcons = status+id;
+            } else {
+                $scope.showIcons = false;
+            }
+        }
+    };
+    
     $scope.loadReport = function(report) {
         var url;
         
@@ -271,18 +319,31 @@ angular.module('myBiApp')
         } else {
             url = 'BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
         }
+        
         $window.open(url, '_blank');
     };
     
-    $scope.changeFavorite = function (report) {
+    $scope.changeFavorite = function (report, index, items) {
         var url = commonService.prepareUserUpdateFavoriteUrl($scope.userLoginName);
-
+        var obj = {
+            report : report,
+            reportIndex : index,
+            arrayItem : items,
+        };
+        
         if (report.favorite === 'N') {
+            obj.favorite = 'N';
+            $scope.$emit('addToFavorite', obj);
             $http.get(url + report.id + '/Y').then(function () {
-
                 report.favorite = 'Y';
             });
         } else {
+            obj.favorite = 'Y';
+            if(items.title === 'My Favorites') {
+                items.service.reports.splice(index,1);
+            } else {
+                $scope.$emit('addToFavorite', obj);
+            }    
             $http.get(url + report.id + '/N').then(function () {
                 report.favorite = 'N';
             });

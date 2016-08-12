@@ -10,6 +10,7 @@
 angular.module('myBiApp')
 .controller('ProfileCtrl', function ($scope, $localStorage, userDetailsService, commonService, CONFIG, $http) {
     $scope.setLoading(true);
+    $scope.$emit('setNavBar', true);
     
     if(!$scope.userObject) {
         userDetailsService.userPromise.then(function (response) {
@@ -77,33 +78,29 @@ angular.module('myBiApp')
         }
     }
     
-//    $scope.setUserTheme = function(theme) {
-//        if($localStorage.userTheme === theme) {
-//            return;
-//        }
-//        console.log($scope.userObject);
-//        console.log($localStorage.personalization);
-//        $scope.setLoading(true);
-//        var reportPriorityList = $localStorage.personalization
-//        var putObj = {
-//            'userId' : $scope.userObject.uid,
-//            'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
-//            'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
-//            'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
-//            'userTheme' : findThemeKey(CONFIG.userTheme, theme)
-//        }
-//        console.log(putObj);
-//        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
-//            .then(function (resp, status, headers) {
-//                $localStorage.userTheme = theme;
-//                $scope.$emit('myThemeSettings', $localStorage.userTheme, reportPriorityList);
-//                console.log(resp);
-//            }, function (resp, status, headers, config) {
-//                console.log(resp);
-//            });
-//    
-//        $scope.setLoading(false);    
-//    };
+    $scope.setUserTheme = function(theme) {
+        if($localStorage.userTheme === theme) {
+            return;
+        }
+        $scope.setLoading(true);
+        var reportPriorityList = $localStorage.personalization
+        var putObj = {
+            'userId' : $scope.userObject.uid,
+            'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
+            'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
+            'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
+            'userTheme' : findThemeKey(CONFIG.userTheme, theme)
+        }
+        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+            .then(function (resp, status, headers) {
+                $localStorage.userTheme = theme;
+                $scope.userTheme = $localStorage.userTheme;
+                $scope.$emit('myThemeSettings', $localStorage.userTheme, reportPriorityList);
+            }, function (resp, status, headers, config) {
+            });
+    
+        $scope.setLoading(false);    
+    };
     
     function findThemeKey(obj, value) {
         var key;

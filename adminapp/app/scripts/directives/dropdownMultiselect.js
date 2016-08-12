@@ -5,6 +5,10 @@
  * @name myBiApp.directive:dropdownMultiselect
  * @description
  * # dropdownMultiselect
+ * 
+ * http://dotansimha.github.io/angularjs-dropdown-multiselect/#/
+ * http://jsfiddle.net/ajm2hvxd/78/
+ * 
  */
 angular.module('adminPageApp')
 .directive('dropdownMultiselect', function () {
@@ -13,10 +17,11 @@ angular.module('adminPageApp')
         scope: {
             model: '=',
             options: '=',
+            selectedModel : '='
             //pre_selected: '=preSelected',
             //dropdownTitle: '@'
         },
-        template: "<div class='btn-group' data-ng-class='{open: open}'>" +
+        template: "<div class='btn-group' data-ng-class='{open: open}' data-ng-model='selectedGroupIdList'>" +
                 "<button class='btn btn-small'  data-ng-click='toggleDropdown()'>{{getButtonText()}}&nbsp;</button>" +
                 "<button class='btn btn-small dropdown-toggle' data-ng-click='toggleDropdown()'><span class='caret'></span></button>" +
                 "<ul class='dropdown-menu scrollable-menu' aria-labelledby='dropdownMenu'>" +
@@ -57,8 +62,14 @@ angular.module('adminPageApp')
                 for (var i = 0; i < scope.options.length; i++) {
                     scope.selectedItems[scope.options[i].id] = true;
                 }
-            };
-
+                if(scope.selectedModel && scope.selectedModel.length) {
+                    for(var i=0; i<scope.selectedModel.length; i++){                        
+                        scope.model.push(scope.selectedModel[i].id);
+                        scope.selectedItems[scope.selectedModel[i].id] = true;
+                    }
+                }
+            }
+            
             scope.toggleDropdown = function () {
                 scope.open = !scope.open;
                 scope.openState = scope.open;
@@ -91,14 +102,12 @@ angular.module('adminPageApp')
                 angular.forEach(scope.model, function (id) {
                     scope.selectedItems[id] = true;
                 });
-            }
-            ;
+            };
 
             function deselectAll() {
                 scope.model = [];
                 scope.selectedItems = {};
-            }
-            ;
+            };
 
             scope.setSelectedItem = function (id) {
                 var filteredArray = [];

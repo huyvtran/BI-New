@@ -38,19 +38,19 @@ angular.module('adminPageApp').controller('BICommunicationCtrl',function($scope,
 
     //
     //groups dropdown on leftpanel
-    userDetailsService.userPromise.then(function(userObj){
-        userObj = userObj[0];
-        var url;
-        if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'admin' ) {
-            url = 'BITool/buAdmin/getBUAdminGroup/?userName=';
-        } else if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'buadmin') {
-            url = 'BITool/buAdmin/getBIGroupForBUAdmin/?userName=';
-        }
-        url = url+userObj.emcLoginName;
-        $http.get(url).then(function(resp){
-            $scope.$emit('emitAuditGroup', resp.data);
-        });
-    });
+//    userDetailsService.userPromise.then(function(userObj){
+//        userObj = userObj[0];
+//        var url;
+//        if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'admin' ) {
+//            url = 'BITool/buAdmin/getBUAdminGroup/?userName=';
+//        } else if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'buadmin') {
+//            url = 'BITool/buAdmin/getBIGroupForBUAdmin/?userName=';
+//        }
+//        url = url+userObj.emcLoginName;
+//        $http.get(url).then(function(resp){
+//            $scope.$emit('emitAuditGroup', resp.data);
+//        });
+//    });
 
     $scope.$on('broadcastAuditGroup', function(event, communicationGroup){
         if (communicationGroup) {
@@ -213,7 +213,7 @@ angular.module('adminPageApp').controller('BICommunicationCtrl',function($scope,
    
     function cancelPendingPromise () {
         _.map(searchPromises, function(eachPromise){
-                eachPromise.cancelService();
+            eachPromise.cancelService();
         });
         searchPromises = [];
     }
@@ -230,31 +230,34 @@ angular.module('adminPageApp').controller('BICommunicationCtrl',function($scope,
         var promise = $q.defer();
         var canceller = $q.defer();
         $scope.communicationGroup = ($scope.communicationGroup) ? $scope.communicationGroup : '';
+        
         var httpPromise = $http({
             'url': 'BITool/admin/communicationSearch/'+offset+'/20?searchText='+$scope.searchTextValue+'&groupid='+$scope.communicationGroup,
             'method': 'get',
             'timeout': canceller.promise
         }).then(function(resp){
-            groups = resp.data.allGroups;
-                _.map(resp.data.communicationList,function(eachList){
-                   //eachList.groupId; 
-                    _.map(resp.data.allGroups,function(eachGroup){
-                        if(eachList.groupId === eachGroup.groupId){
-                            eachList.groupName = eachGroup.groupName;
-                        }
-                    });
+            groups = _.sortBy(resp.data.allGroups, 'groupName');
+            $scope.$emit('emitAuditGroup', groups);
+            
+            _.map(resp.data.communicationList,function(eachList){
+               //eachList.groupId; 
+                _.map(resp.data.allGroups,function(eachGroup){
+                    if(eachList.groupId === eachGroup.groupId){
+                        eachList.groupName = eachGroup.groupName;
+                    }
                 });
+            });
                 
-                if($scope.myData.data.length===0){
-                    $scope.myData.data=resp.data.communicationList;
-                }else{
-                    $scope.myData.data = $scope.myData.data.concat(resp.data.communicationList);
-                }
-                
-                $scope.gridApi.infiniteScroll.saveScrollPercentage();
-                $scope.gridApi.infiniteScroll.dataLoaded(false,resp.data && resp.data.communicationList && resp.data.communicationList.length === 20).then(function(){
-                    promise.resolve();
-                });
+            if($scope.myData.data.length===0){
+                $scope.myData.data=resp.data.communicationList;
+            }else{
+                $scope.myData.data = $scope.myData.data.concat(resp.data.communicationList);
+            }
+
+            $scope.gridApi.infiniteScroll.saveScrollPercentage();
+            $scope.gridApi.infiniteScroll.dataLoaded(false,resp.data && resp.data.communicationList && resp.data.communicationList.length === 20).then(function(){
+                promise.resolve();
+            });
         });
         
         httpPromise.cancelService = function(){

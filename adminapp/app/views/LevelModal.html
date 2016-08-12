@@ -15,24 +15,39 @@
                         </div>
                     </div>
                     <div class="row updateNews">
-                        <div class="col-xs-4"> Level Number </div>
+                        <div class="col-xs-8 col-xs-offset-4">
+                            <label>
+                                <input type="radio" name="levelFlag" value="Parent" ng-model="levelFlag" ng-click="selectLevelType('Parent')" ng-checked="true"> Is Parent
+                            </label>
+                            <label>
+                                <input type="radio" name="levelFlag" value="Child" ng-model="levelFlag" ng-click="selectLevelType('Child')"> Is Child Of
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row updateNews" ng-show="levelFlag === 'Child'">
+                        <div class="col-xs-4"> Parent Level Name </div>
                         <div class="col-xs-8">
-                            <input type="text" name="levelName" ng-model="items.levelNumber" class="col-xs-8">
+                            <select ng-model="items.parentLevelId" ng-options="level.levelId as level.levelDesc for level in parentLevelList" ng-change="getChildLevels()" class="col-xs-8"></select>
+                        </div>
+                    </div>
+                    <div class="row updateNews" ng-show="childLevelList.length > 0 && levelFlag === 'Child'">
+                        <div class="col-xs-4"> Child Level Name </div>
+                        <div class="col-xs-8">
+                            <select ng-model="items.childLevelId" ng-options="level.levelId as level.levelDesc for level in childLevelList" class="col-xs-8"></select>
                         </div>
                     </div>
                     <div class="row updateNews">
-                        <div class="col-xs-4"> Parent Level Name </div>
+                        <div class="col-xs-4"> Persona </div>
                         <div class="col-xs-8">
-                            <select ng-model="items.parentLevelId" ng-options="level.levelId as level.levelDesc for level in levels" class="col-xs-8"></select>
+                            <dropdown-multiselect model="items.selectedGroupIdList" options="groupIdList" selected-model="selectedGroupIds" ng-if="groupIdList"></dropdown-multiselect>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-disabled="!(!!items.levelDesc || !!items.levelNumber || !!items.parentLevelId)" ng-click="save(items)">Save</button>
+        <button class="btn btn-primary" type="button" ng-disabled="!items.levelDesc" ng-click="save(items)">Save</button>
         <button class="btn btn-warning" type="button" ng-click="close()"> Cancel </button>
     </div>
 </div>

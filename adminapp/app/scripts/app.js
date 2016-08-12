@@ -10,7 +10,7 @@
  */
 angular
 .module('adminPageApp', [
-    'ngAnimate',
+    'ngAnimate', 
     'ngCookies',
     'ngResource',
     'ngRoute',
@@ -24,7 +24,8 @@ angular
     'ui.grid.autoResize',
     'ui.router',
     'ui.bootstrap.dropdown',
-    'ui.select'
+    'ui.select',
+    'color.picker'
 ])
 .constant('CONFIG', {
     viewDir: 'views/',

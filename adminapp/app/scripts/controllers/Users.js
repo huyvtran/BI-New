@@ -37,19 +37,19 @@ angular.module('adminPageApp')
     };
 
     //groups dropdown on leftpanel
-    userDetailsService.userPromise.then(function(userObj){
-        userObj = userObj[0];
-        var url;
-        if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'admin' ) {
-            url = 'BITool/buAdmin/getBUAdminGroup/?userName=';
-        } else if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'buadmin') {
-            url = 'BITool/buAdmin/getBIGroupForBUAdmin/?userName=';
-        }
-        url = url+userObj.emcLoginName;
-        $http.get(url).then(function(resp){
-            $scope.$emit('emitAuditGroup', resp.data);
-        });
-    });
+//    userDetailsService.userPromise.then(function(userObj){
+//        userObj = userObj[0];
+//        var url;
+//        if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'admin' ) {
+//            url = 'BITool/buAdmin/getBUAdminGroup/?userName=';
+//        } else if (userObj.userinfo && userObj.userinfo.role.toLowerCase() === 'buadmin') {
+//            url = 'BITool/buAdmin/getBIGroupForBUAdmin/?userName=';
+//        }
+//        url = url+userObj.emcLoginName;
+//        $http.get(url).then(function(resp){
+//            $scope.$emit('emitAuditGroup', resp.data);
+//        });
+//    });
     
     $scope.$on('broadcastAuditGroup', function(event, personaId){
 //        if (personaId) {
@@ -337,15 +337,17 @@ angular.module('adminPageApp')
             });
             groups = resp.data.allGroups;
             roles = resp.data.allRoles;
-            /*_.map(resp.data.users,function(eachList){
-             //eachList.groupId; 
-             _.map(resp.data.allGroups,function(eachGroup){
-             if(eachList.groupId === eachGroup.groupId){
-             eachList.groupName = eachGroup.groupName;
-             }
-             });
+            $scope.$emit('emitAuditGroup', groups);
+            _.map(resp.data.users,function(eachList){
+                //eachList.groupId;
+                _.map(resp.data.allGroups,function(eachGroup){
+                    if(eachList.groupId === eachGroup.groupId){
+                        eachList.groupName = eachGroup.groupName;
+                    }
+                });
 
-             });*/
+            });
+
             if ($scope.myData.data.length === 0) {
                 $scope.myData.data = resp.data.users;
             } else {

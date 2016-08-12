@@ -10,31 +10,17 @@
 angular.module('myBiApp')
 .controller('ReportsCtrl', function ($scope, $localStorage, $state, $q, $http, $sce, commonService, reportsFactory, userDetailsService, CONFIG) {
     $scope.setLoading(true);
+    $scope.$emit('setNavBar', true);
     $scope.access = {};
     $scope.access.limitTo = 6;
     $scope.access.subGroupItemsId = 0;
     setUserPreference();
     
-    $scope.setListView = function (status) {
-        if ($scope.groupsData) {
-            $scope.groupsData.service['listView'] = status;
-            //$scope.groupsData['listView']=status;
-
-        }
-        if (!$scope.dataObj) {
-            return;
-        }
-        else {
-            for (var i in $scope.dataObj) {
-                $scope.dataObj[i].service.listView = status;
-            }
-        }
-    }
-
     $scope.access.allReports = function () {
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].personaInfo.status === 'Error') {
                 $scope.setLoading(false);
+                $scope.personaInfo = userObject[0].personaInfo;
                 $scope.groupsData = {
                     'title': '',
                     'open': 'true',
@@ -48,8 +34,8 @@ angular.module('myBiApp')
                 };
             } else {  
                 setUserLevel(userObject[0]);
-                getBreadCrumLevel(false);
-                
+                //getBreadCrumbLevel(false);
+                $scope.$emit('bredCrumbValue', '');
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
@@ -65,10 +51,12 @@ angular.module('myBiApp')
                             'loadmoredisable': groupService.loadmoredisable,
                             'service': groupService,
                             'data': groupService.reports,
+                            'listView':$scope.listViewStatus,
+                            'displayName' : $scope.mainState.$current.data.displayName,
                             'rr': true
                         };
 
-                        $scope.setListView(false);
+//                        $scope.setListView(false);
 
                     }, function () {
                         $scope.setLoading(false);
@@ -80,8 +68,10 @@ angular.module('myBiApp')
     };
 
     $scope.access.subGroupItems = function (levelid) {
+        $scope.$emit('setNavBar', true);
         $scope.biGroup.all().then(function () {
-            getBreadCrumLevel(levelid);
+            //getBreadCrumbLevel(levelid);
+            $scope.$emit('bredCrumbValue', '');
             $scope.setLoading(false);
             $scope.dataObj = [];
             
@@ -101,7 +91,8 @@ angular.module('myBiApp')
                                 'class_names': 'report-tile',
                                 'service': groupService,
                                 'levelLink': eachLevel.levelId,
-                                'data': groupService.reports
+                                'data': groupService.reports,
+                                'listView':$scope.listViewStatus
                             };
                         });
                     } else {
@@ -113,10 +104,11 @@ angular.module('myBiApp')
                             'limit': undefined,
                             'class_names': 'report-tile',
                             'service': groupService,
-                            'data': groupService.reports
+                            'data': groupService.reports,
+                            'listView':$scope.listViewStatus
                         };
 
-                        $scope.setListView(false);
+//                        $scope.setListView(false);
                     }
                 } else {
                     _.map(obj, function (eachObj) {
@@ -187,51 +179,58 @@ angular.module('myBiApp')
                     personalization[response.data.recommended - 1] = 'recentViewedReports';
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
+                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
+                    $localStorage.userTheme = 'default';
+                    $localStorage.listViewStatus = false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
-    } 
+    }
     
-    function getBreadCrumLevel(levelid) {
-        if(levelid) {
-            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
-                if(response.data) {
-                    $scope.pageBreadCrum = '';
-                    var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
-                    var data = response.data;
+    $scope.setListView = function (status) {
 
-                    for(var i = 0; i<data.length; i++) {
-                        var url = '#/reports/'+data[i].levelId;
-                        pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
-                    }
-
-                    $scope.pageBreadCrum = pageBreadCrum;
-                    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
-
-                } else {
-                    console.log('else');
-                }
-            });
-        } else {
-            $scope.pageBreadCrum ='';
-            var pageBreadCrum = '<a href="#/">Home</a>  -> Available Reports';
-            $scope.pageBreadCrum = pageBreadCrum;
-            $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+        if ($scope.groupsData) {
+            $scope.groupsData.listView = status;
+            //$scope.groupsData['listView']=status;
         }
+        if (!$scope.dataObj) {
+            return;
+        }
+        else {
+            for (var i in $scope.dataObj) {
+                $scope.dataObj[i].listView = status;
+            }
+        }
+        
+//        userDetailsService.userPromise.then(function(userObj) {
+//            var putObj = {
+//                'userId' : userObj[0].uid,
+//                'isListViewed' :(status === true) ? 1 : 0,
+//            };
+//
+//            $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+//                .then(function (resp, status, headers) {
+//
+//                }, function (resp, status, headers, config) {
+//
+//                });
+//        });
     }
 })
 .filter('filterReports', function () {

@@ -35,6 +35,7 @@ angular.module('myBiApp')
     'userSearchallReportsFilter'  : 'BITool/userSearch/allReports/:username/:offset/:limit?:filter=:texttobesearched',
     'feedbackPost'          : 'BITool/addFeedback',
     'feedbackList'          : 'BITool/reportFeedbacks/:reportId',
+    'metadata'              : 'BITool/home/getBIReportMetadata/:offset/:limit?sourceReportId=:sourceReportId&sourceSystem=:sourceSystem&isAllRecords=true',
     'reportAccess'          : 'BITool/reportAccess/:reportId',
     'reportAccessSearch'    : 'BITool/reportAccess/:sourceReportId/:sourceSystemName',
     /*'userProfilePic'      : 'https://ssgosgdev.isus.emc.com/dev/image-api/v1.0/images/:entityId?apikey=l7xx475c903f220c4aa2a0c1259a89afe4a8'//*/

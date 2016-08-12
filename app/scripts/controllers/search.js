@@ -12,7 +12,6 @@ angular.module('myBiApp')
     //subcaption for subheader
     $scope.mainState.$current.data.subCaption = $stateParams.searchText;
     $scope.groupsData = {};
-    
 //    $scope.setListView = function (status) {
 //        if ($scope.groupsData) {
 //            $scope.groupsData.service['listView'] = status;

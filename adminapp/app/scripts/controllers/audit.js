@@ -92,7 +92,8 @@ angular.module('adminPageApp').controller('AuditCtrl',function($scope, $q,$uibMo
         url = url+userObj.emcLoginName;
         
         $http.get(url).then(function(resp){
-            $scope.$emit('emitAuditGroup', resp.data);
+            var group = _.sortBy(resp.data, 'groupName');
+            $scope.$emit('emitAuditGroup', group);
         });
     });
    

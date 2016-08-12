@@ -15,6 +15,7 @@ angular.module('myBiApp')
             eachItem.text = eachItem.searchString;
             eachItem.weight = eachItem.searchCount;
             eachItem.handlers = {click: function () {
+                angular.element('.color-white').triggerHandler('click');    
                 if($rootScope.searchin === 'persona' || !$rootScope.searchin) {
                     $state.go('search', {'searchText': eachItem.searchString, 'persona': 'Y'});
                 } else {

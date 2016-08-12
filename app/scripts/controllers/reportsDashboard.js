@@ -13,9 +13,9 @@ angular.module('myBiApp')
         $scope.operationDashboardLink = reportsMenu.operationalLink;
     });
     
-    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> Operational Dashboard';
-    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
-    
+//    $scope.pageBreadCrumb = '<a href="#/">Home</a>  -> Operational Dashboard';
+    $scope.$emit('bredCrumbValue', '');
+    $scope.$emit('setNavBar', true);
     setUserPreference();
     setUserLevel();
     

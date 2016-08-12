@@ -1,7 +1,7 @@
-<div class="col-sm-12 col-xsd-12 col-md-12 col-lg-12 col-xl-12" style="height:40px;" >
-    <div class="pull-right tile-list-inner" ng-hide="$stateParams.levelId && $stateParams.reportId">
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:groupsData.service['listView'] == true}" ng-click="setListView(true)"><span class="glyphicon glyphicon-align-left"></span></a>
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:groupsData.service['listView'] == false}" ng-click="setListView(false)"><span class="glyphicon glyphicon-th-large"></span></a>
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 hidden-xs" style="height:40px;" ng-hide="$stateParams.levelId && $stateParams.reportId">
+    <div class="pull-right tile-list-inner" ng-hide="personaInfo && personaInfo.status === 'Error'">
+        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:groupsData.listView == true}" ng-click="setListView(true)"><span class="glyphicon glyphicon-th-list"></span></a>
+        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:groupsData.listView == false}" ng-click="setListView(false)"><span class="glyphicon glyphicon-th-large"></span></a>
     </div>
 </div>
 

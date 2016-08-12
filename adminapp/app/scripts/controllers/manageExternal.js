@@ -17,6 +17,7 @@ angular.module('adminPageApp')
     var searchPromises = [];
     $scope.$emit('resetDisplayForm', 'edit');
     $scope.$emit('resetSearchText');
+    $scope.external.additionalInfo = "#0000FF";
     
     /**
      * Search Edit report functions 
@@ -202,6 +203,15 @@ angular.module('adminPageApp')
     }
     
     $scope.clearForm = function() {
+//        $scope.external = {
+//            reportName : '',
+//            reportDesc : '',
+//            reportLink : '',
+//            functionalArea: '',
+//            linkTitle :'',
+//            linkHoverInfo :'',
+//        };
         $scope.external = {};
+        $scope.external.additionalInfo = "#0000FF";
     };
 });

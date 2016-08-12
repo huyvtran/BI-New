@@ -11,142 +11,409 @@
   color: #FFF;
 }
 
-/* line 17, ../../app/styles/theme-default.scss */
+/* line 20, ../../app/styles/theme-default.scss */
 .white-bg {
   background-color: #ffffff;
   padding-top: 10px;
 }
-/* line 22, ../../app/styles/theme-default.scss */
+/* line 25, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #F5F5F5;
 }
-/* line 24, ../../app/styles/theme-default.scss */
+/* line 27, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background: #F5F5F5;
 }
+/* line 33, ../../app/styles/theme-default.scss */
+.white-bg hr {
+  border-top: 1px solid #4e5052;
+}
 
-/* line 31, ../../app/styles/theme-default.scss */
-.default-bg {
-  background-color: #ffffff;
-  padding-top: 10px;
-}
-/* line 36, ../../app/styles/theme-default.scss */
-.default-bg .tiles-list-view .report-tile:nth-child(even) {
-  background-color: #F5F5F5;
-}
 /* line 38, ../../app/styles/theme-default.scss */
+.default-bg {
+  background-color: #EAEAEA;
+  padding-top: 10px;
+  /*color: #FFF;*/
+}
+/* line 42, ../../app/styles/theme-default.scss */
+.default-bg .tiles-list-view .reports-box .wrap-reportname {
+  background: #FFF;
+}
+/* line 46, ../../app/styles/theme-default.scss */
+.default-bg .report-tile .favorite-button {
+  background: url(../images/icon-favourites-stroke-black.png);
+  outline: none;
+}
+/* line 49, ../../app/styles/theme-default.scss */
+.default-bg .report-tile .favorite-button.favorite-selected {
+  background: url(../images/icon-favourite-selected.png);
+  outline: none;
+}
+/* line 54, ../../app/styles/theme-default.scss */
+.default-bg .report-tile .open-exteranl {
+  background-image: url("../images/icon-opennewtab-black.png");
+  outline: none;
+}
+/* line 59, ../../app/styles/theme-default.scss */
+.default-bg .panel {
+  border: 1px solid #cfcfcf;
+  border-bottom: 3px solid #cfcfcf;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* line 67, ../../app/styles/theme-default.scss */
+.default-bg .reports-box .image-container {
+  background: #FFF;
+}
+/* line 72, ../../app/styles/theme-default.scss */
+.default-bg .tiles-list-view .panel {
+  border: none;
+  border-bottom: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+/* line 78, ../../app/styles/theme-default.scss */
+.default-bg .tiles-list-view .single-tile {
+  background: #FFF;
+  margin: 1px 0px;
+  padding: 3px;
+}
+/* line 84, ../../app/styles/theme-default.scss */
+.default-bg .tiles-list-view .report-tile:nth-child(even) {
+  background-color: #FFF;
+}
+/* line 86, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
-  background: #F5F5F5;
+  background: #FFF;
+}
+/* line 92, ../../app/styles/theme-default.scss */
+.default-bg hr {
+  border-top: 1px solid #4e5052;
+}
+/* line 95, ../../app/styles/theme-default.scss */
+.default-bg .background-box {
+  background: #FFF;
+  padding: 10px;
+  clear: both;
+  margin-bottom: 10px;
+}
+/* line 100, ../../app/styles/theme-default.scss */
+.default-bg .background-box tr {
+  border-top: 2px solid #EAEAEA;
+  border-bottom: 2px solid #EAEAEA;
+}
+/* line 104, ../../app/styles/theme-default.scss */
+.default-bg .background-box tr:nth-child(even) {
+  background: #333;
+}
+/* line 107, ../../app/styles/theme-default.scss */
+.default-bg .background-box tr:nth-child(even) {
+  background: #FFF;
+}
+/* line 110, ../../app/styles/theme-default.scss */
+.default-bg .background-box li {
+  border-bottom: 2px solid #EAEAEA;
+}
+/* line 113, ../../app/styles/theme-default.scss */
+.default-bg .background-box li:last-child {
+  border-bottom: none;
+}
+/* line 116, ../../app/styles/theme-default.scss */
+.default-bg .background-box li:nth-child(even) {
+  background-color: #FFF;
+}
+/* line 120, ../../app/styles/theme-default.scss */
+.default-bg .meta-download, .default-bg a.meta-download:hover {
+  border: 1px solid #FFF;
+  color: #FFF;
+  background-color: #333;
+}
+/* line 125, ../../app/styles/theme-default.scss */
+.default-bg .meta-type .active {
+  /*border:1px solid #999;*/
+  border: 1px solid #999;
+  padding: 5px;
+  color: #999;
+}
+/* line 132, ../../app/styles/theme-default.scss */
+.default-bg .table-data .search-icon {
+  color: #887979;
+}
+/* line 135, ../../app/styles/theme-default.scss */
+.default-bg .table-data input, .default-bg .table-data input:hover, .default-bg .table-data input:active {
+  color: #000;
+  border: 1px solid #9e9c9c;
+  outline: none;
+}
+/* line 140, ../../app/styles/theme-default.scss */
+.default-bg .table-data .close-icon {
+  color: #000;
+}
+/* line 144, ../../app/styles/theme-default.scss */
+.default-bg .graph-container {
+  border-top: 1px solid lightgrey;
+}
+/* line 147, ../../app/styles/theme-default.scss */
+.default-bg #d3d button {
+  color: #FFF;
 }
 
-/* line 46, ../../app/styles/theme-default.scss */
+/* line 152, ../../app/styles/theme-default.scss */
 .black-bg {
-  background-color: #1f1f1f;
+  background-color: #1F1F1F;
   padding-top: 10px;
+  color: #FFF;
 }
-/* line 50, ../../app/styles/theme-default.scss */
+/* line 157, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title .dashed-box {
   background: linear-gradient(0deg, transparent 49%, #f5eeee 50%, transparent 52%) !important;
 }
-/* line 53, ../../app/styles/theme-default.scss */
+/* line 160, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title h5 {
   color: #FFF;
-  background: #1f1f1f;
+  background: #1F1F1F;
 }
-/* line 59, ../../app/styles/theme-default.scss */
-.black-bg .container-fluid .panel-footer {
+/* line 165, ../../app/styles/theme-default.scss */
+.black-bg .container-fluid {
+  /*        .panel-footer {
+              background: #333;
+          }*/
+}
+/* line 170, ../../app/styles/theme-default.scss */
+.black-bg .container-fluid .report-tile .favorite-button {
+  background: url(../images/icon-favourites-stroke-white.png);
+  outline: none;
+}
+/* line 173, ../../app/styles/theme-default.scss */
+.black-bg .container-fluid .report-tile .favorite-button.favorite-selected {
+  background: url(../images/icon-favourite-selected.png);
+  outline: none;
+}
+/* line 178, ../../app/styles/theme-default.scss */
+.black-bg .container-fluid .report-tile .open-exteranl {
+  background-image: url("../images/icon-opennewtab-white.png");
+  outline: none;
+}
+/* line 184, ../../app/styles/theme-default.scss */
+.black-bg .panel {
+  border: 1px solid #1F1F1F;
+  border-bottom: 3px solid #1F1F1F;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* line 192, ../../app/styles/theme-default.scss */
+.black-bg .reports-box .image-container {
   background: #333;
 }
-/* line 73, ../../app/styles/theme-default.scss */
+/* line 196, ../../app/styles/theme-default.scss */
+.black-bg .tiles-list-view {
+  /*        .wrap-reportname {
+              background: #333;
+              font-size: 15px;
+              padding-top: 6px;
+              padding-bottom: 6px;
+          }*/
+}
+/* line 197, ../../app/styles/theme-default.scss */
+.black-bg .tiles-list-view .panel {
+  border: none;
+  border-bottom: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: #333;
+}
+/* line 204, ../../app/styles/theme-default.scss */
+.black-bg .tiles-list-view .single-tile {
+  background: #333;
+  margin: 1px 0px;
+  padding: 3px;
+}
+/* line 210, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #333;
 }
-/* line 75, ../../app/styles/theme-default.scss */
+/* line 212, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background-color: #333;
 }
-/* line 80, ../../app/styles/theme-default.scss */
-.black-bg .tiles-list-view .wrap-reportname {
-  background: #1F1F1F;
-  font-size: 15px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+/* line 217, ../../app/styles/theme-default.scss */
+.black-bg .tiles-list-view .reports-box .wrap-reportname {
+  background: #333;
 }
-/* line 87, ../../app/styles/theme-default.scss */
+/* line 220, ../../app/styles/theme-default.scss */
+.black-bg .tiles-list-view .panel-footer {
+  background: #333;
+}
+/* line 230, ../../app/styles/theme-default.scss */
 .black-bg .list-unstyled li:nth-child(even) {
   background-color: #333333;
 }
-/* line 90, ../../app/styles/theme-default.scss */
+/* line 233, ../../app/styles/theme-default.scss */
 .black-bg .report-container tr:nth-child(even) {
   background: #333333;
 }
-/* line 93, ../../app/styles/theme-default.scss */
+/* line 236, ../../app/styles/theme-default.scss */
 .black-bg .table-hover > tbody > tr:hover {
   /* background-color: #E8E8E8; */
 }
+/* line 239, ../../app/styles/theme-default.scss */
+.black-bg hr {
+  border-top: 1px solid #eeeeee;
+}
+/* line 242, ../../app/styles/theme-default.scss */
+.black-bg .background-box {
+  background: #333;
+  padding: 10px;
+  clear: both;
+  margin-bottom: 10px;
+}
+/* line 247, ../../app/styles/theme-default.scss */
+.black-bg .background-box tr {
+  border-top: 2px solid #1F1F1F;
+  border-bottom: 2px solid #1F1F1F;
+}
+/* line 251, ../../app/styles/theme-default.scss */
+.black-bg .background-box tr:nth-child(even) {
+  background: #333;
+}
+/* line 254, ../../app/styles/theme-default.scss */
+.black-bg .background-box li {
+  border-bottom: 2px solid #1F1F1F;
+}
+/* line 257, ../../app/styles/theme-default.scss */
+.black-bg .background-box li:last-child {
+  border-bottom: none;
+}
+/* line 260, ../../app/styles/theme-default.scss */
+.black-bg .background-box li:nth-child(even) {
+  background-color: #333;
+}
+/* line 264, ../../app/styles/theme-default.scss */
+.black-bg .btn {
+  color: #FFF;
+}
+/* line 267, ../../app/styles/theme-default.scss */
+.black-bg .btn.bordered {
+  border: 1px solid #FFF;
+}
+/* line 270, ../../app/styles/theme-default.scss */
+.black-bg .image-container {
+  padding: 0;
+}
+/* line 273, ../../app/styles/theme-default.scss */
+.black-bg .panel-footer {
+  background: #333;
+}
+/* line 276, ../../app/styles/theme-default.scss */
+.black-bg .pagination {
+  color: #000;
+}
+/* line 279, ../../app/styles/theme-default.scss */
+.black-bg .meta-type .active {
+  /*border:1px solid #999;*/
+  border: 1px solid #FFF;
+  padding: 5px;
+  color: #FFF;
+}
+/* line 287, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-list thead > tr > th {
+  background-color: #999;
+}
+/* line 290, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-list th, .black-bg .table-data .meta-list td {
+  border-left: 2px solid #1F1F1F;
+  border-right: 2px solid #1F1F1F;
+}
+/* line 295, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-download, .black-bg .table-data a.meta-download:hover {
+  border: 1px solid #333;
+  color: #333;
+  background-color: #FFF;
+}
+/* line 300, ../../app/styles/theme-default.scss */
+.black-bg .table-data .search-icon {
+  color: #ded9d0;
+}
+/* line 303, ../../app/styles/theme-default.scss */
+.black-bg .table-data input, .black-bg .table-data input:hover, .black-bg .table-data input:active {
+  background-color: #4F4F4F;
+  color: #FFF;
+  outline: none;
+}
+/* line 308, ../../app/styles/theme-default.scss */
+.black-bg .table-data .close-icon {
+  color: #FFF;
+}
+/* line 311, ../../app/styles/theme-default.scss */
+.black-bg .table-data .pagination li a {
+  background-color: #DDD;
+  border-color: #333;
+}
 
-/* line 98, ../../app/styles/theme-default.scss */
+/* line 318, ../../app/styles/theme-default.scss */
 .black-theme #wrapper, .default-theme #wrapper {
   background: #333 !important;
 }
 
-/* line 102, ../../app/styles/theme-default.scss */
+/* line 322, ../../app/styles/theme-default.scss */
 .black-wrapper, .default-wrapper {
   background: #333 !important;
 }
 
-/* line 106, ../../app/styles/theme-default.scss */
+/* line 326, ../../app/styles/theme-default.scss */
 .white-theme #wrapper {
   background: #E8E8E8 !important;
 }
-/* line 108, ../../app/styles/theme-default.scss */
+/* line 328, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default {
   background: #E8E8E8 !important;
 }
-/* line 110, ../../app/styles/theme-default.scss */
+/* line 330, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li {
   background-color: #E8E8E8 !important;
 }
-/* line 112, ../../app/styles/theme-default.scss */
+/* line 332, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li a {
   color: #000 !important;
 }
-/* line 117, ../../app/styles/theme-default.scss */
+/* line 337, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li:hover {
   background: #2c6790 !important;
 }
-/* line 121, ../../app/styles/theme-default.scss */
+/* line 341, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li.reports:hover .tree-view ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 127, ../../app/styles/theme-default.scss */
+/* line 347, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] {
   background-color: #E8E8E8 !important;
   outline-color: #E8E8E8;
 }
-/* line 130, ../../app/styles/theme-default.scss */
+/* line 350, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul {
   outline-color: #E8E8E8;
 }
-/* line 133, ../../app/styles/theme-default.scss */
+/* line 353, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 137, ../../app/styles/theme-default.scss */
+/* line 357, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a:hover {
   text-decoration: underline;
 }
-/* line 140, ../../app/styles/theme-default.scss */
+/* line 360, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a span:hover {
   text-decoration: underline;
 }
 
-/* line 147, ../../app/styles/theme-default.scss */
+/* line 367, ../../app/styles/theme-default.scss */
 .white-portal-name {
   color: #333 !important;
 }
 
-/* line 150, ../../app/styles/theme-default.scss */
+/* line 370, ../../app/styles/theme-default.scss */
 .default-portal-name, .black-portal-name {
   color: #ffffff;
 }
+
+/*# sourceMappingURL=theme-default.css.map */

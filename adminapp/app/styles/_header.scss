@@ -85,6 +85,8 @@ span.input-group-addon {
 .top-search {
     margin: 20px 0 0;
     width:70%;
+    background-color: #7D7D7D !important;
+    border-radius: 32px 32px 32px 32px !important;
     input[type="text"] {
         border-radius: 32px 0 0 32px!important;
         border: none!important;
@@ -92,6 +94,7 @@ span.input-group-addon {
         height: 30px!important;
         color: #fff;
         cursor:default;
+        width:94%;
     }
     .globle-search-icon {
         border-radius: 0px 32px 32px 0px !important;
@@ -119,6 +122,7 @@ span.input-group-addon {
         border: 0;
         background-color: transparent;
         color:#FFF;
+        outline:none;
     }
     border-top-right-radius: 4px !important;
     border-bottom-right-radius: 4px !important;
@@ -302,4 +306,20 @@ ul.submenu-list-admin {
 .urlValidation{
     margin-left: 10px;
     color: red;
+}
+.close-icon {
+    border: none;
+    background-color: transparent;
+    /* display: inline-block; */
+    /* vertical-align: middle; */
+    outline: 0;
+    cursor: pointer;
+    position: absolute;
+    color: #FFF;
+    top: 6px;
+    font-size: 14px;
+    border-radius: 32px;
+    right: 54px;
+    z-index: 2;
+    padding: 2px;
 }

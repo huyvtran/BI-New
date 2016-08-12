@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="bower_components/angular-color-picker/dist/angularjs-color-picker.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -74,8 +75,9 @@
             <div class="col-md-6 col-lg-6 col-sm-6">
                 <form ng-submit="submitSearch(state.current.name)"  ng-show="state.current.name !== 'notauth' && state.current.name !== 'administration.list.recommended'">
                     <div class="input-group top-search">
-                        <input type="text" class="form-control" ng-model="searchText" placeholder="Search for..." autocomplete="off">
+                        <input type="text" class="form-control" ng-model="searchText" placeholder="Search for..." autocomplete="off" ng-change="showIconFlag()">
                         <!-- add ng-show="searchText.length < 1"-->
+                        <button class="glyphicon glyphicon-remove color-white close-icon" ng-class="{'ng-hide': !showIcon, 'ng-show':showIcon}" type="reset" ng-click="resetSearch();"></button>
                         <span class="input-group-addon globle-search-icon">
                             <button type="submit">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -233,26 +235,34 @@
                     </ui-select>
                     <button class="btn btn-primary btn-xs" ng-style="{'visibility': selectedReportType.selected?'visible':'hidden'}" ng-click="clearFilter('report')">clear</button>
                 </div>
-                <div class="col-xs-12" ng-hide="state.current.name !== 'administration.list.audit' && state.current.name !== 'administration.list.communication' && state.current.name !== 'administration.list.users'">
-                    <label>Persona
-                        <select class="form-control" ng-model="selectedAuditGroup" ng-change="changeAuditGroup()">
-                            <option value=''></option>
-                            <option ng-repeat="fa in auditGroups" value="{{fa.groupId}}">{{fa.groupName}}</option>
-                        </select>
-                    </label>
+                <div class="col-xs-12" ng-hide="state.current.name !== 'administration.list.audit' && state.current.name !== 'administration.list.communication' && state.current.name !== 'administration.list.users' && state.current.name !== 'administration.list.levels'">
+                    <label>Persona</label>
+                    <ui-select ng-model="selectedAuditGroup.selected" theme="select2" style="width:100%;" on-select="changeAuditGroup($item, $model)">
+                        <ui-select-match placeholder="Select Persona...&nbsp;&nbsp;">{{$select.selected.groupName}}</ui-select-match>
+                        <ui-select-choices repeat="group in auditGroups | filter: $select.search">
+                            <div ng-bind-html="group.groupName | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <button class="glyphicon glyphicon-remove color-white clear-button" ng-style="{'visibility': selectedAuditGroup.selected?'visible':'hidden'}" ng-click="clearFilter('auditPersona')"></button>
                 </div>
                 <div class="col-xs-12" ng-hide="state.current.name !== 'administration.list.recommended'">
-                    <label>Persona
-                        <select class="form-control" ng-model="selectedUserGroup" ng-change="changeUserGroup()" ng-options="group.groupId as group.groupName for group in userGroup"></select>
-                    </label>
+                    <label>Persona</label>
+                    <ui-select ng-model="selectedUserGroup.selected" theme="select2" style="width:100%;" on-select="changeUserGroup($item, $model)">
+                        <ui-select-match placeholder="Select Persona...&nbsp;&nbsp;">{{$select.selected.groupName}}</ui-select-match>
+                        <ui-select-choices repeat="group in userGroup | filter: $select.search">
+                            <div ng-bind-html="group.groupName | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="col-xs-12" ng-show="(state.current.name === 'contents' || state.current.name === 'external') && displayType === 'Deployed'">
-                    <label>Persona
-                        <select class="form-control" ng-model="selectedReportGroup" ng-change="changeReportGroup()">
-                            <option value=''></option>
-                            <option ng-repeat="group in reportGroup" value="{{group.groupId}}">{{group.groupName}}</option>
-                        </select>
-                    </label>
+                    <label>Persona</label>
+                    <ui-select ng-model="selectedReportGroup.selected" theme="select2" style="width:100%;" on-select="changeReportGroup($item, $model)">
+                        <ui-select-match placeholder="Select Persona...&nbsp;&nbsp;">{{$select.selected.groupName}}</ui-select-match>
+                        <ui-select-choices repeat="group in reportGroup | filter: $select.search">
+                            <div ng-bind-html="group.groupName | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <button class="glyphicon glyphicon-remove color-white clear-button" ng-style="{'visibility': selectedReportGroup.selected?'visible':'hidden'}" ng-click="clearFilter('reportPersona')"></button>
                 </div>
             </div>
         </nav>
@@ -278,38 +288,48 @@
                                 <span ng-hide="state.current.name === 'notauth'">
                                     <ul class="submenu-list-admin">
                                         <li ui-sref-active="active" ng-show="state.current.name === 'contents'|| state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="contents">Enterprise </a>
                                         </li>
 
                                         <li ui-sref-active="active" ng-show="state.current.name === 'contents'|| state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="external">External </a>
                                         </li>
                                         <li ui-sref-active="active" ng-hide="userObject.userinfo.role.toLowerCase() === 'buadmin' || (state.current.name === 'contents' || state.current.name === 'external')">
+                                            <!--<div class="icon news"></div><br />-->
                                             <a ui-sref="administration.list.news">News </a>
                                         </li>
 
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon communication"></div><br />-->
                                             <a ui-sref="administration.list.communication">Communication </a>
                                         </li> 
 
                                         <li ui-sref-active="active" ng-hide="userObject.userinfo.role.toLowerCase() === 'buadmin' || (state.current.name === 'contents' || state.current.name === 'external')">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.groups">Persona </a>
                                         </li> 
 
                                         <li ui-sref-active="active" ng-hide="userObject.userinfo.role.toLowerCase() === 'buadmin' || (state.current.name === 'contents' || state.current.name === 'external')">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.levels">Level  </a>
                                         </li> 
 
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.users">Users  </a>
                                         </li>
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.audit">Audit</a>
                                         </li>
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.recommended">Recommended Reports</a>
                                         </li>
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.manageExternal">Manage External Content</a>
                                         </li>                                 
                                     </ul>
@@ -371,6 +391,8 @@ display the full url for learning purposes-->
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/ngprogress/build/ngprogress.min.js"></script>
+    <script src="bower_components/tinycolor/tinycolor.js"></script>
+    <script src="bower_components/angular-color-picker/dist/angularjs-color-picker.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

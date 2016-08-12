@@ -10,8 +10,9 @@
 angular.module('myBiApp')
 .controller('favoritesCtrl', function ($scope, $localStorage, reportsFactory, userDetailsService, $http, CONFIG) {
     var favoriteService = new reportsFactory.reportsFactoryFunction('favorite');
-    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> My Favorites';
-    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+//    $scope.pageBreadCrumb = '<a href="#/">Home</a>  -> My Favorites';
+    $scope.$emit('bredCrumbValue', '');
+    $scope.$emit('setNavBar', true);
     
     if(!$localStorage.myLevel) {
         userDetailsService.userPromise.then(function (userObject) {
@@ -37,7 +38,7 @@ angular.module('myBiApp')
     
     $scope.setListView = function (status) {
         if ($scope.myfavorites) {
-            $scope.myfavorites.service['listView'] = status;
+            $scope.myfavorites.listView = status;
             //$scope.groupsData['listView']=status;
         }
         
@@ -45,7 +46,7 @@ angular.module('myBiApp')
             return;
         } else {
             for (var i in $scope.dataObj) {
-                $scope.dataObj[i].service.listView = status;
+                $scope.dataObj[i].listView = status;
             }
         }
     }
@@ -57,11 +58,13 @@ angular.module('myBiApp')
         'class_names': 'col-lg-2 col-md-4 col-sm-4 col-xs-6 report-tile',
         'loadmoredisable': favoriteService.loadmoredisable,
         'service': favoriteService,
-        'data': favoriteService.reports
+        'data': favoriteService.reports,
+        'listView' : $scope.listViewStatus
     };
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
@@ -71,24 +74,29 @@ angular.module('myBiApp')
                     personalization[response.data.recommended - 1] = 'recentViewedReports';
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
+                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
+                    $localStorage.userTheme = 'default';
+                    $localStorage.listViewStatus = false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
         }
     }
     
-    $scope.setListView(false);
+//    $scope.setListView(false);
 });
