@@ -122,90 +122,96 @@
 .default-bg .background-box li:nth-child(even) {
   background-color: #FFF;
 }
-/* line 120, ../../app/styles/theme-default.scss */
-.default-bg .meta-download, .default-bg a.meta-download:hover {
-  border: 1px solid #FFF;
-  color: #FFF;
-  background-color: #333;
-}
-/* line 125, ../../app/styles/theme-default.scss */
-.default-bg .meta-type .active {
-  /*border:1px solid #999;*/
-  border: 1px solid #999;
-  padding: 5px;
+/* line 121, ../../app/styles/theme-default.scss */
+.default-bg .meta-type .glyphicon {
   color: #999;
 }
-/* line 132, ../../app/styles/theme-default.scss */
+/* line 124, ../../app/styles/theme-default.scss */
+.default-bg .meta-type .active {
+  /*border:1px solid #999;*/
+  color: #2c95dd;
+}
+/* line 130, ../../app/styles/theme-default.scss */
 .default-bg .table-data .search-icon {
   color: #887979;
 }
-/* line 135, ../../app/styles/theme-default.scss */
+/* line 133, ../../app/styles/theme-default.scss */
 .default-bg .table-data input, .default-bg .table-data input:hover, .default-bg .table-data input:active {
   color: #000;
   border: 1px solid #9e9c9c;
   outline: none;
 }
-/* line 140, ../../app/styles/theme-default.scss */
+/* line 138, ../../app/styles/theme-default.scss */
 .default-bg .table-data .close-icon {
   color: #000;
 }
-/* line 144, ../../app/styles/theme-default.scss */
+/* line 142, ../../app/styles/theme-default.scss */
+.default-bg .table-data .meta-list tr {
+  border-left: 2px solid #f5f5f6;
+  border-right: 2px solid #f5f5f6;
+}
+/* line 146, ../../app/styles/theme-default.scss */
+.default-bg .table-data .meta-list th, .default-bg .table-data .meta-list td {
+  border-left: none;
+  border-right: none;
+}
+/* line 153, ../../app/styles/theme-default.scss */
 .default-bg .graph-container {
   border-top: 1px solid lightgrey;
 }
-/* line 147, ../../app/styles/theme-default.scss */
+/* line 156, ../../app/styles/theme-default.scss */
 .default-bg #d3d button {
   color: #FFF;
 }
 
-/* line 152, ../../app/styles/theme-default.scss */
+/* line 161, ../../app/styles/theme-default.scss */
 .black-bg {
   background-color: #1F1F1F;
   padding-top: 10px;
   color: #FFF;
 }
-/* line 157, ../../app/styles/theme-default.scss */
+/* line 166, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title .dashed-box {
   background: linear-gradient(0deg, transparent 49%, #f5eeee 50%, transparent 52%) !important;
 }
-/* line 160, ../../app/styles/theme-default.scss */
+/* line 169, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title h5 {
   color: #FFF;
   background: #1F1F1F;
 }
-/* line 165, ../../app/styles/theme-default.scss */
+/* line 174, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid {
   /*        .panel-footer {
               background: #333;
           }*/
 }
-/* line 170, ../../app/styles/theme-default.scss */
+/* line 179, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .favorite-button {
   background: url(../images/icon-favourites-stroke-white.png);
   outline: none;
 }
-/* line 173, ../../app/styles/theme-default.scss */
+/* line 182, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .favorite-button.favorite-selected {
   background: url(../images/icon-favourite-selected.png);
   outline: none;
 }
-/* line 178, ../../app/styles/theme-default.scss */
+/* line 187, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .open-exteranl {
   background-image: url("../images/icon-opennewtab-white.png");
   outline: none;
 }
-/* line 184, ../../app/styles/theme-default.scss */
+/* line 193, ../../app/styles/theme-default.scss */
 .black-bg .panel {
   border: 1px solid #1F1F1F;
   border-bottom: 3px solid #1F1F1F;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-/* line 192, ../../app/styles/theme-default.scss */
+/* line 201, ../../app/styles/theme-default.scss */
 .black-bg .reports-box .image-container {
   background: #333;
 }
-/* line 196, ../../app/styles/theme-default.scss */
+/* line 205, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view {
   /*        .wrap-reportname {
               background: #333;
@@ -214,7 +220,7 @@
               padding-bottom: 6px;
           }*/
 }
-/* line 197, ../../app/styles/theme-default.scss */
+/* line 206, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .panel {
   border: none;
   border-bottom: none;
@@ -222,196 +228,196 @@
   box-shadow: none;
   background: #333;
 }
-/* line 204, ../../app/styles/theme-default.scss */
+/* line 213, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .single-tile {
   background: #333;
   margin: 1px 0px;
   padding: 3px;
 }
-/* line 210, ../../app/styles/theme-default.scss */
+/* line 219, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #333;
 }
-/* line 212, ../../app/styles/theme-default.scss */
+/* line 221, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background-color: #333;
 }
-/* line 217, ../../app/styles/theme-default.scss */
+/* line 226, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .reports-box .wrap-reportname {
   background: #333;
 }
-/* line 220, ../../app/styles/theme-default.scss */
+/* line 229, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .panel-footer {
   background: #333;
 }
-/* line 230, ../../app/styles/theme-default.scss */
+/* line 239, ../../app/styles/theme-default.scss */
 .black-bg .list-unstyled li:nth-child(even) {
   background-color: #333333;
 }
-/* line 233, ../../app/styles/theme-default.scss */
+/* line 242, ../../app/styles/theme-default.scss */
 .black-bg .report-container tr:nth-child(even) {
   background: #333333;
 }
-/* line 236, ../../app/styles/theme-default.scss */
+/* line 245, ../../app/styles/theme-default.scss */
 .black-bg .table-hover > tbody > tr:hover {
   /* background-color: #E8E8E8; */
 }
-/* line 239, ../../app/styles/theme-default.scss */
+/* line 248, ../../app/styles/theme-default.scss */
 .black-bg hr {
   border-top: 1px solid #eeeeee;
 }
-/* line 242, ../../app/styles/theme-default.scss */
+/* line 251, ../../app/styles/theme-default.scss */
 .black-bg .background-box {
   background: #333;
   padding: 10px;
   clear: both;
   margin-bottom: 10px;
 }
-/* line 247, ../../app/styles/theme-default.scss */
+/* line 256, ../../app/styles/theme-default.scss */
 .black-bg .background-box tr {
   border-top: 2px solid #1F1F1F;
   border-bottom: 2px solid #1F1F1F;
 }
-/* line 251, ../../app/styles/theme-default.scss */
+/* line 260, ../../app/styles/theme-default.scss */
 .black-bg .background-box tr:nth-child(even) {
   background: #333;
 }
-/* line 254, ../../app/styles/theme-default.scss */
+/* line 263, ../../app/styles/theme-default.scss */
 .black-bg .background-box li {
   border-bottom: 2px solid #1F1F1F;
 }
-/* line 257, ../../app/styles/theme-default.scss */
+/* line 266, ../../app/styles/theme-default.scss */
 .black-bg .background-box li:last-child {
   border-bottom: none;
 }
-/* line 260, ../../app/styles/theme-default.scss */
+/* line 269, ../../app/styles/theme-default.scss */
 .black-bg .background-box li:nth-child(even) {
   background-color: #333;
 }
-/* line 264, ../../app/styles/theme-default.scss */
+/* line 273, ../../app/styles/theme-default.scss */
 .black-bg .btn {
   color: #FFF;
 }
-/* line 267, ../../app/styles/theme-default.scss */
+/* line 276, ../../app/styles/theme-default.scss */
 .black-bg .btn.bordered {
   border: 1px solid #FFF;
 }
-/* line 270, ../../app/styles/theme-default.scss */
+/* line 279, ../../app/styles/theme-default.scss */
 .black-bg .image-container {
   padding: 0;
 }
-/* line 273, ../../app/styles/theme-default.scss */
+/* line 282, ../../app/styles/theme-default.scss */
 .black-bg .panel-footer {
   background: #333;
 }
-/* line 276, ../../app/styles/theme-default.scss */
+/* line 285, ../../app/styles/theme-default.scss */
 .black-bg .pagination {
   color: #000;
 }
-/* line 279, ../../app/styles/theme-default.scss */
-.black-bg .meta-type .active {
-  /*border:1px solid #999;*/
-  border: 1px solid #FFF;
-  padding: 5px;
-  color: #FFF;
-}
-/* line 287, ../../app/styles/theme-default.scss */
+/* line 290, ../../app/styles/theme-default.scss */
 .black-bg .table-data .meta-list thead > tr > th {
   background-color: #999;
 }
-/* line 290, ../../app/styles/theme-default.scss */
-.black-bg .table-data .meta-list th, .black-bg .table-data .meta-list td {
+/* line 293, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-list tr {
   border-left: 2px solid #1F1F1F;
   border-right: 2px solid #1F1F1F;
 }
-/* line 295, ../../app/styles/theme-default.scss */
-.black-bg .table-data .meta-download, .black-bg .table-data a.meta-download:hover {
-  border: 1px solid #333;
-  color: #333;
-  background-color: #FFF;
+/* line 297, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-list th, .black-bg .table-data .meta-list td {
+  border-left: none;
+  border-right: none;
 }
-/* line 300, ../../app/styles/theme-default.scss */
+/* line 301, ../../app/styles/theme-default.scss */
+.black-bg .table-data .meta-list tr:nth-of-type(odd) {
+  background-color: #6f6e6e;
+}
+/* line 305, ../../app/styles/theme-default.scss */
 .black-bg .table-data .search-icon {
   color: #ded9d0;
 }
-/* line 303, ../../app/styles/theme-default.scss */
+/* line 308, ../../app/styles/theme-default.scss */
 .black-bg .table-data input, .black-bg .table-data input:hover, .black-bg .table-data input:active {
   background-color: #4F4F4F;
   color: #FFF;
   outline: none;
 }
-/* line 308, ../../app/styles/theme-default.scss */
+/* line 313, ../../app/styles/theme-default.scss */
 .black-bg .table-data .close-icon {
   color: #FFF;
 }
-/* line 311, ../../app/styles/theme-default.scss */
+/* line 316, ../../app/styles/theme-default.scss */
 .black-bg .table-data .pagination li a {
   background-color: #DDD;
   border-color: #333;
 }
+/* line 321, ../../app/styles/theme-default.scss */
+.black-bg #d3d {
+  color: #333;
+}
 
-/* line 318, ../../app/styles/theme-default.scss */
+/* line 326, ../../app/styles/theme-default.scss */
 .black-theme #wrapper, .default-theme #wrapper {
   background: #333 !important;
 }
 
-/* line 322, ../../app/styles/theme-default.scss */
+/* line 330, ../../app/styles/theme-default.scss */
 .black-wrapper, .default-wrapper {
   background: #333 !important;
 }
 
-/* line 326, ../../app/styles/theme-default.scss */
+/* line 334, ../../app/styles/theme-default.scss */
 .white-theme #wrapper {
   background: #E8E8E8 !important;
 }
-/* line 328, ../../app/styles/theme-default.scss */
+/* line 336, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default {
   background: #E8E8E8 !important;
 }
-/* line 330, ../../app/styles/theme-default.scss */
+/* line 338, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li {
   background-color: #E8E8E8 !important;
 }
-/* line 332, ../../app/styles/theme-default.scss */
+/* line 340, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li a {
   color: #000 !important;
 }
-/* line 337, ../../app/styles/theme-default.scss */
+/* line 345, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li:hover {
   background: #2c6790 !important;
 }
-/* line 341, ../../app/styles/theme-default.scss */
+/* line 349, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li.reports:hover .tree-view ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 347, ../../app/styles/theme-default.scss */
+/* line 355, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] {
   background-color: #E8E8E8 !important;
   outline-color: #E8E8E8;
 }
-/* line 350, ../../app/styles/theme-default.scss */
+/* line 358, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul {
   outline-color: #E8E8E8;
 }
-/* line 353, ../../app/styles/theme-default.scss */
+/* line 361, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 357, ../../app/styles/theme-default.scss */
+/* line 365, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a:hover {
   text-decoration: underline;
 }
-/* line 360, ../../app/styles/theme-default.scss */
+/* line 368, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a span:hover {
   text-decoration: underline;
 }
 
-/* line 367, ../../app/styles/theme-default.scss */
+/* line 375, ../../app/styles/theme-default.scss */
 .white-portal-name {
   color: #333 !important;
 }
 
-/* line 370, ../../app/styles/theme-default.scss */
+/* line 378, ../../app/styles/theme-default.scss */
 .default-portal-name, .black-portal-name {
   color: #ffffff;
 }

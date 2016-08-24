@@ -8,7 +8,7 @@
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('SearchdetailsCtrl', function ($scope, $rootScope, $stateParams, $state, searchservice, CONFIG, userDetailsService, $localStorage, commonService, $http) {
+.controller('SearchdetailsCtrl', function ($scope, $rootScope, $stateParams, $state, $window, searchservice, CONFIG, userDetailsService, $localStorage, commonService, $http) {
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
     $scope.isCollapsed = false;
@@ -38,10 +38,10 @@ angular.module('myBiApp')
                     //Update user view count
                     var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl(response[0].emcLoginName, resp.data.sourceReportId, resp.data.sourceSystem, 'Search');
                     $http.get(reportUpdateViewed);
-
-                    $scope.mainState.$current.data.displayName = resp.data.name;
-                    $rootScope.searchReportName = resp.data.name;
-                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
+                    emitSearchHeader(resp.data.name);
+//                    $scope.mainState.$current.data.displayName = resp.data.name;
+//                    $rootScope.searchReportName = resp.data.name;
+//                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
                     
                     $scope.isTableu = true;
                     var placeholderDiv = document.getElementById('tableu_report3');
@@ -69,9 +69,10 @@ angular.module('myBiApp')
                 
                 $http.get(urlReports).then(function (resp) {
                     $scope.reportData = resp.data;
-                    $scope.mainState.$current.data.displayName = resp.data.name;
-                    $rootScope.searchReportName = resp.data.name;
-                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
+                    emitSearchHeader(resp.data.name)
+//                    $scope.mainState.$current.data.displayName = resp.data.name;
+//                    $rootScope.searchReportName = resp.data.name;
+//                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
                 });
             });
         } else if ($state.current.name === 'search.details.access') {
@@ -84,18 +85,20 @@ angular.module('myBiApp')
                 }
                 if(!$rootScope.searchReportName) {
                     $http.get(urlReports).then(function (resp) {
-                        $scope.mainState.$current.data.displayName = resp.data.name;
-                        $scope.$emit('setSearchDisplayName', resp.data.name);
+                        emitSearchHeader(resp.data.name);
+//                        $scope.mainState.$current.data.displayName = resp.data.name;
+//                        $scope.$emit('setSearchDisplayName', resp.data.name);
                     });
                 } else {
-                    $scope.mainState.$current.data.displayName = $rootScope.searchReportName;
-                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
+                    emitSearchHeader($rootScope.searchReportName);
+//                    $scope.mainState.$current.data.displayName = $rootScope.searchReportName;
+//                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
                 }
                 
                 searchservice.loadReportAccess($stateParams.sourceReportId, $stateParams.sourceName, $stateParams.searchId, $stateParams.persona).then(function (resp) {
                     $scope.reportAccessData = resp;
-                    $scope.mainState.$current.data.displayName = resp.data.name;
-                    $scope.$emit('setSearchDisplayName', resp.data.name);
+//                    $scope.mainState.$current.data.displayName = resp.data.name;
+//                    $scope.$emit('setSearchDisplayName', resp.data.name);
                 });
             });    
         } else if ($state.current.name === 'search.details.feedback') {
@@ -109,12 +112,14 @@ angular.module('myBiApp')
 
                 if(!$rootScope.searchReportName) {
                     $http.get(urlReports).then(function (resp) {
-                        $scope.mainState.$current.data.displayName = resp.data.name;
-                        $scope.$emit('setSearchDisplayName', resp.data.name);
+                        emitSearchHeader(resp.data.name);
+//                        $scope.mainState.$current.data.displayName = resp.data.name;
+//                        $scope.$emit('setSearchDisplayName', resp.data.name);
                     });
                 } else {
-                    $scope.mainState.$current.data.displayName = $rootScope.searchReportName;
-                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
+                    emitSearchHeader($rootScope.searchReportName);
+//                    $scope.mainState.$current.data.displayName = $rootScope.searchReportName;
+//                    $scope.$emit('setSearchDisplayName', $rootScope.searchReportName);
                 }
                 
                 $scope.feedbackArray = [];
@@ -144,6 +149,19 @@ angular.module('myBiApp')
         }
     };
     
+    function emitSearchHeader(reportName) {
+        $scope.mainState.$current.data.displayName = reportName;
+        $rootScope.searchReportName = reportName;
+        
+        if($window.innerWidth < 768) {
+            if(reportName.length > 45) {
+                reportName = reportName.substr(0, 44)+'...';
+            }
+        }
+        
+        $scope.$emit('setSearchDisplayName', reportName);
+    }
+    
     function setUserLevel() {
         if(!$localStorage.myLevel) {
             userDetailsService.userPromise.then(function (userObject) {
@@ -172,9 +190,13 @@ angular.module('myBiApp')
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                     $scope.userTheme = $localStorage.userTheme;

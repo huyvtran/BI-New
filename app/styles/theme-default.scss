@@ -117,16 +117,14 @@
             background-color: #FFF;
         }
     }
-    .meta-download, a.meta-download:hover {    
-        border: 1px solid #FFF;
-        color: #FFF;
-        background-color: #333;
-    }
-    .meta-type .active{
-        /*border:1px solid #999;*/
-        border: 1px solid #999;
-        padding: 5px;
-        color: #999;
+    .meta-type {
+        .glyphicon {
+            color:#999;
+        }
+        .active{
+            /*border:1px solid #999;*/
+            color: #2c95dd;
+        }    
     }
     .table-data {
         .search-icon {
@@ -139,8 +137,19 @@
         }
         .close-icon {
             color: #000;
-        }    
+        }
+        .meta-list {
+            tr {
+                border-left:2px solid #f5f5f6;
+                border-right:2px solid #f5f5f6;
+            }
+            th, td {
+                border-left:none;
+                border-right:none;
+            }
+        }
     }
+    
     .graph-container {
         border-top: 1px solid lightgrey;
     }    
@@ -275,27 +284,23 @@
     }
     .pagination { 
         color:#000;
-    }
-    .meta-type .active{
-        /*border:1px solid #999;*/
-        border: 1px solid #FFF;
-        padding: 5px;
-        color: #FFF;
     }    
     .table-data {
         .meta-list {
             thead > tr > th {
                 background-color: #999;
             }
-            th, td {
+            tr {
                 border-left: 2px solid #1F1F1F;
                 border-right: 2px solid #1F1F1F;
             }
-        }
-        .meta-download, a.meta-download:hover {    
-            border: 1px solid #333;
-            color: #333;
-            background-color: #FFF;
+            th, td {
+                border-left: none;
+                border-right: none;
+            }
+            tr:nth-of-type(odd) {
+                background-color: #6f6e6e;
+            }
         }
         .search-icon {
             color: #ded9d0;
@@ -312,7 +317,10 @@
             background-color: #DDD;
             border-color: #333;
         }
-    }    
+    }
+    #d3d {
+        color:#333;
+    }
 }
 .black-theme, .default-theme {
     #wrapper {

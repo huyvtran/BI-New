@@ -157,6 +157,7 @@ angular.module('myBiApp')
     $scope.setListView = function (status) {
         $scope.listViewStatus  = status;
         $localStorage.listViewStatus = status;
+        $scope.$broadcast('listViewValue', status);
         
         for (var i in $scope.reportPanelList) {
             $scope.reportPanelList[i]['listView'] = status;
@@ -328,9 +329,14 @@ angular.module('myBiApp')
                 (response.data.isFavoriteCollapsed === 1) ? $scope.isFavoriteCollapsed = false : $scope.isFavoriteCollapsed = true;
                 (response.data.isMostViewedCollapsed === 1) ? $scope.isMostViewedCollapsed = false : $scope.isMostViewedCollapsed = true;
                 var personalization = [];
-                personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                personalization[response.data.recommended - 1] = 'recentViewedReports';
+                
+                if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+                } else {
+                    personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                }
                 
                 $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                 $scope.listViewStatus = $localStorage.listViewStatus;

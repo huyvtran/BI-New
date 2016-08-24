@@ -4,14 +4,11 @@
     <meta charset="utf-8">
     <title>EMC Insights</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
-    <meta http-equiv="expires" content="Thu, 30 Jun 2016 1:00:00 GMT" />
-    <meta http-equiv='cache-control' content='no-cache'>
-    <meta http-equiv="pragma" content="no-cache" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -242,8 +239,8 @@
                                     ng-hide="mainState.current.name.indexOf('reports.details.report') === 0 ||
                                             mainState.current.name.indexOf('search.details') === 0"></h2>
                                 <h2 ng-class="{'search-header-margin':mainState.current.name.indexOf('search.details') === 0}"
-                                ng-show="mainState.current.name.indexOf('search.details') === 0"
-                                ng-bind="searchDisplayName">&nbsp;</h2>
+                                    ng-show="mainState.current.name.indexOf('search.details') === 0"
+                                    ng-bind="searchDisplayName">&nbsp;</h2>
                                 <div class="navbar-header-breadcrumb"
                                     ng-show="mainState.current.name.indexOf('reports.details.report') === 0">
                                     <div class="breadcrumb" ng-bind-html="pageBreadCrumb"></div>
@@ -266,7 +263,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ui-sref-active="active" ng-show='reportAccess'>
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ui-sref-active="active">
                                             <a ui-sref="search.details.access({'searchId':searchId})">
                                                 <span title="How to Request">
                                                     <span class="icon request"></span>
@@ -274,7 +271,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active" ng-show='reportAccess'>
+                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active">
                                             <a ui-sref="search.details.feedback({'searchId':searchId})">
                                                 <span title="User Feedback">
                                                     <span class="icon feedback"></span>
@@ -318,7 +315,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 hidden-xs hidden-sm align-left" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.reportmeta({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <span title="Report Meta">
                                                     <span class="icon reportmeta"></span>

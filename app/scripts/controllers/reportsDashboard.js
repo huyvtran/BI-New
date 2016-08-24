@@ -47,9 +47,13 @@ angular.module('myBiApp')
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                     $scope.userTheme = $localStorage.userTheme;

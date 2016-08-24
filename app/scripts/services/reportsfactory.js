@@ -56,9 +56,7 @@ angular.module('myBiApp')
                             url = commonService.prepareSearchUrl(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
                         }
                     }
-                    
-                    console.log(levelid);
-                    console.log(url);
+
                     filter = '';
                 }
                 
@@ -74,6 +72,7 @@ angular.module('myBiApp')
                     if (filter !== '') {
                         arrayReports = resp.data[filter] ? resp.data[filter] : [];
                     }
+                    
                     _.map(arrayReports, function (report) {
                         if (type === 'search') {
                             if (levelid === 'Y') {
@@ -112,22 +111,26 @@ angular.module('myBiApp')
                                 }
                             }
                         }
+                        
                         return report;
                     });
 
                     if (arrayReports && arrayReports.length === CONFIG.limit) {
                         this.loadmoredisable = false;
                     }
+                    
                     if (stopInfinite) {
                         this.loadmoredisable = true;
                     }
+                    
                     if (this.reports.length === 0) {
                         this.reports = arrayReports;
-                    }
-                    else {
+                    } else {
                         Array.prototype.push.apply(this.reports, arrayReports);
                     }
+                    
                     defer.resolve({});
+                    
                 }.bind(this));
             }.bind(this));
             return defer.promise;

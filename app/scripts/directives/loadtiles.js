@@ -200,6 +200,7 @@ angular.module('myBiApp')
  * Controller of the tiles. 
  */
 .controller('tilesController', function ($scope, commonService, $http, userDetailsService, CONFIG, $sce, $window) {
+    $scope.mobileDevice = ($window.innerWidth < 768) ? true: false;
     $scope.panel = $scope.tilesData;
     $scope.$watch('panel.data', function (value) {
         _.map(value, function (report) {

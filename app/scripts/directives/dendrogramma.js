@@ -12,28 +12,21 @@ angular.module("myBiApp")
 .directive("dendroGram", function ($window) {
     return {
         restrict: "E",
-        template: "<div id='d3d'><button class='btn btn-info' id='expand'>Expand All</button><button class='btn btn-info' id='collapse'>Collapse All</button><svg width='960' height='2000'></svg></div>",
+        templateUrl: 'views/dendroGram.html',
         link: function(scope, elem, attrs){
-            //https://bipduruat01.corp.emc.com/BITool/home/getD3DendrogramForMetadata?sourceReportId=Aa.49YHKKkNBuh0kJvrfCbI&sourceSystem=PROPEL%20BOBJ%20PRD
             var data =  scope[attrs.data];
             var url = scope[attrs.url];
-            console.log(url);
-            var expand = elem.find("#expand");
-            var collapse = elem.find("#collapse");
-            
+            var toggle = elem.find("#toggle");    
             var d3 = $window.d3;
             var rawSvg = elem.find("#d3d svg")[0];
             var margin = {top: 20, right: 120, bottom: 20, left: 250},
                 width = 960  - margin.right - margin.left,
-                height = 2000 - margin.top - margin.bottom;
-
+                height = 800 - margin.top - margin.bottom;
             var i = 0,
                 duration = 750,
                 root;
-
             var tree = d3.layout.tree()
                 .size([height, width]);
-
             var diagonal = d3.svg.diagonal()
                 .projection(function(d) { return [d.y, d.x]; });
             var svg = d3.select(rawSvg);
@@ -68,95 +61,9 @@ angular.module("myBiApp")
             generateTree();
             
             d3.select(self.frameElement).style("height", "800px");
-
-//            function update(source) {
-//                // Compute the new tree layout.
-//                var nodes = tree.nodes(root).reverse(),
-//                    links = tree.links(nodes);
-//
-//                // Normalize for fixed-depth.
-//                nodes.forEach(function(d) { d.y = d.depth * 180; });
-//
-//                // Update the nodes…
-//                var node = svg.selectAll("g.node")
-//                    .data(nodes, function(d) { return d.id || (d.id = ++i); });
-//
-//                // Enter any new nodes at the parent's previous position.
-//                var nodeEnter = node.enter().append("g")
-//                    .attr("class", "node")
-//                    .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-//                    .on("click", click);
-//
-//                nodeEnter.append("circle")
-//                    .attr("r", 1e-6)
-//                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
-//
-//                nodeEnter.append("text")
-//                    .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-//                    .attr("dy", ".35em")
-//                    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-//                    .text(function(d) { return d.name; })
-//                    .style("fill-opacity", 1e-6);
-//
-//                // Transition nodes to their new position.
-//                var nodeUpdate = node.transition()
-//                    .duration(duration)
-//                    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-//
-//                nodeUpdate.select("circle")
-//                    .attr("r", 4.5)
-//                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
-//
-//                nodeUpdate.select("text")
-//                    .style("fill-opacity", 1);
-//
-//                // Transition exiting nodes to the parent's new position.
-//                var nodeExit = node.exit().transition()
-//                    .duration(duration)
-//                    .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-//                    .remove();
-//
-//                nodeExit.select("circle")
-//                    .attr("r", 1e-6);
-//
-//                nodeExit.select("text")
-//                    .style("fill-opacity", 1e-6);
-//
-//                // Update the links…
-//                var link = svg.selectAll("path.link")
-//                    .data(links, function(d) { return d.target.id; });
-//
-//                // Enter any new links at the parent's previous position.
-//                link.enter().insert("path", "g")
-//                    .attr("class", "link")
-//                    .attr("d", function(d) {
-//                        var o = {x: source.x0, y: source.y0};
-//                        return diagonal({source: o, target: o});
-//                    });
-//
-//                // Transition links to their new position.
-//                link.transition()
-//                    .duration(duration)
-//                    .attr("d", diagonal);
-//
-//                // Transition exiting nodes to the parent's new position.
-//                link.exit().transition()
-//                    .duration(duration)
-//                    .attr("d", function(d) {
-//                        var o = {x: source.x, y: source.y};
-//                        return diagonal({source: o, target: o});
-//                    })
-//                    .remove();
-//
-//                // Stash the old positions for transition.
-//                nodes.forEach(function(d) {
-//                    d.x0 = d.x;
-//                    d.y0 = d.y;
-//                });
-//            }
             
             function update(source) {
-                // Compute the new tree layout.
+                // Compute the new tree layout. -- Sent by Viswa
                 var nodes = tree.nodes(root).reverse(),
                     links = tree.links(nodes);
 
@@ -179,9 +86,7 @@ angular.module("myBiApp")
                         div.transition()
                             .duration(200)
                             .style("opacity", .9);
-                        div .html(
-                            d.class + d.name + "<br/>" + 
-                            "Dashboard Name: " + d.COMMAND + "<br/>")
+                        div .html(d.className)
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
                     })
@@ -196,13 +101,38 @@ angular.module("myBiApp")
                     .style("fill", function(d) { 
                         return d._children ? "lightsteelblue" : "#fff"; 
                     });
-
-                nodeEnter.append("text")
+                  
+                  nodeEnter.append("text")
                     .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
                     .attr("dy", ".35em")
                     .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
                     .text(function(d) { return d.name; })
+                    .call(wrap, 30)
                     .style("fill-opacity", 1e-6);
+            
+//                var nodeText = nodeEnter.append("text");
+//                
+//                nodeText.attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+//                    .attr("dy", ".35em")
+//                    .attr("class", "label")
+//                    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+//                    .text(function(d) { 
+//                        if(d.name.length > 30) {
+//                            console.log(d.name.substring(0, 29));
+//                            nodeText.append('tspan')
+//                                    .attr("x", "-10")
+//                                    .attr("dy", ".35em")
+//                                    .text(d.name.substring(0,29));
+//                            console.log(d.name.substring(29, d.name.length));
+//                            nodeText.append('tspan')
+//                                    .attr("x", "-10")
+//                                    .attr("dy", "1.35em")
+//                                     .text(d.name.substring(29, d.name.length));
+//                        } else {
+//                                return d.name;
+//                        }
+//                    })
+//                    .style("fill-opacity", 1e-6);
 
                 // add the tool tip
                 var div = d3.select("body").append("div")
@@ -268,21 +198,46 @@ angular.module("myBiApp")
                 });
             }
             
-            function expandCollapse () {
-                
+            function wrap(text, width) {
+                text.each(function() {
+                    var nodeText =d3.select(this).text();
+                    var nodeTextlength = nodeText.length;
+                    var nWords = (nodeTextlength > 30) ? [nodeText.substring(0,29), nodeText.substring(29,nodeText.length)] :[nodeText]; 
+                    var text = d3.select(this),
+//                        words = text.text().split(/\s+/).reverse(),
+                        words = (nodeTextlength > 30) ? [nodeText.substring(0,29), nodeText.substring(29,nodeText.length)].reverse() :[nodeText],
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        lineHeight = 1.1, // ems
+                        y = text.attr("y"),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                        if (nodeTextlength > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }
+                    }
+                });
             }
-            expand.on("click", function() {
-                console.log('Exand here');
-                toggleAll(root); 
-                update(root);
-                
-            });
-
-            collapse.on("click", function() {
-                console.log('collapse here');
-                root.children.forEach(collapseAll);
-                collapseAll(root);
-                update(root);
+            
+            toggle.on("click", function() {
+                var toggleText = toggle.text();
+                if(toggleText === "Expand All") {
+                    toggle.text('Collapse All');
+                    toggleAll(root); 
+                    update(root);
+                } else {
+                    toggle.text('Expand All');
+                    root.children.forEach(collapseAll);
+                    collapseAll(root);
+                    update(root);
+                }
             });
             
             // Toggle children on click.

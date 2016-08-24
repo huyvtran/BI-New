@@ -8064,54 +8064,112 @@ select:focus::-ms-value {
 .meta-type {
     padding:2px;
     .glyphicon {
-        font-size: 20px;
-    }    
+        color:#999;
+        font-size: 13px;
+    }
+    .active{
+        /*border:1px solid #999;*/
+        color: #2c95dd;
+    }
     a {
-        padding-right:2px;
+        padding-right:20px;
+    }
+    span.meta-table-icon{
+        background-image: url("../images/charts/table-view.png");
+        position: relative;
+        background-size: 13%;
+        background-repeat: no-repeat;
+        background-position: left;
+        display: inline-table;
+        color: #999;
+    }
+    span.meta-table-icon-active::after, span.meta-table-icon::after {
+        content: 'CROSSTAB';
+        padding-left: 21px;
+        font-size: 13px;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+    }
+    span.meta-table-icon-active {
+        color: #2c95dd;
+        background-image: url("../images/charts/table-view-blue.png");
+        position: relative;
+        background-size: 13%;
+        background-repeat: no-repeat;
+        background-position: left;
+        display: inline-table;
+    }
+    
+    span.meta-graph-icon{
+        background-image: url("../images/charts/graphical.png");
+        position: relative;
+        background-size: 13%;
+        background-repeat: no-repeat;
+        background-position: left;
+        display: inline-table;
+        color: #999;
+    }
+    span.meta-graph-icon-active::after, span.meta-graph-icon::after {
+        content: 'VISUALIZATION';
+        padding-left: 21px;
+        font-size: 13px;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+    }
+    span.meta-graph-icon-active {
+        color: #2c95dd;
+        background-image: url("../images/charts/graphical-blue.png");
+        position: relative;
+        background-size: 13%;
+        background-repeat: no-repeat;
+        background-position: left;
+        display: inline-table;
     }
 }
 .table-data {
-    /*overflow-x: scroll;*/
     margin: 4px;
     width: 98%;
     input {
-        padding-left: 27px;
         border: none;
-        padding-top: 2px;
-        padding-bottom: 4px;
-        //color:#000;
-        //padding-left: 24px;
+        padding: 3px 0px 3px 24px;
+        vertical-align: middle;
+        height:27px;
+        width:175px;
     }
     .search-icon {
         position: absolute;
         background: transparent;
         display: inline-block;
-        top: 5px;
-        right: 219px;
+        top: 6px;
+        right: 230px;
     }
     .close-icon {
-        right: 52px;
+        right: 70px;
         color: #333;
         top: 4px;
     }
     .meta-list {
         font-size:13px;
+        table-layout: fixed;
+        td {
+            /*word-break: break-all;*/
+            word-wrap: break-word;
+        }
     }
     .meta-message {
         float: right;
         margin-top: 25px;
         padding-right: 5px;
     }
-    .meta-download, a.meta-download:hover {
-        margin: 0 0 0 10px;
-        border-radius: 32px;
+    .meta-download, a.meta-download:hover {    
+        color: #FFF;
+        background: #2c95dd;
+        padding: 13px 9px 13px 8px;
+        margin: 0px;
+        /*width:8%;*/
     }
-}
-.meta-table-icon {
-    background-image: url('../images/charts/table.png');
-}
-.meta-graph-icon {
-    background-image: url('../images/charts/graph.png');
 }
 .auto-suggestion-content {
     a {
@@ -8131,6 +8189,20 @@ select:focus::-ms-value {
 }
 
 .dendrogram {
+    height:800px;
+    div.tooltip {
+       position: absolute;
+       text-align: left;
+       width: 280px;
+       height: 30px;
+       padding: 2px;
+       font: 12px sans-serif;
+       background: grey;
+       border: 0px;
+       border-radius: 8px;
+       pointer-events: none;
+     }
+
     .node {
         cursor: pointer;
     }
@@ -8138,11 +8210,11 @@ select:focus::-ms-value {
     .node circle {
         fill: #fff;
         stroke: steelblue;
-        stroke-width: 1.5px;
+        stroke-width: 2.5px;
     }
 
     .node text {
-        font: 10px sans-serif;
+        font: 12px sans-serif;
     }
 
     .link {
@@ -8153,9 +8225,23 @@ select:focus::-ms-value {
 }
 #d3d {
     button {
-        width: 10%;
-        padding: 10px;  
+        width: 9%;
+        padding: 15px;
         margin: 5px;
+        margin-left: 15px;
+        
+    }
+    .tree-info {
+        width: 100%;
+        padding: 25px 0px 20px 15px;
+        span { 
+            border: 1px solid #333;
+            padding: 6px;
+            border-radius: 10px;
+        }
+        .glyphicon {
+            padding: 0 10px;
+        }
     }
 }
 .graph-container {
@@ -8406,7 +8492,7 @@ select:focus::-ms-value {
         }
     }
     .ibox-title h5 {
-        font-size: 14px;
+        font-size: 13px;
         width: 85%;
     }
     .right-border{
@@ -8551,8 +8637,11 @@ select:focus::-ms-value {
         font-size: 11px;
         padding: 3px 0px 2px 4px;
     }
+    .heading-banner h2 {
+        font-size: 16px  !important;
+    }    
     .search-header-margin {
-        margin-bottom: 44px !important;
+        margin-bottom: 26px !important;
     }
     .top-navigation .navbar-header {
         display: block;
@@ -8566,7 +8655,7 @@ select:focus::-ms-value {
     }
     .table-data {
         width: 93%;
-    }
+    }    
 }
 @media (min-width: 768px)and (max-width: 991px){
     #page-wrapper {

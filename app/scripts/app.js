@@ -45,7 +45,7 @@ angular
     userTheme: {
         '0':'default',  
         '1':'black'
-    } 
+    }
 })
 .config(function (CONFIG, $provide) {
     //Only load mock data, if config says so
@@ -74,6 +74,7 @@ angular
         prefixStateName: 'home',
         template: 'bootstrap2'
     });
+    
     $httpProvider.interceptors.push(function ($q, $timeout, CONFIG, $rootScope) {
         /**
          * Function which add new params to url 

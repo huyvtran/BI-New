@@ -19,7 +19,7 @@
         </div>
     </div>
     
-    <div ng-show="panel.open" class="ibox-content no-padding" ng-class="{'tiles-list-view':panel.listView}">
+    <div ng-show="panel.open" class="ibox-content no-padding" ng-class="{'tiles-list-view':panel.listView && !mobileDevice}">
         <div class="container-fluid">
             <div class="row" >
                 <div ng-class="panel.class_names" class="single-tile" ng-repeat="report in panel.data" ng-mouseenter="showHideIcon(true,  report.id)" ng-mouseleave="showHideIcon(false, report.id)" ng-if="$index < 5">
