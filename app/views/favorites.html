@@ -1,7 +1,26 @@
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 hidden-xs" style="height:40px;" >
-    <div class="pull-right tile-list-inner" ng-hide="$stateParams.levelId && $stateParams.reportId">
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:myfavorites.listView == true}" ng-click="setListView(true)"><span class="glyphicon glyphicon-th-list"></span></a>
-        <a class="btn btn-lg align-center" ng-hide="false" ng-class="{bordered:myfavorites.listView == false}" ng-click="setListView(false)"><span class="glyphicon glyphicon-th-large"></span></a>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 pull-left padding-zero">
+        <select ng-model="selectedFilter" class="search-filter-dropdown" ng-change="getFilteredResult()">
+            <option value="default">{{defaultOption}}</option>
+            <option value="asc_name">Name(A-Z)</option>
+            <option value="des_name">Name(Z-A)</option>
+            <option value="des_date">Date Added(New-Old)</option>
+            <option value="asc_date">Date Added(Old-New)</option>
+            <option value="bobj_report">BOBJ Reports</option>
+            <option value="tableau_report">Tableau Reports</option>
+            <option value="external_report">External Reports</option>
+        </select>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 pull-right tile-list-inner" ng-hide="$stateParams.levelId && $stateParams.reportId">
+        <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'detailed'}" ng-click="setListView('detailed')" data-toggle="tooltip" data-placement="left" tooltip title="Detailed View">
+            <span class="detailed-view-icon"></span>
+        </a>
+        <a class="list-grid-container align-center" ng-hide="false" ng-class="{bordered:myfavorites.listView == 'list'}" ng-click="setListView('list')" data-toggle="tooltip" data-placement="left" tooltip title="List View">
+            <span class="list-view-icon"></span>
+        </a>
+        <a class="list-grid-container align-center" ng-hide="false" ng-class="{bordered:myfavorites.listView == 'grid'}" ng-click="setListView('grid')" data-toggle="tooltip" data-placement="bottom" tooltip title="Tile View">
+            <span class="grid-view-icon"></span>
+        </a>
     </div>
 </div>
 

@@ -18,6 +18,7 @@ angular.module('adminPageApp')
     var searchPromises = [];
     $scope.$emit('resetDisplayType', 'All');
     $scope.$emit('resetSearchText');
+    $scope.isBUFlag = false;
     
     /**
      * @ngdoc function
@@ -77,10 +78,15 @@ angular.module('adminPageApp')
         onRegisterApi: onRegisterApi
     };
     
+    $scope.$on('userObjectBroadCast', function(userObject) {
+        $scope.userObject = userObject;
+    });
+    
     //Modal open callBack.
     $scope.open = function (row) {
         var defer = $q.defer();
-
+        row.isBUFlag = $scope.isBUFlag;
+        console.log(row);
         var modalInstance = $uibModal.open({
             templateUrl: 'views/modal.html',
             controller: 'ModalCtrl',
@@ -107,9 +113,20 @@ angular.module('adminPageApp')
         });
         searchPromises = [];
     }
-
+    
+    $scope.downloadEntDeployedReport = '/BITool/admin/downloadEntDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
+    
+    $scope.$on('reportGroupList', function (event, list) {
+        _.map(list, function(item) {
+            if(item.buGroupName.toLowerCase() == 'sales'){
+                $scope.isBUFlag = true;
+            }
+        })
+    });
+    
     $scope.$on('searchTextUpdate', function (event, searchTxt) {
         $scope.searchTextValue = searchTxt;
+        $scope.downloadEntDeployedReport = '/BITool/admin/downloadEntDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();
@@ -139,6 +156,7 @@ angular.module('adminPageApp')
     $scope.$on('broadcastDeployedSelection', function (event, displayType, personaId) {
         $scope.displayType = (displayType === 'All')? '' : displayType;
         $scope.personaId = personaId;
+        $scope.downloadEntDeployedReport = '/BITool/admin/downloadEntDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();
@@ -147,6 +165,7 @@ angular.module('adminPageApp')
     $scope.$on('broadcastDeployedReportGroup', function (event, displayType, personaId) {
         $scope.displayType = displayType;
         $scope.personaId = personaId;
+        $scope.downloadEntDeployedReport = '/BITool/admin/downloadEntDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();

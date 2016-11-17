@@ -13,10 +13,22 @@ angular.module('myBiApp')
 //    $scope.pageBreadCrumb = '<a href="#/">Home</a>  -> My Favorites';
     $scope.$emit('bredCrumbValue', '');
     $scope.$emit('setNavBar', true);
+    $scope.selectedFilter = 'default';
+    $scope.defaultOption = 'Sort';
     
     $scope.$on('listViewValue', function(event, status) {
         $localStorage.listViewStatus = status;
+        $scope.listViewStatus = $localStorage.listViewStatus;
     });
+    
+    $scope.getFilteredResult = function() {
+        if($scope.selectedFilter === 'default') {
+            $scope.defaultOption = 'Sort';
+        } else {
+            $scope.defaultOption = 'Default';
+        }
+        $scope.$broadcast('sortReports', $scope.selectedFilter);
+    }
     
     if(!$localStorage.myLevel) {
         userDetailsService.userPromise.then(function (userObject) {
@@ -59,7 +71,7 @@ angular.module('myBiApp')
     
     function updateListView(status) {
         $scope.$broadcast('listViewValue', status);
-        var value = (status === true) ? 1 : 0;
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
         var putObj = {
             'isListViewed' :value,
         };
@@ -100,7 +112,14 @@ angular.module('myBiApp')
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                     $localStorage.personalization = personalization;
-                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    
+//                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -108,7 +127,7 @@ angular.module('myBiApp')
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     $localStorage.personalization = personalization;
                     $localStorage.userTheme = 'default';
-                    $localStorage.listViewStatus = false;
+                    $localStorage.listViewStatus = 'grid';
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -120,6 +139,18 @@ angular.module('myBiApp')
             $scope.userTheme = $localStorage.userTheme;
             $scope.listViewStatus = $localStorage.listViewStatus;
             $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+        }
+    }
+    
+    function sortList(list, filter) {
+        if(filter === 'asc_name') {
+            return _.sortBy(list, 'name');
+        } else if(filter === 'des_name'){
+            return _.sortBy(list, 'name').reverse();
+        } else if(filter === 'asc_date'){
+            return _.sortBy(list, 'createDate');
+        } else {
+            return _.sortBy(list, 'createDate').reverse();
         }
     }
     

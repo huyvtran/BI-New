@@ -12,16 +12,20 @@ angular.module('myBiApp')
     $scope.setLoading(true);
     $scope.$emit('setNavBar', true);
     $scope.access = {};
-    $scope.access.limitTo = 6;
+    $scope.access.limitTo = 5;
     $scope.access.subGroupItemsId = 0;
     
     $scope.$on('listViewValue', function(event, status) {
         $localStorage.listViewStatus = status;
+        $scope.listViewStatus = status = $localStorage.listViewStatus;
     });
     
     setUserPreference();
     
     $scope.access.allReports = function () {
+        $localStorage.treeLevelId = false;
+        $scope.selectedFilter = 'default';
+        $scope.defaultOption = 'Sort';
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].personaInfo.status === 'Error') {
                 $scope.setLoading(false);
@@ -43,14 +47,12 @@ angular.module('myBiApp')
                 $scope.$emit('bredCrumbValue', '');
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
-                    console.log(groupid);
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
+                    
                     groupService.loadReports().then(function () {
                         $scope.setLoading(false);
                         var title = ($scope.biGroup && $scope.biGroup.biGroups &&
                                 $scope.biGroup.biGroups[0] && $scope.biGroup.biGroups[0].levelDesc) ? $scope.biGroup.biGroups[0].levelDesc : (($state && $state.$current && $state.$current.data && $state.$current.data.displayName) ? $state.$current.data.displayName : 'Reports');
-                        console.log(groupService);
-                        
                         $scope.groupsData = {
                             'title': title,
                             'open': true,
@@ -64,18 +66,19 @@ angular.module('myBiApp')
                             'displayName' : $scope.mainState.$current.data.displayName,
                             'rr': true
                         };
-
 //                        $scope.setListView(false);
-
                     }, function () {
                         $scope.setLoading(false);
                     });
                 });
             }
-        });
+        }); 
     };
 
     $scope.access.subGroupItems = function (levelid) {
+        $localStorage.treeLevelId = true;
+        $scope.selectedFilter = 'default';
+        $scope.defaultOption = 'Sort';
         $scope.$emit('setNavBar', true);
         $scope.biGroup.all().then(function () {
             //getBreadCrumbLevel(levelid);
@@ -85,17 +88,19 @@ angular.module('myBiApp')
             
             function getLevelObj(obj) {
                 var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
+                
                 if (filter) {
                     $scope.mainState.$current.data.displayName = filter.levelDesc;
                     var groupid = $scope.biGroup.biGroupId;
                     if (filter.children.length !== 0) {
-                        $scope.dataObj = _.map(filter.children, function (eachLevel) {
+                        var parent = [{'collapsed':filter.collapsed, 'levelDesc':filter.levelDesc, 'levelId':filter.levelId,'levelNumber':filter.levelNumber,'parentLevelId':filter.parentLevelId}];
+                        $scope.dataObj1 = _.map(parent, function (eachLevel) {
                             var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, eachLevel.levelId, true);
                             groupService.loadReports();
                             return {
                                 'title': eachLevel.levelDesc,
                                 'open': true,
-                                'limit': 6,
+                                'limit': $scope.access.limitTo,
                                 'class_names': 'report-tile',
                                 'service': groupService,
                                 'levelLink': eachLevel.levelId,
@@ -103,6 +108,23 @@ angular.module('myBiApp')
                                 'listView':$scope.listViewStatus
                             };
                         });
+                        
+                        $scope.dataObj = _.map(filter.children, function (eachLevel) {
+                            var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, eachLevel.levelId, true);
+                            groupService.loadReports();
+                            return {
+                                'title': eachLevel.levelDesc,
+                                'open': true,
+                                'limit': $scope.access.limitTo,
+                                'class_names': 'report-tile',
+                                'service': groupService,
+                                'levelLink': eachLevel.levelId,
+                                'data': groupService.reports,
+                                'listView':$scope.listViewStatus
+                            };
+                        });
+                        
+                        $scope.dataObj.unshift($scope.dataObj1[0])
                     } else {
                         var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, levelid);
                         groupService.loadReports();
@@ -115,9 +137,48 @@ angular.module('myBiApp')
                             'data': groupService.reports,
                             'listView':$scope.listViewStatus
                         };
-
 //                        $scope.setListView(false);
                     }
+                } else {
+                    _.map(obj, function (eachObj) {
+                        if (eachObj.children.length !== 0) {
+                            getLevelObj(eachObj.children);
+                        }
+                        return eachObj;
+                    });
+                }
+            }
+            getLevelObj($scope.biGroup.biGroups);
+        });
+
+        $scope.access.subGroupItemsId = levelid;
+    };
+    
+    $scope.access.subGroupItemsViewAll = function (levelid) {
+        $scope.$emit('setNavBar', true);
+        $scope.biGroup.all().then(function () {
+            //getBreadCrumbLevel(levelid);
+            $scope.$emit('bredCrumbValue', '');
+            $scope.setLoading(false);
+            $scope.dataObj = [];
+            
+            function getLevelObj(obj) {
+                var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
+                
+                if (filter) {
+                    $scope.mainState.$current.data.displayName = filter.levelDesc;
+                    var groupid = $scope.biGroup.biGroupId;
+                    var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, levelid);
+                    groupService.loadReports();
+                    $scope.dataObj[0] = {
+                        'title': filter.levelDesc,
+                        'open': true,
+                        'limit': undefined,
+                        'class_names': 'report-tile',
+                        'service': groupService,
+                        'data': groupService.reports,
+                        'listView':$scope.listViewStatus
+                    };
                 } else {
                     _.map(obj, function (eachObj) {
                         if (eachObj.children.length !== 0) {
@@ -156,8 +217,10 @@ angular.module('myBiApp')
     };
     
     function getCount(reports) {
-        if(reports) {
+        if(reports && reports.length > 0) {
            return reports[0].rowCount;
+        } else {
+            return 0;
         }
     };
     
@@ -198,7 +261,15 @@ angular.module('myBiApp')
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                     $localStorage.personalization = personalization;
-                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    
+//                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -206,7 +277,7 @@ angular.module('myBiApp')
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     $localStorage.personalization = personalization;
                     $localStorage.userTheme = 'default';
-                    $localStorage.listViewStatus = false;
+                    $localStorage.listViewStatus = 'grid';
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
                     $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
@@ -222,16 +293,14 @@ angular.module('myBiApp')
     }
     
     $scope.setListView = function (status) {
-
         if ($scope.groupsData) {
             $scope.groupsData.listView = status;
-            //$scope.groupsData['listView']=status;
             updateListView(status);
         }
+        
         if (!$scope.dataObj) {
             return;
-        }
-        else {
+        } else {
             for (var i in $scope.dataObj) {
                 $scope.dataObj[i].listView = status;
                 updateListView(status);
@@ -239,9 +308,18 @@ angular.module('myBiApp')
         }
     }
     
+    $scope.getFilteredResult = function() {
+        if($scope.selectedFilter === 'default') {
+            $scope.defaultOption = 'Sort';
+        } else {
+            $scope.defaultOption = 'Default';
+        }
+        $scope.$broadcast('sortReports', $scope.selectedFilter);
+    }
+    
     function updateListView(status) {
         $scope.$broadcast('listViewValue', status);
-        var value = (status === true) ? 1 : 0;
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
         var putObj = {
             'isListViewed' :value,
         };
@@ -252,8 +330,8 @@ angular.module('myBiApp')
             }, function (resp, status, headers, config) {
 
             });
-    } 
-    
+    }
+
 })
 .filter('filterReports', function () {
     return function (items, levelId) {

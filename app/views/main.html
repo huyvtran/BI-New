@@ -18,8 +18,10 @@
                     </div>    
                     <uib-carousel active="active" interval="myInterval" ng-show="personaInfo.status.toLowerCase() === 'success'" no-wrap="noWrapSlides">
                         <uib-slide ng-repeat="slide in carouselData" >
-                            <img ng-src="{{slide.image}}" style="margin:auto;">
-                            <div class="carousel-caption">
+                            <a href="{{slide.link}}" target="_blank">
+                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                            </a>    
+                            <div class="carousel-caption" ng-class="{'carousel-z-index':slide.details === ''}">
                                 <div class="carousel-caption-centered">
                                     <div class="child1">
                                         <h4>{{slide.title}}</h4>
@@ -33,35 +35,27 @@
                     </uib-carousel>
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 v-padding-top-10px v-padding-bottom-10px background-dark">
+            <div class="col-xl-3 col-lg-3 col-md-3 hidden-xs hidden-sm v-padding-top-10px v-padding-bottom-10px background-dark">
                 <div ng-scrollbars ng-scrollbars-config="config" class="hidden-xs hidden-sm">
-                    <ul class="news-list" class="row">
+                    <ul class="news-list">
                         <li ng-repeat="news in newsData">
                             <div class="container">
-                                <div>{{news.title}}</div>
-                                <a ng-href="{{news.url}}" target="_blank" class="news-heading" >
-                                    Read >
+                                <a ng-href="{{news.url}}" target="_blank" class="news-heading">
+                                    <div>{{news.title}}</div> 
                                 </a>
-                                <div class="news-desc ng-hide">
-                                    {{news.description}}
-                                </div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="hidden-xl hidden-lg hidden-md news-mobile">
-                    <ul class="news-list" class="row">
+                    <ul class="news-list">
                         <li ng-repeat="news in newsData">
                             <div class="container">
-                                <div>
-                                    {{news.title | limitTo:14}}<span ng-show="news.title.length > 14">...</span>
-                                </div>
-                                <a ng-href="{{news.url}}" target="_blank" class="news-heading" >
-                                    Read >
+                                <a ng-href="{{news.url}}" target="_blank" class="news-heading">
+                                    <div>
+                                        {{news.title | limitTo:14}}<span ng-show="news.title.length > 14">...</span>
+                                    </div>
                                 </a>
-                                <div class="news-desc ng-hide">
-                                    {{news.description}}
-                                </div>
                             </div>
                         </li>
                     </ul>
@@ -71,8 +65,15 @@
     </div>
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 hidden-xs" ng-hide="personaInfo.status.toLowerCase() === 'error'">
         <div class="pull-right tile-list">
-            <a class="btn btn-lg align-center" ng-class="{bordered:listViewStatus === true}" ng-click="setListView(true)"><span class="glyphicon glyphicon-th-list"></span></a>
-            <a class="btn btn-lg align-center" ng-class="{bordered:listViewStatus === false}" ng-click="setListView(false)"><span class="glyphicon glyphicon-th-large"></span></a>
+            <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'detailed'}" ng-click="setListView('detailed')" data-toggle="tooltip" data-placement="left" tooltip title="Detailed View">
+                <span class="detailed-view-icon"></span>
+            </a>
+            <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'list'}" ng-click="setListView('list')" data-toggle="tooltip" data-placement="left" tooltip title="List View">
+                <span class="list-view-icon"></span>
+            </a>
+            <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'grid'}" ng-click="setListView('grid')" data-toggle="tooltip" data-placement="bottom" tooltip title="Tile View">
+                <span class="grid-view-icon"></span>
+            </a>
         </div>
     </div>
     <load-tiles tiles-data="report" on-move-panel-to="onMovePanelTo(index,increment)" user-login-name="{{userObject.emcLoginName}}" ng-repeat="report in reportPanelList" ng-hide="personaInfo.status === 'Error'"></load-tiles>

@@ -18,7 +18,7 @@ angular.module('adminPageApp')
     $scope.$emit('resetDisplayForm', 'edit');
     $scope.$emit('resetSearchText');
     $scope.external.additionalInfo = "#0000FF";
-    
+    $scope.external.displayType = 'N';
     /**
      * Search Edit report functions 
      */
@@ -175,7 +175,7 @@ angular.module('adminPageApp')
         $scope.messageAlertError = '';
         $scope.external  = external;
         $scope.external.groupId = $scope.reportPersona;
-        
+
         $http.post('BITool/admin/externalrepo/savereport', $scope.external)
             .then(function(resp) {
                 if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {

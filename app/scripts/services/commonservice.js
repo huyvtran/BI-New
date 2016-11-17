@@ -202,8 +202,8 @@ angular.module('myBiApp')
     /**
     *prepare the Get User Persona Info Url
     */
-    this.prepareGetUserPersonaInfoUrl = function(username) {
-        return  this.replaceStringWithValues(WEBSERVICEURL.userPersona, {'username':username});
+    this.prepareGetUserPersonaInfoUrl = function() {
+        return WEBSERVICEURL.userPersona;
     };
     
     /** 

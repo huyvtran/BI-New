@@ -8,7 +8,7 @@
  * Controller of the myBiApp
  */
 angular.module('adminPageApp')
-.controller('RootCtrl', function ($scope, $http, $log, $q, userDetailsService, commonService, $state, $rootScope) {
+.controller('RootCtrl', function ($scope, $http, $log, $q, userDetailsService, commonService, $state, $window, $rootScope) {
     $scope.state = $state;
     $scope.displayType = 'All';
     $scope.displayForm = 'edit';
@@ -17,6 +17,16 @@ angular.module('adminPageApp')
     $scope.selectedReportGroup ={};
     $scope.badge = '0%';
     $scope.showIcon = false;
+    
+    checkUserExist();
+    
+    function checkUserExist() {
+        $http.get('BITool/userExistInBITool').then(function(response) {
+            if(response.data && response.data.isApplicationRunning === false) {
+                $window.location.href ='../maintenance/index.html';
+            }
+        });
+    }
     
     /**
      *Update my level indication
@@ -58,6 +68,7 @@ angular.module('adminPageApp')
     }
     userDetailsService.userPromise.then(function (userObject) {
         $rootScope.userObject = $scope.userObject = userObject[0];
+        $scope.$broadcast('userObjectDetails', userObject[0]);
         $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
         $scope.badge = $scope.badgePercentage[$scope.userObject.userinfo.badge];
         var url;
@@ -72,6 +83,7 @@ angular.module('adminPageApp')
         
         $http.get(url).then(function(resp){
             $scope.reportGroup = _.sortBy(resp.data, 'groupName');
+            $scope.$broadcast('reportGroupList', $scope.reportGroup);
         });
     });
 
@@ -79,29 +91,26 @@ angular.module('adminPageApp')
      * Common Search in all pages
      */
     $scope.submitSearch = function (stateName) {
-        if (stateName === 'contents' || stateName === 'external' || stateName === 'administration.list.manageExternal') {
+        if (stateName === 'contents' || 
+            stateName === 'external' || 
+            stateName === 'administration.list.manageExternal' ||
+            stateName === 'administration.list.notification') {
             $scope.selectedFuncArea = '';
             $scope.selectedOwner = '';
             $scope.selectedReportName = '';
             $scope.searchText = $scope.searchText ? $scope.searchText : '';
             $scope.$broadcast('searchTextUpdate', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.news') {
+        } else if (stateName === 'administration.list.news') {
             $scope.$broadcast('searchNews', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.communication') {
+        } else if (stateName === 'administration.list.communication') {
             $scope.$broadcast('searchCommunication', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.groups') {
+        } else if (stateName === 'administration.list.groups') {
             $scope.$broadcast('searchGroup', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.levels') {
+        } else if (stateName === 'administration.list.levels') {
             $scope.$broadcast('searchLevel', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.users') {
+        } else if (stateName === 'administration.list.users') {
             $scope.$broadcast('searchUsers', $scope.searchText);
-        }
-        else if (stateName === 'administration.list.audit') {
+        } else if (stateName === 'administration.list.audit') {
             $scope.$broadcast('searchReportAudit', $scope.searchText);
         }
     };

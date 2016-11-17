@@ -74,6 +74,8 @@ angular.module('adminPageApp')
         columnDefs: columnDefs(),
         onRegisterApi: onRegisterApi
     };
+    
+    $scope.downloadExtDeployedReport = '/BITool/admin/downloadExtDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
 
     //Modal open callBack.
     $scope.open = function (row) {
@@ -111,6 +113,7 @@ angular.module('adminPageApp')
     $scope.$on('broadcastDeployedSelection', function (event, displayType, personaId) {
         $scope.displayType = (displayType === 'All')? '' : displayType;
         $scope.personaId = personaId;
+        $scope.downloadExtDeployedReport = '/BITool/admin/downloadExtDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();
@@ -119,6 +122,7 @@ angular.module('adminPageApp')
     $scope.$on('broadcastDeployedReportGroup', function (event, displayType, personaId) {
         $scope.displayType = displayType;
         $scope.personaId = personaId;
+        $scope.downloadExtDeployedReport = '/BITool/admin/downloadExtDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();
@@ -126,6 +130,7 @@ angular.module('adminPageApp')
     
     $scope.$on('searchTextUpdate', function (event, searchTxt) {
         $scope.searchTextValue = searchTxt;
+        $scope.downloadExtDeployedReport = '/BITool/admin/downloadExtDeployedReport?personaId='+$scope.personaId+'&searchText='+$scope.searchTextValue;
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateReportForm();

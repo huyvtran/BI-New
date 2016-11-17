@@ -2,16 +2,13 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Insights</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="expires" content="Thu, 30 Jun 2016 1:00:00 GMT" />
-    <meta http-equiv='cache-control' content='no-cache'>
-    <meta http-equiv="pragma" content="no-cache" />
+    <title>Insights - Administration</title>
+    <META NAME="description" CONTENT="" />
+    <META NAME="viewport" CONTENT="width=device-width" />
+    <META HTTP-EQUIV="X-UA-Compatible" CONTENT="IE=edge,chrome=1" />
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="MAX-AGE=0, NO-CACHE" />
+    <META HTTP-EQUIV="EXPIRES" CONTENT="0" />
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -52,7 +49,7 @@
     }
     </style>
 </head>
-<body ng-app="adminPageApp" ng-controller="RootCtrl" ng-class="{'mini-navbar':toggleLeft}">
+<body ng-app="adminPageApp" ng-controller="RootCtrl">
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -60,13 +57,9 @@
 <!-- Add your site or application content here -->
 <header id="header">    
     <div class="container">
-        <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
+        <div class="row visible-md visible-lg visible-sm hidden-xs">
             <div class="navbar-brand col-md-3 col-lg-3 col-sm-3">
-                <a class="navbar-minimalize">
-                    <!--span class="emc-logo">x</span -->
-                    <span class="glyphicon glyphicon-menu-hamburger" ng-hide="true"></span>
-                </a>
-                <a href="../" style="display:inline-table; width:30px;">
+                <a href="../">
                     <!--span class="emc-logo">x</span -->
                     <img class="logo"  src="images/EMCLogo.png"/>
                     <span ng-show="!toggleLeft" class="portal-name" id="insights">INSIGHTS</span>
@@ -88,7 +81,7 @@
             </div>
             <div class="col-md-3 col-lg-3 col-sm-3">
                 <div class="row">
-                    <span class="header-right pull-right" ng-show="userObject.userFullName != ''">
+                    <span class="header-right" ng-show="userObject.userFullName != ''">
                         <!--  userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin' -->
                         <a ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'" data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
                             <div class="top-header-title">
@@ -135,8 +128,25 @@
                             <li><a href="#/">Administration</a></li>
                         </ul>
                     </span>
+                    <div class="help-icons">
+                        <div class="icons-header-dropdown">
+                            <a class="faq-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="images/help.png" />
+                            </a>
+                            <div class="dropdown-menu animated fadeInRight icons-header-container" role="menu">
+                                <span class="help-support">
+                                    <h4>HELP & SUPPORT</h4>
+                                    <p><a target="_blank" href="{{userObject.userinfo.group[0].pageLink}}">{{userObject.userinfo.group[0].helpLinkLabel}}</a></p>
+                                </span>
+                                <span class="contact">
+                                    <h4>INSIGHTS</h4>
+                                    <p><a target="_blank" href="../doc/Insights%20BUAdmin%20Documentation.pdf">About</a></p>
+                                    <p><a href="mailto:insights.portal.help@emc.com">Contact</a></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
         <div class="row hidden-md hidden-lg hidden-sm visible-xs">
@@ -235,7 +245,7 @@
                     </ui-select>
                     <button class="btn btn-primary btn-xs" ng-style="{'visibility': selectedReportType.selected?'visible':'hidden'}" ng-click="clearFilter('report')">clear</button>
                 </div>
-                <div class="col-xs-12" ng-hide="state.current.name !== 'administration.list.audit' && state.current.name !== 'administration.list.communication' && state.current.name !== 'administration.list.users' && state.current.name !== 'administration.list.levels'">
+                <div class="col-xs-12" ng-hide="state.current.name !== 'administration.list.audit' && state.current.name !== 'administration.list.communication' && state.current.name !== 'administration.list.users' && state.current.name !== 'administration.list.levels' && state.current.name !== 'administration.list.notification'">
                     <label>Persona</label>
                     <ui-select ng-model="selectedAuditGroup.selected" theme="select2" style="width:100%;" on-select="changeAuditGroup($item, $model)">
                         <ui-select-match placeholder="Select Persona...&nbsp;&nbsp;">{{$select.selected.groupName}}</ui-select-match>
@@ -306,7 +316,7 @@
                                             <a ui-sref="administration.list.communication">Communication </a>
                                         </li> 
 
-                                        <li ui-sref-active="active" ng-hide="userObject.userinfo.role.toLowerCase() === 'buadmin' || (state.current.name === 'contents' || state.current.name === 'external')">
+                                        <li ui-sref-active="active" ng-hide="(state.current.name === 'contents' || state.current.name === 'external')">
                                             <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.groups">Persona </a>
                                         </li> 
@@ -331,7 +341,11 @@
                                         <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
                                             <!--<div class="icon report"></div><br />-->
                                             <a ui-sref="administration.list.manageExternal">Manage External Content</a>
-                                        </li>                                 
+                                        </li>
+                                        <li ui-sref-active="active" ng-hide="state.current.name === 'contents' || state.current.name === 'external'">
+                                            <!--<div class="icon communication"></div><br />-->
+                                            <a ui-sref="administration.list.notification">Notification </a>
+                                        </li>
                                     </ul>
                                 </span>
                             </li>
@@ -340,16 +354,27 @@
                 </nav>
             </div>
             <!-- main content -->
+            
             <div class="row">
                 <div class="col-md-12">
                     <div class="wrapper wrapper-content" ui-view></div>
                 </div>
             </div>
-            <div class="row footer-row">
+            
+            <div class="row footer-row hidden-md hidden-lg hidden-sm">
                 <div class="footer">
-                    <div class="visible-md visible-lg hidden-sm hidden-xs">
-                        <a href="../#/faq">FAQ</a> | <a target="_blank" href="../doc/Insights%20BUAdmin%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
+                    <div class="align-center visible-md visible-lg visible-sm hidden-xs">
+                        <!--<a ui-sref="faq">FAQ</a> | <a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>-->
                     </div>
+                    <div class="align-center in-mobile-footer hidden-md hidden-lg hidden-sm visible-xs">
+                        <p><h4>INSIGHTS</h4></p>
+                        <p><a target="_blank" href="../doc/Insights%20BUAdmin%20Documentation.pdf">About</a></p>
+                        <p><a ui-sref="faq" href="#/faq">FAQ</a></p>
+                        <p><a href="mailto:insights.portal.help@emc.com">Contact</a></p>
+                        <p><h4>HELP & SUPPORT</h4></p>
+                        <p><a target="_blank" href="{{userObject.userinfo.group[0].pageLink}}">{{userObject.userinfo.group[0].helpLinkLabel}}</a></p>
+                    </div>
+                    <div class="pull-left"></div>
                 </div>
             </div>
             <!-- end main content -->
@@ -417,6 +442,7 @@ display the full url for learning purposes-->
     <script src="scripts/controllers/external.js"></script>
     <script src="scripts/controllers/manageExternal.js"></script>
     <script src="scripts/controllers/modalExternal.js"></script>
+    <script src="scripts/controllers/notification.js"></script>
     <script src="scripts/directives/ngfiles.js"></script>
     <script src="scripts/directives/validFile.js"></script>
     <script src="scripts/directives/dropdownMultiselect.js"></script>

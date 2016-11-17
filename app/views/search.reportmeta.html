@@ -1,4 +1,4 @@
-<div class="background-box">
+<div class="background-box mobile-padding">
     <span class="meta-type" ng-show="metaDataCopy.length > 0">
         <a href="javascript:void(0)" ng-click="isTable = true">
             <!--<span class="glyphicon glyphicon-th" ng-class="{'active': isTable === true}" aria-hidden="true"> CROSSTAB</span>-->
@@ -11,18 +11,21 @@
     </span>
     <div class="row">
         <div ng-show="isTable">
-            <div class="col-xs-12 col-sm-12 co-md-12 col-lg-12 col-xl-12" ng-show="metaDataCopy.length === 0">
-                The report does not have metadata to display.
+            <div class="col-xs-12 col-sm-12 co-md-12 col-lg-12 col-xl-12" ng-show="emptyMessage">
+                {{emptyMessage}}
             </div>
             <div class="col-xs-12 col-sm-12 co-md-12 col-lg-12 col-xl-12 table-data" ng-show="metaDataCopy.length > 0">
-                <span class="align-right pull-right v-offset-bottom-10px no-padding col-xs-12 col-sm-12 co-md-12 col-lg-12 col-xl-12">
-                    <span class="search-icon"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" name="filterMeta" placeholder="Search..." ng-model ="search.reportColumnName" ng-change="filterMetaData()">
-                    <button class="glyphicon glyphicon-remove color-white close-icon" ng-class="{'ng-hide': !showIcon, 'ng-show':showIcon}" type="reset" ng-click="resetFilterText();"></button>
-                    <a target="_self" class="btn btn-sm btn-info meta-download" title="Export Results" href="{{downloadLink}}" download="report-Metadata.csv" ng-disabled="reportMetaData.length ==0">
-                        Download
-                    </a>
-                </span>
+                <div class="col-xs-12 col-sm-12 co-md-12 col-lg-12 col-xl-12 no-padding">
+                    <span class="align-left pull-left no-padding hidden-xs hidden-sm hidden-md col-lg-9 col-xl-9 static-message">Track data lineage from a report to the data source ( List of data columns, fields and logic involved in the report).</span>
+                    <span class="align-right pull-right v-offset-bottom-10px no-padding col-xs-12 col-sm-12 co-md-12 col-lg-3 col-xl-3">
+                        <span class="search-icon"><i class="glyphicon glyphicon-search"></i></span>
+                        <input type="text" name="filterMeta" placeholder="Search" ng-model ="search.reportColumnName" ng-change="filterMetaData()">
+                        <button class="color-white close-icon" ng-class="{'ng-hide': !showIcon, 'ng-show':showIcon}" type="reset" ng-click="resetFilterText();"></button>
+                        <a target="_self" class="btn btn-sm btn-info meta-download" title="Export Results" href="{{downloadLink}}" download="report-Metadata.csv" ng-disabled="reportMetaData.length ==0">
+                            Download
+                        </a>
+                    </span>
+                </div>
                 <!--<div class="pull-right v-offset-top-20px col-xs-12 col-sm-12 co-md-12 col-lg-8 col-xl-8">-->
                 <uib-pagination
                     ng-model="currentPage"
@@ -109,12 +112,7 @@
             </div>
         </div>
         <div ng-hide="isTable" class="graph-container">
-<!--            <nvd3 options="options"
-                data="d3Data"
-                config="config"
-                events="events"
-                api="api"
-                on-ready="callback"></nvd3>-->
+            <span class="align-left pull-left hidden-xs hidden-sm hidden-md col-lg-9 col-xl-9 static-message">Track data lineage from a report to the data source ( List of data columns, fields and logic involved in the report).</span>
             <dendro-gram data="d3Data" ng-if="d3Url" url="d3Url"></dendro-gram>
         </div>
     </div>

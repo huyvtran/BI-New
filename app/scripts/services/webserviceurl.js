@@ -11,7 +11,7 @@ angular.module('myBiApp')
 .constant('WEBSERVICEURL', {
     'getUserDetails'        : 'BITool/getUserDetails',//
     'userInfo'              : 'BITool/userinfo/:username',//
-    'userPersona'           : 'BITool/userExistInBITool/?userName=:username',//
+    'userPersona'           : 'BITool/userExistInBITool',//
     'dashboard'             : 'BITool/dashboard/:username',//
     'updateFavorite'        : 'BITool/report/updateFavorite/:username/',//
     'favoriteRepots'        : 'BITool/favoriteReports/:username/:offset/:limit',//

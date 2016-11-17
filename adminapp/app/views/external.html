@@ -1,4 +1,7 @@
 <div class="container-fluid">
+    <span class="col-xs-12 text-right download-button" ng-show="displayType==='Deployed'">
+        <a target="_self" class="btn btn-sm btn-info" href="{{downloadExtDeployedReport}}" download="DeployedReport.csv">Download</a>
+    </span>
     <div class="col-xs-12">
         <div id="grid1" ui-grid="myData" ui-grid-edit ui-grid-selection ui-grid-infinite-scroll class="grid"></div>
     </div>

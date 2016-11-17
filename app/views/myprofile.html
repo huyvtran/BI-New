@@ -41,13 +41,14 @@
 <br>
 <div class="row">
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <span class="pull-right text-navy">{{$scope.statusMessage}}</span>
         <ul class="list-unstyled background-box no-padding">
             <li>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
                     Persona:
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                    <span ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}} </span>
+                    <span ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}}</span>
                 </div>
             </li>
             <li>
@@ -93,16 +94,19 @@
         </ul>
     </div>
 </div>
-<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 v-offset-top-10px v-offset-bottom-10px ng-scope" ng-show="userObject.userinfo.role.toLowerCase() === 'admin'">
-    <h3>Color Schemes</h3><!-- style="color:#D7D7D7"-->
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 v-offset-top-10px v-offset-bottom-10px ng-scope">
+    <h3>Themes</h3><!-- style="color:#D7D7D7"-->
     <hr />
     <div class="col-lg-3 col-md-3 col-lg-3 col-sm-5 col-xs-5">
-        <a class="theme-select" ng-click="setUserTheme('default')" ng-class="{'active' : userTheme === 'default'}"><img src="images/color-2.png" /></a>
+        <a class="theme-select" ng-click="setUserTheme('default')" ng-class="{'active' : userTheme === 'default'}">
+            <img src="images/color-2.png" />
+            <h4 class="align-center">Light</h4>
+        </a>
     </div>
-<!--    <div class="col-lg-3 col-md-3 col-lg-3 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
-        <a class="theme-select" ng-click="setUserTheme('white')" ng-class="{active : userTheme === 'white'}"><img src="images/color-3.png" ng-disabled="userTheme === 'white'" /></a>
-    </div>-->
     <div class="col-lg-3 col-md-3 col-lg-3 col-sm-5 col-xs-5 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
-        <a class="theme-select" ng-click="setUserTheme('black')" ng-class="{'active' : userTheme === 'black'}"><img src="images/color-1.png" /></a>
+        <a class="theme-select" ng-click="setUserTheme('black')" ng-class="{'active' : userTheme === 'black'}">
+            <img src="images/color-1.png" />
+            <h4 class="align-center">Dark</h4>
+        </a>
     </div>
 </div>

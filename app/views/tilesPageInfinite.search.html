@@ -12,86 +12,62 @@
         </h5>
     </div>
 </div>
-<div
+<div 
     infinite-scroll='panel.service.loadReports(panel.parameter1,panel.parameter2)' 
     infinite-scroll-distance='1' 
     infinite-scroll-disabled='panel.service.loadmoredisable' 
     infinite-scroll-immediate-check='true'>
-<!--    <div class="row" ng-show="panel.service.listView">
-        <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10 col-lg-offset-1 col-xl-offset-1">
-            <div ng-class="panel.class_names" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 search-article " ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))">
-                <div style="height:310px;">
-                    <div class="col-xs-10 col-sm-10 col-md-8 col-lg-8 col-xl-8">
-                        <div class="reports-box reports-box-search v-offset-bottom-10px">
-                            <load-tile-image></load-tile-image>
+    <div class="row">
+        <div ng-class="panel.class_names" ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))">
+            <article class="search-article background-box">
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-xs-5">
+                    <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
+                        <img ng-show="report.isMobileEnabled === 'N' && mobileDevice " alt="image" class="phone-banned" src="images/phone-banned.png">
+                        <div class="reports-box reports-box-search">
+                            <div class="image-container">
+                                <a ui-sref="search.details.report({'searchId':report.id, 'sourceReportId':report.sourceReportId, 'sourceName':report.sourceSystem})" 
+                                    title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                                    ng-hide="externalUrl">
+                                    <load-tile-image></load-tile-image>
+                                </a>
+                                <a href="javascript:void(0)" 
+                                    ng-click="loadReport(report);" 
+                                    target="_blank" 
+                                    title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                                    ng-show="externalUrl">
+                                    <load-tile-image></load-tile-image>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 v-offset-bottom-5px">
+                    </div>    
+                </div>  
+                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                    <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
                         <h3>
                             <a ui-sref="search.details.report({'searchId':report.id, 'sourceReportId':report.sourceReportId, 'sourceName':report.sourceSystem})" 
-                           title="{{report.reportName}}" 
-                           ng-bind-html="highlight(report.reportName, keyword)"
-                           ng-show="!externalUrl"></a>
-                        <a href="javascript:void(0)" 
-                           ng-click="loadReport(report);" 
-                           target="_blank" title="{{report.reportDesc}}" 
-                           ng-bind-html="highlight(report.reportName, keyword)" 
-                           ng-show="externalUrl"></a>
+                               title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                               ng-bind-html="highlight(report.reportName, keyword)"
+                               ng-hide="externalUrl"></a>
+                            <a href="javascript:void(0)" 
+                               ng-click="loadReport(report);" 
+                               target="_blank" 
+                               title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                               ng-bind-html="highlight(report.reportName, keyword)" 
+                               ng-show="externalUrl"></a>
                         </h3>
                         <div class="small text-muted">
                             Created by <cite title="{{report.owner}}" ng-bind-html="highlight(report.owner, keyword)"></cite> in 
                             <span ng-bind-html="highlight(report.functionalArea, keyword)"></span>
                         </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 description v-offset-bottom-5px" ng-if="report.reportDesc">
-                        <div class="border-bottom v-offset-bottom-5px"></div>
-                        Report Description: <span ng-bind-html="highlight(report.reportDesc, keyword)"></span>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 small text-muted v-offset-top-5px">
-                        <div ng-if="report.viewCount">Views:{{report.viewCount}}</div>
-                        <div ng-if="report.createdDate" >Created: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</div>
-                        <div ng-if="report.updatedDate">Last modified: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <p ng-if="panel.service.reports.length === 0" class="col-sm-12 col-md-12 col-lg-10 col-xl-10 col-lg-offset-1 col-xl-offset-1 text-center">Your search did not match any results.</p>
-    </div>-->
-    <div class="row">
-        <div ng-class="panel.class_names" ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))">
-            <article class="search-article background-box">
-                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-xs-5">
-                    <div class="reports-box reports-box-search">
-                        <div class="image-container">
-                            <load-tile-image></load-tile-image>
+                        <p ng-if="report.reportDesc" class="margin-top-md">
+                            <span>Report Description: </span><span ng-bind-html="highlight(report.reportDesc, keyword)"></span>
+                        </p>
+                        <div class="small text-muted details-in-mobile">
+                            <span>Created: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</span>
+                            <span>Last modified: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</span>
+                            <span>Views:{{report.viewCount}}</span>
                         </div>
-                    </div>
-                </div>  
-                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                    <h3>
-                        <a ui-sref="search.details.report({'searchId':report.id, 'sourceReportId':report.sourceReportId, 'sourceName':report.sourceSystem})" 
-                           title="{{report.reportName}}" 
-                           ng-bind-html="highlight(report.reportName, keyword)"
-                           ng-show="!externalUrl"></a>
-                        <a href="javascript:void(0)" 
-                           ng-click="loadReport(report);" 
-                           target="_blank" title="{{report.reportDesc}}" 
-                           ng-bind-html="highlight(report.reportName, keyword)" 
-                           ng-show="externalUrl"></a>
-                    </h3>
-                    <div class="small text-muted">
-                        Created by <cite title="{{report.owner}}" ng-bind-html="highlight(report.owner, keyword)"></cite> in 
-                        <span ng-bind-html="highlight(report.functionalArea, keyword)"></span>
-                    </div>
-                    <p ng-if="report.reportDesc" class="margin-top-md">
-                        <span>Report Description: </span><span ng-bind-html="highlight(report.reportDesc, keyword)"></span>
-                    </p>
-                    <div class="small text-muted details-in-mobile">
-                        <span>Created: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</span>
-                        <span>Last modified: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</span>
-                        <span>Views:{{report.viewCount}}</span>
-                    </div>
+                    </div>    
                 </div>
             </article>
         </div>

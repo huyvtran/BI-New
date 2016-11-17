@@ -8,21 +8,16 @@
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('ReportCtrl', function ($scope, $rootScope, $http, $stateParams, $state, $sce, $filter, $timeout, reportsMenu, userDetailsService, commonService, CONFIG, $window, searchservice/*, $rootScope*/) {
+.controller('ReportCtrl', function ($scope, $rootScope, $localStorage, $http, $stateParams, $state, $sce, $filter, $timeout, reportsMenu, userDetailsService, commonService, CONFIG, $window, searchservice/*, $rootScope*/) {
     /*jshint latedef: false */
     $scope.setLoading(true);
     $scope.isTableu = false;
-    $scope.tableuLink = '';
     $scope.feedbackArray = [];
     $scope.mainState.$current.data.displayName = '';
     $scope.reportAccessData = {};
-    $scope.isCollapsed = false;    
+    $scope.isCollapsed = false;
     ($state.current.name !== 'reports.details.report.report' && $state.current.name !== 'reports.details.report.about') ? getBreadCrumbLevel($stateParams.reportId) : '';
     
-    $scope.getTableuLink = function () {
-        return $sce.trustAsResourceUrl($scope.tableuLink);
-    };
-
     if ($stateParams.levelId && $stateParams.reportId) {
         if ($state.current.name === 'reports.details.report.report') {
             userDetailsService.userPromise.then(function (response) {
@@ -31,25 +26,36 @@ angular.module('myBiApp')
                     //Update user view count
                     var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl(response[0].emcLoginName, resp.data.sourceReportId, resp.data.sourceSystem, 'Persona');
                     $http.get(reportUpdateViewed);
-
+                    $scope.setLoading(false);
+                    
                     if (resp.data.name) {
                         $scope.mainState.$current.data.displayName = resp.data.name;
+                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                        $scope.isTableu = (resp.data.type === 'Tableau')? true : false;
                         $scope.reportName = resp.data.name;
                         addToRootScope(resp.data);
                         getBreadCrumbLevel($stateParams.reportId);
-                        $scope.setLoading(false);
-                        $scope.isTableu = true;
-                        //$scope.tableuLink = value.tableuLink ? value.tableuLink:''; 
-                        var placeholderDiv = document.getElementById('tableu_report3');
-                        //placeholderDiv.setAttribute('fixT',Math.random());
-                        var url = resp.data.reportLink ? resp.data.reportLink : '';
-                        var options = {
-                            hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? false : true,
-                            width: '100%',
-                            height: '800px'
-                        };
                         
-                        new tableau.Viz(placeholderDiv, url, options);
+                        if($scope.isTableu) {
+                            var placeholderDiv = document.getElementById('tableu_report3');
+                            var url = resp.data.reportLink ? resp.data.reportLink : '';
+                            var headerFlag = (resp.data.isHeaderFlag === 0) ? '?Header Flag=0&' : '?';
+                            var reportToolBar = (resp.data.displayType === 'H') ? headerFlag+':toolbar=no' : 
+                                    ((resp.data.displayType === 'B')? headerFlag+':toolbar=bottom' : headerFlag+':toolbar=top'); 
+                            var options = {
+                                hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? false : true,
+                                width: '100%',
+                                height: '800px'
+                            };
+                            
+                            new tableau.Viz(placeholderDiv, url+reportToolBar, options);
+                        } else {
+                            var url = resp.data.reportLink ? resp.data.reportLink : '';
+                            
+                            $scope.getOtherReportLink = function () {
+                                return $sce.trustAsResourceUrl(url);
+                            };
+                        }
                     }
                 });
             });
@@ -58,6 +64,7 @@ angular.module('myBiApp')
             
             if($rootScope.reportName) {
                 $scope.mainState.$current.data.displayName = $rootScope.reportName;
+                ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
                 getBreadCrumbLevel($stateParams.reportId);
             }
             
@@ -70,6 +77,7 @@ angular.module('myBiApp')
                         //
                     } else {
                         $scope.mainState.$current.data.displayName = resp.data.name;
+                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
                         addToRootScope(resp.data); 
                         getBreadCrumbLevel($stateParams.reportId);
                     }
@@ -82,6 +90,7 @@ angular.module('myBiApp')
         } else if ($state.current.name === 'reports.details.report.access') {
             $scope.reportAccessData = {};
             ($rootScope.reportName) ? $scope.mainState.$current.data.displayName = $rootScope.reportName : '';
+            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
             var url = commonService.prepareReportAccessUrl($stateParams.reportId);
 
             $http.get(url).then(function (resp) {
@@ -92,6 +101,7 @@ angular.module('myBiApp')
         } else if ($state.current.name === 'reports.details.report.feedback') {
             $scope.feedbackArray= [];
             ($rootScope.reportName) ? $scope.mainState.$current.data.displayName = $rootScope.reportName : '';
+            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
             $scope.feedbackArray = [];
             
             searchservice.loadFeedbacks($stateParams.reportId).then(function (resp) {
@@ -115,30 +125,39 @@ angular.module('myBiApp')
             
             $scope.metaData = function () {
                 if($rootScope.reportName && $rootScope.sourceSystem && $rootScope.sourceReportId) { 
-                    $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false;
                     
                     if($scope.isTableu) {
                         if($rootScope.viewTabs === 'N') {
                             $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
-                            $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
                             var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                         } else {
                             $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
-                            $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
                             var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId);
                         }
                     } else {
                         $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
-                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
                         var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                     }                 
                     
-                    console.log(url);
-                    
                     $http.get(url).then(function (resp) {
-                        if(!resp.data) {
-                            $scope.setLoading(false);
-                            return;
+                        if(resp.data) {
+                            if(resp.data.length > 0) {
+                                if($scope.isTableu) {
+                                    if($rootScope.viewTabs === 'N') {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                    } else {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
+                                    }
+                                } else {
+                                    $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                }
+                            } else {
+                                $scope.emptyMessage = 'The report does not have metadata to display.';
+                                $scope.setLoading(false);
+                                return;
+                            }
                         }
 
                         $scope.reportMetaData = resp.data;
@@ -153,6 +172,9 @@ angular.module('myBiApp')
                             $scope.setLoading(false);
                         });
                         $scope.setLoading(false);
+                    },function(){
+                        $scope.emptyMessage = 'The report does not have metadata to display.';
+                        $scope.setLoading(false);
                     });
                 } else {
                     userDetailsService.userPromise.then(function (response) { 
@@ -165,29 +187,37 @@ angular.module('myBiApp')
                             $rootScope.repType = resp.data.type;
                             $rootScope.workbookId = resp.data.additionalInfo;
                             $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false;
-                            
+                            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
                             if($scope.isTableu) {
                                 if($rootScope.viewTabs === 'N') {
                                     $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
-                                    $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
                                     var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                                 } else {
                                     $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
-                                    $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
                                     var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId);
                                 }
                             } else {
                                 $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
-                                $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
                                 var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                             }
                             
-                            console.log(url);
-                            
                             $http.get(url).then(function (resp) {
-                                if(!resp.data) {
-                                    $scope.setLoading(false);
-                                    return;
+                                if(resp.data) {
+                                    if(resp.data.length > 0) {
+                                        if($scope.isTableu) {
+                                            if($rootScope.viewTabs === 'N') {
+                                                $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                            } else {
+                                                $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
+                                            }
+                                        } else {
+                                            $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                        }
+                                    } else {
+                                        $scope.emptyMessage = 'The report does not have metadata to display.';
+                                        $scope.setLoading(false);
+                                        return;
+                                    }
                                 }
 
                                 $scope.reportMetaData = resp.data;
@@ -203,6 +233,8 @@ angular.module('myBiApp')
                                     $scope.setLoading(false);
                                 });
                                 $scope.setLoading(false);
+                            },function(){
+                                $scope.emptyMessage = 'The report does not have metadata to display.';
                             });    
                         });
                     });
@@ -287,8 +319,8 @@ angular.module('myBiApp')
     };
     
     function getBreadCrumbLevel(reportId) {
-        if($rootScope.reportName && $rootScope.levelId) { 
-            
+        if($rootScope.reportName && $rootScope.levelId) {
+//            console.log($localStorage.treeLevelId);
             if($window.innerWidth < 768) {
                 if($rootScope.reportName.length > 45) {
                     $scope.pageBreadCrumb = $rootScope.reportName.substr(0, 44)+'...';
@@ -296,11 +328,13 @@ angular.module('myBiApp')
                     $scope.pageBreadCrumb = $rootScope.reportName;
                 }
                 
-                $scope.$emit('bredCrumbValue', $scope.pageBreadCrumb);
+                $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
                 return;
             }
-
-            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+$rootScope.levelId).then(function (response) {
+            
+            var lId = ($localStorage.treeLevelId) ? $stateParams.levelId : $rootScope.levelId;
+            
+            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+lId).then(function (response) {
                 if(response.data) {
                     $scope.pageBreadCrumb = '';
                     var pageBreadCrumb = '<a href="#/">Home</a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href="#/reports">Available Reports</a>';
@@ -323,19 +357,20 @@ angular.module('myBiApp')
                     }
                     
                     $scope.pageBreadCrumb = pageBreadCrumb;
-                    $scope.$emit('bredCrumbValue', $scope.pageBreadCrumb);
+                    $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
 
                 } else {
                 }
             });
         } else {
+//            console.log($localStorage.treeLevelId);
             userDetailsService.userPromise.then(function (response) {
                 var urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, reportId);
                 $http.get(urlReports).then(function (resp) {
                     addToRootScope(resp.data);
                     var reportName = resp.data.name;
                     var reportLevelId = resp.data.levelId;
-
+                    
                     if($window.innerWidth < 768) {
                         if(reportName.length > 45) {
                             $scope.pageBreadCrumb = reportName.substr(0, 44)+'...';
@@ -343,11 +378,13 @@ angular.module('myBiApp')
                             $scope.pageBreadCrumb = reportName;
                         }
                         
-                        $scope.$emit('bredCrumbValue', $scope.pageBreadCrumb);
+                        $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
                         return;
                     }
-
-                    $http.get('BITool/home/getBreadCrumbsDetails?levelId='+reportLevelId).then(function (response) {
+                    
+                    var lId = ($localStorage.treeLevelId) ? $stateParams.levelId : reportLevelId;
+                    
+                    $http.get('BITool/home/getBreadCrumbsDetails?levelId='+lId).then(function (response) {
                         if(response.data) {
                             $scope.pageBreadCrumb = '';
                             var pageBreadCrumb = '<a href="#/">Home</a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href="#/reports">Available Reports</a>';
@@ -370,7 +407,7 @@ angular.module('myBiApp')
                             }
                             
                             $scope.pageBreadCrumb = pageBreadCrumb;
-                            $scope.$emit('bredCrumbValue', $scope.pageBreadCrumb);
+                            $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
 
                         } else {
                         }

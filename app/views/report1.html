@@ -1,6 +1,9 @@
-<div class="background-box">
+<div class="background-box mobile-padding">
     <nvd3 options="options" data="data" ng-hide="isTableu"></nvd3>
     <!-- iframe ng-src="{{getTableuLink()}}" width="100%" height="800" style="border: 0;" ng-show="isTableu"></iframe -->
     <div id="tableu_report3" style="border: 0;width:100%;" ng-show="isTableu"></div>
+    <div id="other_report3" style="border: 0;width:100%;" ng-show="!isTableu">
+        <iframe ng-src="{{getOtherReportLink()}}" frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" width="100%" height="800" style="display: block; width: 100%; height: 800px;" ng-show="!isTableu"></iframe>
+    </div>
     <!-- div id="grid1" ui-grid="{ data: myData, columnDefs:mydefs }" class="grid" ng-hide="isTableu"></div -->
-</div>    
+</div>

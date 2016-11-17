@@ -16,9 +16,9 @@ and open the template in the editor.
             <div class="row">
                 <div class="col-xs-12">
                     <div class="row updateNews">
-                        <div class="col-xs-4"> Communication Title *</div>
+                        <div class="col-xs-4"> Communication Title</div>
                         <div class="col-xs-8">
-                            <input type="text" name="communicationTitle" ng-model="items.title" class="col-xs-8" required>
+                            <input type="text" name="communicationTitle" ng-model="items.title" class="col-xs-8">
                         </div>
                     </div>
                     
@@ -44,9 +44,9 @@ and open the template in the editor.
                     </div>
                                                            
                     <div class="row updateNews">
-                        <div class="col-xs-4"> Details *</div>
+                        <div class="col-xs-4"> Details</div>
                         <div class="col-xs-8">
-                            <textarea rows="4" cols="50" ng-model="items.details" name="communicationDetails" class="col-xs-8" required></textarea>
+                            <textarea rows="4" cols="50" ng-model="items.details" name="communicationDetails" class="col-xs-8"></textarea>
                         </div>
                     </div>
                     
@@ -67,7 +67,7 @@ and open the template in the editor.
         </form> 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-disabled="(CommunicationForm.communicationTitle.$invalid || CommunicationForm.communicationLink.$invalid || CommunicationForm.communicationDetails.$invalid || (items.type == 'new' &&  items.groupIdList.length < 1) || (!((!!items.image && !CommunicationForm.communicationImage.$error.url) || errorFlag)))" ng-click="save(items)"> Save</button>
+        <button class="btn btn-primary" type="button" ng-disabled="(CommunicationForm.communicationLink.$invalid || (items.type == 'new' &&  items.groupIdList.length < 1) || (!((!!items.image && !CommunicationForm.communicationImage.$error.url) || errorFlag)))" ng-click="save(items)"> Save</button>
         <button class="btn btn-warning" type="button" ng-click="close()">Cancel</button>
     </div>
 </div>

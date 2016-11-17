@@ -8,7 +8,7 @@
  * This service is used to alert any messages in project & modal/popup functionality
  */
 angular.module('myBiApp')
-.service('userAlertService', function userAlertService($rootScope, $uibModal) {
+.service('userAlertService', function userAlertService($rootScope, $uibModal, $window, $localStorage) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     var ModalInstanceCtrl = function ($scope, $uibModalInstance, $uibModal, modalContent) {
@@ -41,13 +41,19 @@ angular.module('myBiApp')
         opts.resolve.modalContent = function () {
             return angular.copy(args); // pass name to resolve storage
         };
-
+        
         var modalInstance = $uibModal.open(opts);
         modalInstance.result.then(function () {
             args.ok.callback();
         }, function () {       //on cancel button press
             args.cancel.callback();
         });
+    }
+    
+    function RefreshSSO(args) {
+//        console.log($window.location);
+//        $localStorage.urlObj = $window.location;
+        $window.location.reload();
     }
 
     // This event need not be broadcasted from directuve which aren't in an isolated 
@@ -57,8 +63,14 @@ angular.module('myBiApp')
         showUserAlert(args);
         $rootScope.setLoading(false);
     });
+    
+    $rootScope.$on('RefreshSSO', function (event, args) {
+        RefreshSSO(args);
+        $rootScope.setLoading(false);
+    });
 
     return {
         'showUserAlert': showUserAlert,
+        'RefreshSSO': RefreshSSO
     };
 });

@@ -55,6 +55,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="displayType" class="col-sm-2 control-label">Is Embedded :</label>
+                <div class="col-sm-6 isembeded">
+                    <input type="radio" name="displayType" class="" ng-model="external.displayType" value="Y">&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="displayType" class="" ng-model="external.displayType" value="N">&nbsp;&nbsp;No
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="additionalInfo" class="col-sm-2 control-label additional-info">Tile Color :
                     <a href="javascript:void(0)" class="glyphicon glyphicon-question-sign font-Iconsize" popover-animation="true" uib-popover="{{popAdditionalInfo.content}}" popover-placement="{{popAdditionalInfo.placement}}" popover-class="{{popAdditionalInfo.class}}" popover-trigger="focus"></a>
                 </label>

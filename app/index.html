@@ -2,13 +2,13 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>EMC Insights</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
+    <title>Insights</title>
+    <META NAME="description" CONTENT="" />
+    <META NAME="viewport" CONTENT="width=device-width, initial-scale=1, maximum-scale=1" />
+    <META HTTP-EQUIV="X-UA-Compatible" CONTENT="IE=edge,chrome=1" />
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="MAX-AGE=0, NO-CACHE" />
+    <META HTTP-EQUIV="EXPIRES" CONTENT="0" />
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/theme-default.css">
-
+    
     <!-- endbuild -->
     <style>
         #grayblackground {
@@ -56,102 +56,124 @@
     <![endif]-->
 
     <!-- Header Starts -->
-    <header id="header" ng-class="userTheme+'-theme-header'">
+    <!--noNavBar && {'z-index':999} || !noNavBar && {'z-index':998}-->
+    <header id="header" ng-class="userTheme+'-theme-header'" ng-style="{'z-index':zIndex}">
         <div class="container">
             <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
-                <div class="navbar-brand col-md-3 col-lg-3 col-sm-3">
-                    <a class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                <div class="navbar-brand col-xl-6 col-md-6 col-lg-6 col-sm-6">
+                    <a class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft" data-toggle="tooltip" data-placement="bottom" tooltip title="Main Menu">
+                        <img class="menu-hamburger" src="images/menu.png"/>
                     </a>
-                    <a href="#/" style="display:inline-table; width:30px;">
+                    <a href="#/" class="logo-container">
                         <img class="logo"  src="images/EMCLogo.png"/>
-                        <span ng-show="!toggleLeft && !scrollVariable" class="portal-name" scroll=''>INSIGHTS</span>
+                        <span class="portal-name">INSIGHTS</span>
                     </a>
                 </div>
-                <div class="col-md-6 col-lg-6 col-sm-6">
-                    <search-report></search-report>
-                </div>
-                <div class="col-md-3 col-lg-3 col-sm-3">
+                <div class="col-xl-6 col-md-6 col-lg-6 col-sm-6">
                     <div class="row">
-                        <span class="header-right pull-right" ng-show="userObject.userFullName != ''">
-                            <a ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'" data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
-                                <div class="top-header-title">
-                                    <span class="pull-left">
-                                        <img alt="image" class="usr-image" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
-                                    </span>
-                                    <span>
-                                        <div ng-bind="userObject.userFullName"></div>
-                                        <div class="profile-progress-small">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                     aria-valuemin="0" aria-valuemax="100" ng-class="myLevel">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </div>
-
-                                <div class="top-header-caret">
-                                    <b class="caret"></b>
-                                </div>
-                            </a>
-
-                            <!-- userObject.userinfo.role.toLowerCase() !== 'admin' && userObject.userinfo.role.toLowerCase() !== 'buadmin' -->
-                            <a ng-show="userObject.userinfo.role.toLowerCase() !== 'admin' && userObject.userinfo.role.toLowerCase() !== 'buadmin'" ui-sref="profile"> 
-                                <span>
-                                    <img alt="image" class="usr-image" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
-                                </span>
-                                <span>
-                                    <div ng-bind="userObject.userFullName"></div>
-                                    <div class="profile-progress-small">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                 aria-valuemin="0" aria-valuemax="100" style="{{badge}}">
-                                            </div>
-                                        </div>
+                        <div class="search-help-icons">
+                            <div class="search-icon-container">
+                                <search-report></search-report>
+                            </div>
+                            <div class="icons-header-dropdown">
+                                <div class="help-icon">
+                                    <a class="faq-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img src="images/help.png" />
+                                    </a>
+                                    <div class="dropdown-menu animated fadeInRight icons-header-container" role="menu">
+                                        <span class="help-support">
+                                            <h4>HELP & SUPPORT</h4>
+                                            <p><a target="_blank" href="{{userObject.userinfo.group[0].pageLink}}">{{userObject.userinfo.group[0].helpLinkLabel}}</a></p>
+                                        </span>
+                                        <span class="contact">
+                                            <h4>INSIGHTS</h4>
+                                            <p><a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">About</a></p>
+                                            <p><a href="mailto:insights.portal.help@emc.com">Contact</a></p>
+                                        </span>
                                     </div>
-                                </span>
-                            </a>
-
-                            <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
-                                <li><a ui-sref="profile">My Profile</a></li>
-                                <li class="divider"></li>
-                                <li><a href="admin">Administration</a></li>
-                            </ul>
-                        </span>
+                                </div>
+                            </div>
+                            <div class="notif-icon-container">
+                                <div dropdown dropdown-append-to-body class="help-icon">
+                                    <a class="notfy-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <!--<img src="images/help.png" />-->
+                                        <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                                        <span ng-show="notficationObj.newNotificationCount > 0" class="notfy-count">{{notficationObj.newNotificationCount}}</span>
+                                    </a>
+                                    <div class="dropdown-menu animated fadeInRight notfy-wrapper" role="menu" ng-click="$event.stopPropagation()">
+                                        <div class="notfy-title">
+                                            <h4>{{notficationObj.newNotificationCount}} {{(notficationObj.newNotificationCount > 0) ? 'Notifications': 'Notificiation'}}</h4>
+                                        </div>
+                                        <div ng-scrollbars ng-scrollbars-config="notfyConfig" class="hidden-xs hidden-sm">
+                                            <div class="notfy-container" ng-repeat="notification in notficationObj.userNotificationList">
+                                                <div class="notfy-header">
+                                                    <b>{{notification.header}}</b>
+                                                    <span class="notfy-icons">
+                                                        <a ng-click="setReadNotification(notification.assignId)" title="Mark as Read">
+                                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a ng-click="dismissNotification(notification.assignId)" title="Dismiss">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <p class="notfy-body">{{notification.messageBody}}</p>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-5 col-sm-6 pull-right">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 no-padding no-margins">
+                                    <span class="header-right pull-right" ng-show="userObject.userFullName != ''">
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
+                                            <div class="top-header-title">
+                                                <span class="pull-left">
+                                                    <img alt="image" class="usr-image" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
+                                                </span>
+                                                <span>
+                                                    <div ng-bind="userObject.userFullName"></div>
+                                                    <div class="profile-progress-small">
+                                                        <div class="progress">
+                                                            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+                                                                 aria-valuemin="0" aria-valuemax="100" ng-class="myLevel">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <div class="top-header-caret">
+                                                <b class="caret"></b>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
+                                            <li><a ui-sref="profile">My Profile</a></li>
+                                            <li class="divider" ng-show="userObject.userinfo.isMultiplePersona"></li>
+                                            <li><a href="javascript:void(0)" ng-click="openModelPersona()" ng-show="userObject.userinfo.isMultiplePersona">Switch Persona</a></li>
+                                            <li class="divider" ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'"></li>
+                                            <li ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'"><a href="admin">Administration</a></li>                                            
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>   
+                </div>
             </div>
             <div class="row hidden-md hidden-lg hidden-sm visible-xs">
-                <div class="col-xs-7 no-padding no-margins">
+                <div class="col-xs-10 no-padding no-margins">
                     <a class="navbar-minimalize" ng-click="hideNavBar();">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        <img class="menu-hamburger" src="images/menu.png"/>
                     </a>
-                    <a href="#/" style="display:inline-table; width:30px;">
+                    <a href="#/" class="logo-container">
                         <img class="logo"  src="images/EMCLogo.png"/>
+                        <span class="portal-name">INSIGHTS</span>
                     </a>
                 </div>
                 <div class="col-xs-2 glb-search-mob">
                     <search-report></search-report>
-                </div>
-                <div class="col-xs-3 text-right">
-                    <ul class="nav">
-                        <li class="nav-header" ng-show="userObject.userFullName != ''" aria-hidden="false">
-                            <div class="dropdown text-center profile-element" title="{{userObject.userFullName}}"> 
-                                <a class="dropdown-toggle user-icon-nav-header" ui-sref="profile">
-                                    <span><img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png"></span>
-                                </a>
-                                <!--<a data-toggle="dropdown" class="dropdown-toggle user-icon-nav-header" href="javascript:void(0)" aria-expanded="false">
-                                    <span><img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png"></span>
-                                </a>
-                                <ul class="dropdown-menu animated fadeInRight profile-dropdown-menu">
-                                    <li><a ui-sref="profile">My Profile</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="admin">Administration</a></li>
-                                </ul>-->
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -159,32 +181,54 @@
     <!-- Header Ends -->
     
     <!-- Pace Done Starts-->
-    <div class="pace-done" ng-class="userTheme+'-theme'">
-        <div id="wrapper" class="container-fluid no-padding">
+    <!--<div class="pace-done" ng-class="userTheme+'-theme'">-->
+    <div class="pace-done default-theme">
+        <div id="wrapper" class="container-fluid no-padding" resize>
             <!-- Side Menu Starts -->
-            <nav class="navbar-default navbar-static-side" role="navigation" ng-class="{'showMenu':!noNavBar, 'hideMenu':noNavBar}">
+            <nav class="navbar-default navbar-static-side" id="nav-menu" role="navigation" ng-class="{'showMenu':!noNavBar, 'hideMenu':noNavBar}">
                 <div class="sidebar-collapse">
-                    <span class="hidden-md hidden-lg hidden-sm visible-xs  insight-text">INSIGHTS</span>
-                    <ul class="nav metismenu" id="side-menu" style="display: block;margin-top:60px;">
+                    <span class="hidden-md hidden-lg hidden-sm visible-xs insight-text">
+                        <a class="user-icon-nav-header" ui-sref="profile">
+                            <span class="col-xs-4 leftpane-profileimage" style="">
+                                <img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
+                                <span ng-bind="" class="in-mobile-userName" title="{{userObject.userFullName}}">{{userObject.userFullName}}</span>
+                            </span>
+                        </a>
+<!--                        <span ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'">
+                            <a class="user-icon-nav-header" href="javascript:void(0)">
+                                <div class="col-xs-4 leftpane-profileimage" style="">
+                                    <img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
+                                    <span ng-bind="" class="in-mobile-userName" title="{{userObject.userFullName}}">{{userObject.userFullName}}</span>
+                                </div>
+                            </a>
+                            <span class="persona-block" ng-if="personaList">
+                                <label>Persona:</label>
+                                <select ng-show="userObject.userinfo.isMultiplePersona" ng-model="defaultPersona" class="persona-dropDown" ng-options="group.groupId as group.groupName for group in personaList" ng-change="setNewPersona()"></select>
+                                <span ng-hide="userObject.userinfo.isMultiplePersona" ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}}</span>
+                            </span>
+                        </span>    -->
+                        <button class="color-white close-icon sidebar-close-button" ng-click="hideNavBar();"></button>
+                    </span>
+                    <ul class="nav metismenu" id="side-menu" style="display: block;">
                         <li ui-sref-active="active" class="home">
                             <a ui-sref="home" title="Home">
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
+                                    <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-homeIcon.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
+                                    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Home</label>
                                     </div>
                                 </div>
                             </a>
                         </li>
-                        <li ui-sref-active="active" class="dashboard">
+                        <li ui-sref-active="active" class="dashboard" ng-show="operationalDashboard">
                             <a ui-sref="reportsDashboard" title="Operational Dashboard"> 
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
+                                    <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-reportDashboardIcon_leftNavigation.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
+                                    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Operational Dashboard</label>
                                     </div>
                                 </div>
@@ -193,10 +237,10 @@
                         <li ng-class="{'active': mainState.includes('reports')}" class="reports">
                             <a ui-sref="reports.list" title="Available Reports">
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
+                                    <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-iconReports.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
+                                    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Available Reports</label>
                                     </div>
                                 </div>
@@ -212,10 +256,10 @@
                         <li ui-sref-active="active" class="favorites" title="My Favorites">
                             <a ui-sref="favorites" >
                                 <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-sm-4 col-xl-4 col-xs-2">
+                                    <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-iconFavorites.png"/>
                                     </div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 col-xs-10">
+                                    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">My Favorites</label>
                                     </div>
                                 </div>
@@ -246,8 +290,8 @@
                                     <div class="breadcrumb" ng-bind-html="pageBreadCrumb"></div>
                                 </div>
                                 <span ng-show="mainState.current.name.indexOf('search.details') === 0">
-                                    <ul class="col-lg-8 col-xl-8 col-md-8 col-sm-12 col-xs-12 col-lg-offset-4 col-xl-offset-4 col-md-offset-4 subHeaderMenu" ng-cloak>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3"  ui-sref-active="active">
+                                    <ul class="col-lg-10 col-xl-10 col-md-12 col-sm-12 col-xs-12 col-lg-offset-4 col-xl-offset-4 col-md-offset-4 subHeaderMenu" ng-cloak>
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-3 col-xs-3 no-padding"  ui-sref-active="active">
                                             <a ui-sref="search.details.report({'searchId':searchId})">
                                                 <span title="Report">
                                                     <span class="icon report"></span>
@@ -255,7 +299,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-3 col-xs-3 no-padding" ui-sref-active="active">
                                             <a ui-sref="search.details.about({'searchId':searchId})">
                                                 <span title="About the Report">
                                                     <span class="icon about"></span>
@@ -263,7 +307,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-3 col-xs-3 no-padding" ui-sref-active="active" ng-hide="hideTabsFlag">
                                             <a ui-sref="search.details.access({'searchId':searchId})">
                                                 <span title="How to Request">
                                                     <span class="icon request"></span>
@@ -271,7 +315,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-3 col-xl-3 col-md-3 col-sm-4 col-xs-3" ng-hide="$stateParams.persona === 'N'" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-3 col-xs-3 no-padding" ng-hide="$stateParams.persona === 'N' || hideTabsFlag" ui-sref-active="active">
                                             <a ui-sref="search.details.feedback({'searchId':searchId})">
                                                 <span title="User Feedback">
                                                     <span class="icon feedback"></span>
@@ -279,11 +323,19 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        <li class="col-lg-3 col-xl-2 col-md-3 hidden-xs hidden-sm align-left no-padding" ng-hide="$stateParams.persona === 'N' || hideTabsFlag" ui-sref-active="active">
+                                            <a ui-sref="search.details.reportmeta({'searchId':searchId})">
+                                                <span title="Report Metadata">
+                                                    <span class="icon reportmeta"></span>
+                                                    <span class="hidden-xs hidden-sm">Metadata</span>
+                                                </span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </span> 
                                 <span ng-show="mainState.current.name.indexOf('reports.details.report') === 0">
                                     <ul class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-xs-12 col-xl-offset-2 col-lg-offset-2 subHeaderMenu" ng-cloak>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3 align-left no-padding" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.report({'searchId':searchId})">
                                                 <span title="Report">
                                                     <span class="icon report"></span>
@@ -291,7 +343,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3 align-left no-padding" ui-sref-active="active">
                                             <a ui-sref="reports.details.report.about({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <span title="About the Report">
                                                     <span class="icon about"></span>
@@ -299,7 +351,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3 align-left no-padding" ui-sref-active="active" ng-hide="hideTabsFlag">
                                             <a ui-sref="reports.details.report.access({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <span title="How to Request">
                                                     <span class="icon request"></span>
@@ -307,7 +359,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-2 align-left" ui-sref-active="active">
+                                        <li class="col-lg-2 col-xl-2 col-md-2 col-sm-2 col-xs-3 align-left no-padding" ui-sref-active="active" ng-hide="hideTabsFlag">
                                             <a ui-sref="reports.details.report.feedback({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
                                                 <span title="User Feedback">
                                                     <span class="icon feedback"></span>
@@ -315,9 +367,9 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="col-lg-2 col-xl-2 col-md-2 hidden-xs hidden-sm align-left" ui-sref-active="active">
+                                        <li class="col-lg-3 col-xl-3 col-md-3 hidden-xs hidden-sm align-left no-padding" ui-sref-active="active" ng-hide="hideTabsFlag">
                                             <a ui-sref="reports.details.report.reportmeta({'levelId':$stateParams.levelId,'reportId':$stateParams.reportId})">
-                                                <span title="Report Meta">
+                                                <span title="Report Metadata">
                                                     <span class="icon reportmeta"></span>
                                                     <span class="hidden-xs hidden-sm">Metadata</span>
                                                 </span>
@@ -332,17 +384,26 @@
                 <!-- Inner Page header Ends -->
                 
                 <!-- View Content Here -->
-                <div class="row" ng-class="userTheme+'-bg'">    
+                <div id="main-div" class="row" ng-class="userTheme+'-bg'">    
                     <div class="col-md-12">
-                        <div class="wrapper wrapper-content " ui-view></div>
+                        <div class="wrapper wrapper-content" ng-class="{'search-padding':mainState.current.name.indexOf('search.details') === 0}" ui-view></div>
                     </div>
                 </div>
                 <!-- View Content Here -->
+                
                 <!-- Footer Starts -->
-                <div class="row footer-row">
+                <div class="row footer-row hidden-md hidden-lg hidden-sm">
                     <div class="footer">
-                        <div class="align-center visible-md visible-lg hidden-sm hidden-xs">
-                            <a ui-sref="faq">FAQ</a> | <a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">Help</a> | <a href="mailto:insights.portal.help@emc.com">Contact</a>
+                        <div class="align-center in-mobile-footer hidden-md hidden-lg hidden-sm visible-xs">
+                            <div>
+                                <h4>INSIGHTS</h4>
+                                <p><a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">About</a></p>
+                                <p><a href="mailto:insights.portal.help@emc.com">Contact</a></p>
+                            </div>
+                            <div>
+                                <h4>HELP & SUPPORT</h4>
+                                <p><a target="_blank" href="{{userObject.userinfo.group[0].pageLink}}">{{userObject.userinfo.group[0].helpLinkLabel}}</a></p>
+                            </div>    
                         </div>
                         <div class="pull-left"></div>
                     </div>
@@ -435,24 +496,28 @@
     <script src="scripts/services/commonservice.js"></script>
     <script src="scripts/services/userdetailsservice.js"></script>
     <script src="scripts/controllers/profile.js"></script>
+    <script src="scripts/controllers/helpSupport.js"></script>
     <script src="scripts/module/treeview.js"></script>
     <script src="scripts/services/useralertservice.js"></script>
     <script src="scripts/directives/loadtiles.js"></script>
     <script src="scripts/directives/searchreport.js"></script>
-    <script src="scripts/directives/dendrogramma.js"></script>
+    <script src="scripts/directives/scroll.js"></script>
+    <script src="scripts/directives/tooltip.js"></script>
+    <script src="scripts/directives/resize.js"></script>
+    <script src="scripts/directives/dendrogram.js"></script>
     <script src="scripts/services/reportsfactory.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/searchReportController.js"></script>
     <script src="scripts/controllers/searchdetails.js"></script>
     <script src="scripts/services/searchservice.js"></script>
     <!--<script src="scripts/module/highlight.js"></script>-->
-    <!--<script src="scripts/module/tableau-2.0.0.min.js"></script>-->
+    <script src="scripts/module/tableau-2.0.0.min.js"></script>
     <!-- endbuild -->
 
     <!-- Mainly scripts>
     <script src="scripts/js/jquery.metisMenu.js"></script> 
     <script src="scripts/js/jquery.slimscroll.min.js"></script>
     <script src="scripts/js/mybi-custom.js"></script -->
-    <script src="https://baaastableau.corp.emc.com/javascripts/api/tableau-2.0.0.min.js"></script>
+    <!--<script src="https://baaastableau.corp.emc.com/javascripts/api/tableau-2.0.0.min.js"></script>-->
 </body>
 </html>

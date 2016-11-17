@@ -14,7 +14,10 @@ angular.module('adminPageApp').controller('deleteModalCtrl',function($scope,item
         $scope.message = 'Are you sure to delete LevelID ' + $scope.items.data.levelId + ' from Insights';
     } else if($scope.items.pageType === 'Users'){
         $scope.message = 'Are you sure to delete UserName ' + $scope.items.data.userName + ' from Insights';
+    } else if($scope.items.pageType === 'Notification'){
+        $scope.message = 'Are you sure to delete Notification ' + $scope.items.data.notificationId + ' from Insights';
     }
+    
     
     $scope.delete=function(deleteObj){
         $uibModalInstance.close(deleteObj);

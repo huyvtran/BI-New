@@ -53,8 +53,41 @@ angular.module('myBiApp')
         link: function postLink(scope/*, element, attrs*/) {
             scope.$watch('tilesData', function (value) {
                 scope['panel'] = value;
-
             });
+            scope.$on('sortReports', function(event, filter) {
+                if(filter === 'asc_name') {
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name');
+                } else if(filter === 'des_name'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name').reverse();
+                } else if(filter === 'asc_date'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createDate');
+                } else if(filter === 'des_date'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createDate').reverse();
+                } else if(filter === 'bobj_report'){
+                    scope.reportFlagType = 'Webi';
+                    scope.sortReportCounts = getReportCount('Webi', scope.panel.service.reports);
+                } else if(filter === 'tableau_report'){
+                    scope.reportFlagType = 'Tableau';
+                    scope.sortReportCounts = getReportCount('Tableau', scope.panel.service.reports);
+                } else if(filter === 'external_report'){
+                    scope.reportFlagType = 'HTTP';
+                    scope.sortReportCounts = getReportCount('HTTP', scope.panel.service.reports);
+                } else {
+                    scope.panel.service.reports = scope.panel.service.reports;
+                    scope.reportFlagType = '';
+                    scope.sortReportCounts = '';
+                }
+            });
+            
+            function getReportCount(reportType, report) {
+                var sortReport = [];
+                _.each(report, function(row){
+                    if(row.type === reportType) {
+                        sortReport.push(row);
+                    }
+                });
+                return sortReport.length;
+            }
         }
     };
 })
@@ -103,9 +136,36 @@ angular.module('myBiApp')
             var template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}}), url(images/charts/not-found.png)\'}"></div>';
             var ele;
             scope.iconClass = 'icon-default';
+            scope.externalReport = false;
             scope.externalUrl = false;
+            scope.toolbarPos = 'H';
+            scope.openNewTabUrl = '';
+            if (scope.report.type.toLowerCase() === 'tableau') {
+                if (scope.report.isHeaderFlag === 0) {
+                    scope.openNewTabUrl = scope.report.reportLink+'?Header Flag=0&';
+                } else {
+                    scope.openNewTabUrl = scope.report.reportLink+ '?';
+                }
+                if (scope.report.displayType === 'B') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=bottom";
+                } else if (scope.report.displayType === 'T') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=top";
+                } else if(scope.report.displayType && scope.report.displayType === 'H') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=no";
+                } else {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=no";
+                }
+                if(scope.report.tabbedViews === 'Y') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+'&:tabs=y';
+                } else {
+                    scope.openNewTabUrl = scope.openNewTabUrl+'&:tabs=n';
+                }
+            } else { 
+                scope.openNewTabUrl = scope.report.reportLink;
+            }
             if (scope.report.sourceSystem === 'EXTERNAL') {
-                scope.externalUrl = true;
+                scope.externalReport = true;
+                (scope.report.displayType == 'N') ? scope.externalUrl = true : scope.externalUrl = false;
                 var bg = (scope.report.additionalInfo && scope.report.additionalInfo.indexOf('#') > -1) ? 'style = background-color:' + scope.report.additionalInfo : '';
                 var Desc = (scope.report.reportDesc) ? scope.report.reportDesc : '';
                 template = '<div class="panel-heading" ng-class="report.externalClass" ' + bg + '>' +
@@ -116,6 +176,7 @@ angular.module('myBiApp')
                 element.replaceWith(ele);
                 element = ele;
             } else {
+                (scope.report.displayType == 'T') ? scope.toolbarPos = 'T' : ((scope.report.displayType == 'B')? scope.toolbarPos = 'B' : scope.toolbarPos = 'H');
                 /* report type 'webi' & RefreshStatus is Y tile should be loaded with bobj report in iframe*/
                 if (scope.report.type && scope.report.type.toLowerCase() === 'webi' && scope.report.refreshStatus === 'Y') {
                     scope.report.iframeUrl = $sce.trustAsResourceUrl(scope.report.reportLinkImg);
@@ -186,8 +247,6 @@ angular.module('myBiApp')
                     element.replaceWith(ele);
                 }
             }
-
-
         }
     };
 })
@@ -226,6 +285,9 @@ angular.module('myBiApp')
                         //report.reportLinkImg = CONFIG.tableauImagesPath+encodeURIComponent(report.functionalArea)+'/'+report.sourceReportId+'.png';
                     } else if (report.refreshStatus && report.refreshStatus === 'Y') {
                         report.reportLinkImg = report.reportLinkImg.replace('#/site', 't');
+                        if($scope.mobileDevice && report.isMobileEnabled === 'N') {
+                            report.reportLinkImg ='';
+                        }
                     }
                 }
             }
@@ -325,6 +387,8 @@ angular.module('myBiApp')
     };
     
     $scope.changeFavorite = function (report, index, items) {
+//        $scope.favoriteTooltip = (report.favorite === 'Y')? 'Remove favorite': 'Mark as favorite';
+        
         var url = commonService.prepareUserUpdateFavoriteUrl($scope.userLoginName);
         var obj = {
             report : report,

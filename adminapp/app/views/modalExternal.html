@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <button class="btn btn-primary save" type="button" ng-disabled="progress" ng-click="ok()">Save</button>
+    <button class="btn btn-primary save" type="button" ng-disabled="progress || !items.reportName" ng-click="ok()">Save</button>
     <h3 class="modal-title">External Reports</h3>
 </div>
 
@@ -135,7 +135,17 @@
                 </div>
             </div>
 
-            <div class="col-xs-6" ></div>
+            <div class="col-xs-6" >
+                <div class="row">
+                    <div class="col-xs-4"> Is Embedded </div>
+                    <div class="col-xs-8">
+                        <select ng-model="items.displayType">
+                            <option value="N">No</option>
+                            <option value="Y">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--End of row8-->  
         <div class="row">

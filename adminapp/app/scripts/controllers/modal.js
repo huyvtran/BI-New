@@ -9,12 +9,21 @@
  */
 angular.module('adminPageApp')
 .controller('ModalCtrl', function ($scope, $uibModalInstance, items, $http, $q) {
+    
+    if(items.sourceSystem === 'EXTERNAL')  {
+        $scope.exFlag = true;
+    } else {
+        $scope.exFlag = false;
+    }
+    
     $scope.items = items;
-    $scope.exFlag = (items.sourceSystem === 'EXTERNAL') ? true : false;
+    $scope.headerFlag = ((items.isBUFlag && $scope.userObject.userinfo.role.toLowerCase() === 'buadmin')|| $scope.userObject.userinfo.role.toLowerCase() === 'admin')? true : false;
+    
     $scope.levelGroupMaps = [{
         'selectedlevel': 0,
         'selectedgroup': 0
     }];
+    
     $scope.oldList = [];
     $scope.deletedLevelAndGroupIds = [];
     $scope.updatefields = true;
@@ -62,6 +71,11 @@ angular.module('adminPageApp')
         $scope.items.systemDescription = resp.systemDescription;
         $scope.items.reportName = resp.reportName;
         $scope.items.reportType = resp.reportType;
+        $scope.items.displayType = resp.displayType;
+        $scope.items.isHeaderFlag = resp.isHeaderFlag;
+        $scope.items.displayType = ($scope.items.displayType === null) ? 'B' : $scope.items.displayType;
+        $scope.items.isHeaderFlag = ($scope.items.isHeaderFlag === null) ? '1' : $scope.items.isHeaderFlag.toString();
+        $scope.isHeaderVal = $scope.items.isHeaderFlag;
     })
     .finally(function () {
         getReportLevelGroup.then(function (response) {
@@ -103,16 +117,22 @@ angular.module('adminPageApp')
         }
     };
 
-    $scope.ok = function () {       
+    $scope.ok = function () {
+        $scope.items = _.omit($scope.items,'isBUFlag');
+        $scope.items.isHeaderFlag = parseInt($scope.isHeaderVal, 10);
+        
         var returnObj = {
             items: $scope.items,
             levelGroups: $scope.levelGroupMaps
         };
+        
+        console.log(returnObj);
         $scope.saveText = 'saving...';
         $scope.progress = true;
         if ($scope.updatefields) {
             $http.put("BITool/admin/updateReport", $scope.items)
                 .then(function (updatedData, status, headers) {
+                    $scope.isHeaderVal.toString();
                     $scope.progress = false;
                     $scope.saveText = updatedData.data.message;
                     $scope.items.id = updatedData.data.id;
@@ -155,11 +175,6 @@ angular.module('adminPageApp')
                 $scope.saveText = resp.data.message;;
             });
         }
-        
-//        $timeout(function() {
-//            $uibModalInstance.close(returnObj);
-//        }, 4000);
-        
         //$uibModalInstance.close(returnObj);
     };
 

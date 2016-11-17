@@ -9,6 +9,7 @@
  */
 angular.module('myBiApp')
 .controller('searchReportController', ['$scope', 'popularSearchService', '$timeout', '$window', function ($scope, popularSearchService, $timeout, $window) {
+        
     $scope.model = {
         isMinimised: true,
         searchCloud: '',
@@ -27,6 +28,12 @@ angular.module('myBiApp')
         console.log('hi');
     }
     
+    $scope.clearText = function() {
+        $scope.showIcon = false;
+        $scope.searchText = "";
+        angular.element('.globle-search-input').focus();
+    }
+    
     popularSearchService.then(function (r) {
         $scope.model.searchCloud = r;
         $scope.isCloudVisible = true;
@@ -38,6 +45,7 @@ angular.module('myBiApp')
     $scope.$watch('model.isMinimised', function (o, n) {
         if (n) {
             $timeout(function () {
+                angular.element('.globle-search-input').focus();
                 $scope.isCloudVisible = true;
             }, 1);
         } else {

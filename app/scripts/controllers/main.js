@@ -17,13 +17,13 @@ angular.module('myBiApp')
     $scope.personaInfo = {};
     $scope.ieFlag = true;
     $scope.winFocus = false;
-    $scope.listViewStatus = false;
+    $scope.listViewStatus = 'grid';
     $scope.isRecommendedCollapsed = true;
     $scope.isFavoriteCollapsed = true;
     $scope.isMostViewedCollapsed = true;
-    
+    $localStorage.treeLevelId = false;
     var newHeight, scrollBar;
-
+    
     if($window.innerWidth < 768) {
         newHeight = 66;
         scrollBar = true;
@@ -49,8 +49,12 @@ angular.module('myBiApp')
         ($scope.noNavBar) ? $scope.noNavBar = false: $scope.noNavBar = true;
     };
     
-    $scope.$on('bredCrumbValue', function(event, value){
+    $scope.$on('breadCrumbValue', function(event, value){
         $scope.pageBreadCrumb = value
+    });
+    
+    $scope.$on('hideReportTabs', function(event, value){
+        $scope.hideTabsFlag = value
     });
     
     $scope.$on('myLevelIndication', function(event, value){
@@ -162,7 +166,8 @@ angular.module('myBiApp')
         for (var i in $scope.reportPanelList) {
             $scope.reportPanelList[i]['listView'] = status;
         }
-        var value = (status === true) ? 1 : 0;
+        
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
         setUserCustomization(value, 'listView');
     }
 
@@ -195,19 +200,18 @@ angular.module('myBiApp')
     };
 
     $q.all([reportSummaryService.getReportSummary(), newsService, carouselService, popularSearchService, $scope.biGroup.all(), userDetailsService.userPromise]).then(function (response) {
-        $scope.personaInfo = response[5][0].personaInfo;
+        $timeout(function() {
+            $scope.personaInfo = ($rootScope.personaInfo)? $rootScope.personaInfo : response[5][0].personaInfo;
+//            $scope.personaInfo = response[5][0].personaInfo;
+        }, 2000);
         $scope.setLoading(false);
         $scope.newsData = response[1];
-//        $scope.panelMostViewedReports.data = (response[0].mostViewedReports.length > $scope.panelMostViewedReports.limit) ? (response[0].mostViewedReports.splice(0, $scope.panelMostViewedReports.limit)) : response[0].mostViewedReports;
-//        $scope.panelFavoriteReports.totalRecord = response[0].favoriteReports.length;
-//        $scope.panelFavoriteReports.data = (response[0].favoriteReports.length > $scope.panelFavoriteReports.limit) ? (response[0].favoriteReports.splice(0, $scope.panelFavoriteReports.limit)) : response[0].favoriteReports;
-//        $scope.panelRRReports.data = (response[0].recentViewedReports.length > $scope.panelRRReports.limit) ? (response[0].recentViewedReports.splice(0, $scope.panelRRReports.limit)) : response[0].recentViewedReports;
         $scope.panelMostViewedReports.data = response[0].mostViewedReports;
         $scope.panelFavoriteReports.data = response[0].favoriteReports;
         $scope.panelRRReports.data = response[0].recentViewedReports;
-        $scope.panelMostViewedReports.listView = false;
-        $scope.panelFavoriteReports.listView = false;
-        $scope.panelRRReports.listView = false;
+        $scope.panelMostViewedReports.listView = 'grid';
+        $scope.panelFavoriteReports.listView = 'grid';
+        $scope.panelRRReports.listView = 'grid';
         $scope.refreshPanelList();
         $scope.carouselData = response[2];
         $scope.words = response[3];
@@ -324,7 +328,14 @@ angular.module('myBiApp')
     function setPersonalization() {
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
-                (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+//                (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
+                
+                if (response.data.isListViewed === null || !response.data.isListViewed) {
+                    $localStorage.listViewStatus = 'grid';
+                } else {
+                    (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                }  
+                
                 (response.data.isRecommendedCollapsed === 1) ? $scope.isRecommendedCollapsed = false : $scope.isRecommendedCollapsed = true;
                 (response.data.isFavoriteCollapsed === 1) ? $scope.isFavoriteCollapsed = false : $scope.isFavoriteCollapsed = true;
                 (response.data.isMostViewedCollapsed === 1) ? $scope.isMostViewedCollapsed = false : $scope.isMostViewedCollapsed = true;
@@ -350,7 +361,7 @@ angular.module('myBiApp')
                 $scope.reportPriorityList = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                 $scope.reportPanelList = [];
                 $localStorage.userTheme = 'default';
-                $scope.listViewStatus = $localStorage.listViewStatus = false;
+                $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
                 $scope.userTheme = $localStorage.userTheme;
                 $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList);
             }

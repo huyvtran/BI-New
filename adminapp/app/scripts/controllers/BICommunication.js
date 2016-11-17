@@ -365,9 +365,9 @@ angular.module('adminPageApp').controller('BICommunicationModalInstanceCtrl',fun
         $scope.selectedItem = selectedItem;
         var file = document.getElementById('myFile').files[0];
         
-        imageData.append('details', selectedItem.details);
-        imageData.append('link', selectedItem.link); 
-        imageData.append('title', selectedItem.title); 
+        (selectedItem.title)? imageData.append('title', selectedItem.title) :'';
+        (selectedItem.details)? imageData.append('details', selectedItem.details): '';
+        imageData.append('link', selectedItem.link);
         
         if(items.type && items.type === 'new'){
             selectedItem.groupIdList = selectedItem.groupIdList.toString();

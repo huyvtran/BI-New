@@ -7,6 +7,9 @@ angular.module('adminPageApp').controller('LevelCtrl', function ($scope, $http, 
     $scope.$emit('resetSearchText');
     $scope.$emit('resetGroup');
     var groupIdList = [];
+    $scope.searchTextValue = '';
+    $scope.personaId = '';
+    var searchPromises = [];
     
     function columnDefs() {
         return[
@@ -79,10 +82,6 @@ angular.module('adminPageApp').controller('LevelCtrl', function ($scope, $http, 
                 });
         });
     };
-    
-    $scope.searchTextValue = '';
-    $scope.personaId = '';
-    var searchPromises = [];
 
     function cancelPendingPromise() {
         _.map(searchPromises, function (eachPromise) {
@@ -99,11 +98,7 @@ angular.module('adminPageApp').controller('LevelCtrl', function ($scope, $http, 
     });
     
     $scope.$on('broadcastAuditGroup', function(event, personaId){
-        if (personaId) {
-            $scope.personaId = personaId;
-        } else {
-            $scope.personaId = '';
-        }
+        (personaId) ? $scope.personaId = personaId : $scope.personaId = '';
         cancelPendingPromise();
         $scope.myData.data = [];
         $scope.updateLevel();

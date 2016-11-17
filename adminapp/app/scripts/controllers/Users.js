@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('adminPageApp')
-.controller('UsersCtrl', function ($scope, $q, $uibModal, $http, $timeout, userDetailsService) {
+angular.module('adminPageApp').controller('UsersCtrl', function ($scope, $q, $uibModal, $http, $timeout, userDetailsService) {
     var groups = [], roles = [];
     $scope.myData = {};
     $scope.messageAlert = "";
@@ -13,10 +12,11 @@ angular.module('adminPageApp')
     function columnDefs() {
         return [
             {name: 'Options', width: '10%', cellTemplate: 'views/adminDropdown.html'},
-            {name: 'fullName', displayName: 'Display Name', width: '25%', cellToolTip: true/*, cellTemplate:"<span>{{row.entity.lastName}}<span ng-show='row.entity.lastName && row.entity.firstName'>,</span> {{row.entity.firstName}}</span>"*/},
+            {name: 'fullName', displayName: 'Display Name', width: '20%', cellToolTip: true/*, cellTemplate:"<span>{{row.entity.lastName}}<span ng-show='row.entity.lastName && row.entity.firstName'>,</span> {{row.entity.firstName}}</span>"*/},
             {name: 'userName', displayName: 'Username', width: '25%', cellToolTip: true},
             {name: 'role', displayName: 'Role', width: '15%', cellToolTip: true},
-            {name: 'groupName', displayName: 'Persona', width: '25%', cellToolTip: true}
+            {name: 'groupName', displayName: 'Persona', width: '20%', cellToolTip: true},
+            {name: 'isMultiplePersona', displayName: 'Multiple Persona', width: '10%', cellToolTip: true}
         ];
     }
 
@@ -105,9 +105,9 @@ angular.module('adminPageApp')
                         $scope.updateUsers();
                     } else {
                         $scope.messageAlert = '';
-                        $scope.messageAlertError = "Error While updating the User " + selectedItem.userName;
+//                        $scope.messageAlertError = "Error While updating the User " + selectedItem.userName;
                         if (resp.data && resp.data.message) {
-                            $scope.messageAlertError = $scope.messageAlertError + ', ' + resp.data.message
+                            $scope.messageAlertError = resp.data.message
                         }
                     }
                 }, function () {
@@ -156,9 +156,9 @@ angular.module('adminPageApp')
                         $scope.myData.data.splice(index, 1);
                     } else {
                         $scope.messageAlert = "";
-                        $scope.messageAlertError = "Error While Deleting";
+//                        $scope.messageAlertError = "Error While Deleting";
                         if (resp.data && resp.data.message) {
-                            $scope.messageAlertError = $scope.messageAlertError + ', ' + resp.data.message
+                            $scope.messageAlertError = resp.data.message;
                         }
                     }
                 }, function () {
@@ -226,9 +226,9 @@ angular.module('adminPageApp')
                                 $scope.updateUsers();
                             } else {
                                 $scope.messageAlert = '';
-                                $scope.messageAlertError = "Error While Adding";
+//                                $scope.messageAlertError = "Error While Adding";
                                 if (resp.data && resp.data.message) {
-                                    $scope.messageAlertError = $scope.messageAlertError + ', ' + resp.data.message
+                                    $scope.messageAlertError = resp.data.message;
                                 }
                             }
                         }, function () {
@@ -247,9 +247,9 @@ angular.module('adminPageApp')
                             $scope.updateUsers();
                         } else {
                             $scope.messageAlert = '';
-                            $scope.messageAlertError = "Error While Adding";
+//                            $scope.messageAlertError = "Error While Adding";
                             if (resp.data && resp.data.message) {
-                                $scope.messageAlertError = $scope.messageAlertError + ', ' + resp.data.message
+                                $scope.messageAlertError = resp.data.message
                             }
                         }
                     }, function () {
@@ -268,7 +268,8 @@ angular.module('adminPageApp')
                 postObj = _.omit(postObj, 'login');
                 postObj = _.omit(postObj, 'userId');
                 postObj = _.omit(postObj, 'id');
-
+                postObj = _.omit(postObj, 'isMultiplePersona');
+                
                 $http.post('BITool/admin/updateBIUser', postObj)
                     .then(function (resp) {
                         if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
@@ -277,9 +278,9 @@ angular.module('adminPageApp')
                             $scope.updateUsers();
                         } else {
                             $scope.messageAlert = '';
-                            $scope.messageAlertError = "Error While updating the User " + selectedItem.userName;
+//                            $scope.messageAlertError = "Error While updating the User " + selectedItem.userName;
                             if (resp.data && resp.data.message) {
-                                $scope.messageAlertError = $scope.messageAlertError + ', ' + resp.data.message
+                                $scope.messageAlertError = resp.data.message
                             }
                         }
                     }, function () {
@@ -339,15 +340,19 @@ angular.module('adminPageApp')
             roles = resp.data.allRoles;
             $scope.$emit('emitAuditGroup', groups);
             _.map(resp.data.users,function(eachList){
+                if(eachList.isMultiplePersona ===false){
+                    eachList.isMultiplePersona = 'No';
+                } else {
+                    eachList.isMultiplePersona = 'Yes';
+                }
                 //eachList.groupId;
                 _.map(resp.data.allGroups,function(eachGroup){
                     if(eachList.groupId === eachGroup.groupId){
                         eachList.groupName = eachGroup.groupName;
                     }
                 });
-
             });
-
+            
             if ($scope.myData.data.length === 0) {
                 $scope.myData.data = resp.data.users;
             } else {

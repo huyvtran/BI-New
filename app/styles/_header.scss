@@ -1,12 +1,46 @@
 body {
     background: #fff;
-    font-family: 'MetaWeb-Normal';
+    font-family: 'Roboto-Regular';
     font-weight: 400;
     color: #64686d;
 } 
-.logo{
-    margin-top: -15px;
-    height:90px;
+.navbar-minimalize {
+    color: #fff !important;
+    cursor: pointer;
+    font-weight: normal;
+    display: inline-block;
+    font-size: 20px;
+    .glyphicon {
+        padding: 15px 0px 0px 17px;
+    }
+}
+.menu-hamburger {
+    /*padding: 3px 0 0 5px;*/
+    margin: 10px 0 0 16px;
+    width: 22px;
+}
+.logo-container {
+    .logo{
+/*        height: 32px;
+        padding: 7px;
+        margin-top: 4px;*/
+        height: 32px;
+        padding: 7px;
+        margin-top: 9px;
+        margin-left: 10px;
+    }
+    .portal-name{
+/*        color: #FFF;
+        font-size: 18px;
+        vertical-align: text-bottom;
+        line-height: 17px;
+        font-family: 'Roboto-Regular';*/
+        color: #FFF;
+        font-size: 18px;
+        vertical-align: text-bottom;
+        line-height: 11px;
+        font-family: 'Roboto-Regular';
+    }
 }
 .header-search-close-button{
     display: inline-block;
@@ -15,17 +49,99 @@ body {
     padding:0;
     font-size:16px;
 }
+.help-icon {
+    border: none;
+    background: none;
+    color: #FFF;
+    padding: 12px 0;
+    font-size: 17px;
+    outline: none;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+.faq-link, .notfy-link {
+    img {
+        width: 24px;
+        height: 24px;
+    }
+}
+.notfy-link {
+    font-size: 22px;
+    color: #FFF;
+}
+.notfy-count {
+    font-size: 12px;
+    color: #FFF;
+    background: blue;
+    border-radius: 32px;
+    padding: 2px;
+    vertical-align: middle;
+}
+.notfy-wrapper {
+    color:#999;
+    padding: 0 !important;
+    left: auto !important;
+    width: 300px;
+    margin: 0;
+    right: 2%;
+    background: #eaeaea;
+    outline: none;
+    .mCSB_container_wrapper {
+        margin-right:0px !important;
+    }
+    .notfy-title h4{
+        padding: 11px;
+        background: #ccc;
+        margin-top: 0;
+        color: #2c6790;
+    }
+    .notfy-container {
+        padding: 10px;
+        background: #FFF;
+        border-radius: 5px;
+        margin: 0 -10px 10px 20px;
+    }
+    .notfy-header {
+        .notfy-icons {
+            float: right;
+            a {
+                padding: 2px;  
+            }
+        }
+    }
+    .notfy-body {
+        
+    }
+}
+.search-image {
+    margin-top: -5px;
+    width: 25px;
+}
+.search-image-popup {
+    background: url(/images/search.png);
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    display: inline-block;
+    background-repeat: no-repeat;
+    margin-top: 5px;
+}
 span.input-group-addon {
-    background: #333332;
+    background: #2C6790;
     color: #fff;
     border: none;
 }
 .form-control {
     box-shadow: none;
     -webkit-box-shadow: none;
-    font-family: arial;
+    font-family: 'Roboto-Regular';
     height: 38px;
 }
+.caret {
+    margin-right: 2px;
+}  
 .usr-image{
     border-radius: 32px;
     width : 38px;
@@ -33,10 +149,82 @@ span.input-group-addon {
     border:none;
     margin-right: 5px;
 }
+.search-help-icons {
+    float: right;
+    width: 25%;
+    .search-icon-container {
+        width: 33%;
+        float: left;
+        border-left: 1px solid #545252;
+        height: 50px;
+    }
+    .notif-icon-container {
+        width: 33%;
+        float: left;
+        border-left: 1px solid #545252;
+        height: 50px;
+    }
+}
+#imaginary_container  {
+    button {
+        border: none;
+        background: none;
+        color: #FFF;
+        padding: 15px 0;
+        font-size: 17px;
+        outline: none;
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+    }
+}
+.icons-header-dropdown {
+    width: 33%;
+    height: 50px;
+    float: left;
+    border-left: 1px solid #545252;
+    .glyphicon {
+        color: #FFF;
+        font-size: 18px;
+        padding: 14px 0;
+        width: 100%;
+        text-align: center;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+.icons-header-container {
+    left: auto !important;
+    width: 300px;
+    padding: 10px!important;
+    margin: 0;
+    right: 8%;
+    span {
+        float: left;
+        padding: 10px;
+        h4 {
+            color: #a99797;
+        }
+        a {
+            font-size: 13px;
+        }
+    }
+    span.help-support {
+        width:60%;
+        p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    span.contact {
+        width:40%;
+    }
+}
 #header{
     position: fixed;
-    height: 69px;
-    background-color: #4e5052;
+    height: 50px;
+    background-color: #262626;
     z-index: 999;
     width: 100%;
 }
@@ -45,8 +233,8 @@ span.input-group-addon {
     width: 100%;
     text-align: right;
     text-overflow: ellipsis;
-    margin-top: 17px;
-    margin-right: 20px;
+    margin-top: 7px;
+    margin-right: 7px;
 }
 .profile-progress-small{
     .progress {
@@ -83,21 +271,13 @@ span.input-group-addon {
 .clickable{
     cursor:pointer
 }
-#imaginary_container{
-    margin:20px 0 0; 
-}
-#imaginary_container *{
-    z-index:2;
-}
 .overlay form .search-parent{
     z-index:2;
 }
 .search-report.globle-search-input{
-    border-radius:32px 0 0 32px;
     height:30px;
     border-top-right-radius:0;
     border-bottom-right-radius:0;
-    border:none !important;
     background-color:#7D7D7D;
     height:30px !important;
     color:#fff;
@@ -105,7 +285,7 @@ span.input-group-addon {
     cursor : default;
 }
 input.search-report.globle-search-input {
-    background:#4F4F4F !important
+    background:#4F4F4F;
 }
 span.globle-chevron-icon {
     border-left: none;
@@ -119,10 +299,9 @@ span.globle-chevron-icon {
 .globle-search-icon{  
     button{
         border: 0;
+        outline:none;
         background-color: transparent;
     }
-    border-top-right-radius: 32px !important;
-    border-bottom-right-radius: 32px !important;
 }
 .globle-search-input{
     border-right:0;
@@ -139,35 +318,100 @@ span.globle-chevron-icon {
     font-size: 10px;
 }
 .profile-dropdown-menu{
-    margin-right: 21px !important;
-    top:68px !important;
-    left:133px !important;
+    margin-right: 9px !important;
+    top: 49px !important;
+    left: 0;
 }
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background-color: #2c95dd !important;
 }
 @media (min-width: 300px)and (max-width: 374px){
-    .glb-search-mob {
-        padding: 19px 0px 0px 0px !important;
-    }
     .text-right {
         padding: 23px 0px 0px 11px !important;
     }
-    .portal-name {
-        font-size: 8px !important;
-        margin-top: 15px !important;
-    }
     .profile-small {
-        height: 30px;
+        /*height: 30px;*/
         margin-left: -5px;
     }
 }
 @media (min-width: 300px)and (max-width: 767px){
     #header {
-        height: 85px;
+        height: 50px;
+    }
+    .search-image {
+        width: 23px;
+    }
+    .navbar-minimalize .glyphicon {
+        padding: 15px 0px 0px 20px;
+    }
+    .insight-text {
+        color: #eae6e6;
+        font-size: 21px;
+        padding: 31px 0px 20px 10px;
+        background: url(../images/banner-profile-mob.png);
+        background-size: 198%;
+        background-repeat: repeat;
+        display: table !important;
+    }
+    .insight-text {
+        /*height: 100px;*/
+        height: auto;
+        width: 100%;
+    }
+    .search-image-popup {
+        background: url(/images/search-mobile.png);
+        width: 20px;
+        height: 20px;
+        background-size: 100%;
+        display: inline-block;
+        background-repeat: no-repeat;
+        margin-top: 5px;
+    }
+    .leftpane-profileimage {
+        margin: 0;
+        width: 100%;
+    }
+    .leftpane-text {
+        margin-top: 8px;
+    }
+    .leftpane-text:hover {
+        text-decoration: underline;
+    }
+    .img-circle {
+        border-radius: 50%;
+        width: 20%;
+        float: left;
+    }
+    .profile-small{
+/*        height: 16% !important;
+        width:16% !important;*/
+        margin-top: 5px;
+        margin-right: 0px;
+        float: left
+    }
+    .persona-block {
+        font-size: 12px;
+        padding-left: 19%;
+        margin: 0;
+        select {
+            /*width: 38%;*/
+            width: auto;
+            color: #000;
+        }
+    }
+    .in-mobile-userName {
+        width: 84%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        float: left;
+        display: inline;
+        padding: 21px 5px 9px 10px;
+        font-size: 19px;
+        white-space: nowrap;
+        color: #FFF;
     }
     .myprofile {
-        margin-top: 9px !important;
+        margin-top: 0px !important;
     }
     .picture-bg {
         .profile-logo {
@@ -176,10 +420,6 @@ span.globle-chevron-icon {
         .user-name {
             width: 80% !important;
         }
-    }    
-    .navbar-minimalize { 
-        vertical-align: bottom;
-        margin: 0px 10px;
     }
     .search-report.globle-search-input {
         display: none;
@@ -194,20 +434,32 @@ span.globle-chevron-icon {
     .text-right {
         padding: 23px 0px 0px 4px;
     }
-    .portal-name {
-        font-size: 12px !important;
-        margin-top: 15px !important;
-    }
     .navbar-brand {
         padding-top: 2px !important;
         padding-left: 2px !important;
         margin-left: 2px !important;
         padding-right: 2px !important;
     }
-    img.logo {
-        width: auto;
-        padding-top: 0px;
-        margin-right: 5px;
+/*    img.logo {
+        height: 44px;
+        padding: 2px 5px 2px 15px !important;
+        margin-top: -16px !important;
+    }*/
+    .menu-hamburger {
+        margin: 17px 0 0 16px;
+        width: 22px;
+    }
+    .logo-container{ 
+        .logo {
+            /*padding: 0px 5px 0px 4px;*/
+            display: none;
+        }
+        .portal-name {                 
+            /*line-height: 14px;*/
+            line-height: 0px;
+            padding-left: 10px;
+
+        }    
     }
     .margin-padding-zero {
         margin-left:0px !important;
@@ -219,21 +471,13 @@ span.globle-chevron-icon {
     .metismenu {
         left: -145px !important;
     }
-    .profile-small{
-        height: 35px;
-        margin-top: 5px;
-        margin-right: 0px;
-    }
     .globle-search-input{
         border-right:0;
         color: #FFF;
         background-color:#7D7D7D;
     }
-    #header{
-        margin-bottom: 10px !important;
-    }
     .xs-report-header{
-        font-family: arial;
+        font-family: 'Roboto-Regular';
     }
     .button-icon {
         padding: 4px !important;
@@ -241,13 +485,13 @@ span.globle-chevron-icon {
         color: #333333;
     }
     .glb-search-mob{
-        padding: 19px 0px 0px 8px;
+        padding: 2px 0px 0px 0px;
+        height: 50px;
     }
-    .img-circle {
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-    }
+    #imaginary_container button {
+        text-align: right;
+        padding-right: 15px;
+    }    
 }
 @media (min-width: 768px)and (max-width: 991px){
     .profile-dropdown-menu {
@@ -256,16 +500,8 @@ span.globle-chevron-icon {
     .container {
         width: 100%;
     }
-    header .portal-name {
-        line-height: 50px;
-        font-size: 18px !important;
-        margin-top: 15px !important;
-    }
-    .navbar-brand {
-        padding-top: 5px !important;
-        padding-left: 0px !important;
-        margin-left: 0px !important;
-        padding-right: 5px !important;
+    .search-help-icons {
+        width: 30%;
     }
     img.logo {
         height: 65px;
@@ -281,18 +517,13 @@ span.globle-chevron-icon {
         width: 30px;
         height: 30px;
     }
-    .header-right {
-        height: 40px;
-        padding: 10px;
-        margin: 5px;
-    }
     .profile-progress-small{
         .progress{
             margin-bottom:5px;
         }
     }
     header .input-group-addon {  
-        padding: 5px 12px !important;
+        /*padding: 5px 12px !important;*/
         font-size: 10px;
     }
     .picture-bg {
@@ -307,9 +538,6 @@ span.globle-chevron-icon {
 @media (min-width: 992px)and (max-width: 1199px){
     .container {
         width: 100%;
-    }
-    .portal-name {
-        font-size: 25px !important;
     }
 }
 @media (min-width: 1200px){

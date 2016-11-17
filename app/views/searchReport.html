@@ -1,36 +1,31 @@
 <div id="imaginary_container">
-    <div class="col-lg-9 col-md-9 col-sm-9 col-xl-12">
-        <div class="input-group search-parent clickable" ng-show="model.isMinimised" ng-click="model.isMinimised = false;" >
-            <div class="search-report globle-search-input"></div>
-            <span class="input-group-addon globle-search-icon hidden-xs">
-                <button type="submit">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>  
-            </span>
-            <button type="submit" class="hidden-xl hidden-lg hidden-md hidden-sm search-icon-mobile">
-                <span class="glyphicon glyphicon-search"></span>
-            </button>
-        </div>
-    </div>
+    <button type="submit" class="hidden-xs" ng-show="model.isMinimised" ng-click="model.isMinimised = false;">
+        <!--<span class="glyphicon glyphicon-search"></span>-->
+        <img class="search-image" src="images/search.png">
+    </button>
+    <button type="submit" class="hidden-xl hidden-lg hidden-md hidden-sm" ng-show="model.isMinimised" ng-click="model.isMinimised = false;">
+        <!--<span class="glyphicon glyphicon-search"></span>-->
+        <img class="search-image" src="images/search.png">
+    </button>
 </div>
 
 <div class="overlay-dark" ng-hide="model.isMinimised">
-    <form ng-submit="submitSearch()" class="jq-form-class" style="z-index:100" name="searchForm" ng-hide="model.isMinimised">
+    <form ng-submit="submitSearch()" class="jq-form-class" auto style="z-index:100" name="searchForm" ng-hide="model.isMinimised">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-center">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-center v-offset-top-20px">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 align-center searchbox-top">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-1 v-offset-top-5px align-custom">
                         <a href="javascript:;" ng-click="model.isMinimised = true;" class="header-search-close-button color-white">
                             <span class="back-button-image color-white"></span>
                             <span class="hidden-xs back-text">&nbsp;&nbsp;Back</span>
                         </a>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-10 align-center">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-11 align-center padding-zero">
                         <div class="input-group search-parent">
                             <select class="filter hidden-xs" ng-model="searchFilter" ng-options="filter.name for filter in model.searchFilterOptions" ng-change="setFilterValue()">
-                                <option value="">Filter Search</option>
+                                <option value="">All</option>
                             </select>
-                            <input ng-model="searchText"
+                            <input autofocus="" ng-model="searchText"
                                    type="text"
                                    name="searchText"
                                    class="form-control search-report globle-search-input hidden-xs"
@@ -46,7 +41,7 @@
                                    autocomplete="off"
                                    ng-model-onblur ng-change="showIconFlag()"
                                    />
-                            <input ng-model="searchText"
+                            <input autofocus="" ng-model="searchText"
                                    type="text"
                                    name="searchText"
                                    class="form-control search-report globle-search-input hidden-xl hidden-lg hidden-md hidden-sm"
@@ -62,15 +57,18 @@
                                    autocomplete="off"
                                    ng-model-onblur ng-change="showIconFlag()"
                                    />
-                            <button class="glyphicon glyphicon-remove color-white close-icon" ng-class="{'ng-hide': !showIcon, 'ng-show':showIcon}" type="reset" ng-click="showIcon = false;"></button>
+                            <button class="color-black close-icon" ng-class="{'ng-hide': !showIcon, 'ng-show':showIcon}" type="button" ng-click="clearText()"></button>
                             <span class="input-group-addon search-report globle-search-icon">
-                                <button type="submit">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>  
+                                <button type="submit" class="hidden-lg hidden-xl hidden-md" ng-class="{'ng-hide': showIcon, 'ng-show':!showIcon}">
+                                    <span class="search-image-popup"></span>
+                                </button>
+                                <button type="submit" class="hidden-sm hidden-xs">
+                                    <span class="search-image-popup"></span>
+                                </button>
                             </span>
                         </div>
                     </div>
-                    <div class="hidden-xl hidden-lg hidden-md hidden-sm col-xs-12 margin-top-md on-Mobile">
+                    <div class="hidden-xl hidden-lg hidden-md hidden-sm col-xs-12 margin-top-md on-Mobile ng-hide">
                         <select class="filter col-xs-5" ng-model="searchin" ng-change="setSearchInValue()">
                             <option value="persona" ng-selected="true">Persona</option>
                             <option value="catalog">Report Catalog</option>

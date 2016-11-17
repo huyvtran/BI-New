@@ -19,8 +19,11 @@ angular.module("myBiApp")
             var toggle = elem.find("#toggle");    
             var d3 = $window.d3;
             var rawSvg = elem.find("#d3d svg")[0];
-            var margin = {top: 20, right: 120, bottom: 20, left: 250},
-                width = 960  - margin.right - margin.left,
+            var initWidth = (scope.isTableu) ? 1250: 960; 
+            //http://eyeseast.github.io/visible-data/2013/08/28/responsive-charts-with-d3/
+            //https://chartio.com/resources/tutorials/how-to-resize-an-svg-when-the-window-is-resized-in-d3-js
+            var margin = {top: 20, right: 120, bottom: 20, left: 190},
+                width = initWidth  - margin.right - margin.left,
                 height = 800 - margin.top - margin.bottom;
             var i = 0,
                 duration = 750,
@@ -38,7 +41,7 @@ angular.module("myBiApp")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
             function generateTree(){
-//                d3.json("/scripts/data/data1.json", function(error, json) {
+//                d3.json("/scripts/data/data.json", function(error, json) {
                 d3.json(url, function(error, json) {
                     if (error) throw error;
                     root = json;
@@ -66,10 +69,14 @@ angular.module("myBiApp")
                 // Compute the new tree layout. -- Sent by Viswa
                 var nodes = tree.nodes(root).reverse(),
                     links = tree.links(nodes);
+            
+                // add the tool tip
+                var div = d3.select("body").append("div")
+                    .attr("class", "tooltip tooltip-box");
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) { d.y = d.depth * 180; });
-
+                
                 // Update the nodes…
                 var node = svg.selectAll("g.node")
                     .data(nodes, function(d) { return d.id || (d.id = ++i); });
@@ -86,14 +93,16 @@ angular.module("myBiApp")
                         div.transition()
                             .duration(200)
                             .style("opacity", .9);
-                        div .html(d.className)
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                        div.html('<b>'+d.className+'</b>'+ ' <hr class="border-line" /> ' +d.name)
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 30) + "px");
+//                            .style("left", (d3.event.pageX) + "px")
+//                            .style("top", (d3.event.pageY - 70) + "px");  
                     })
                     .on("mouseout", function(d) {
                         div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
+                            .duration(500)
+                            .style("opacity", 0);
                     });
 
                 nodeEnter.append("circle")
@@ -101,43 +110,19 @@ angular.module("myBiApp")
                     .style("fill", function(d) { 
                         return d._children ? "lightsteelblue" : "#fff"; 
                     });
-                  
-                  nodeEnter.append("text")
+                    
+                var status = 'start';
+                
+                nodeEnter.append("text")
                     .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
                     .attr("dy", ".35em")
-                    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+                    .attr("text-anchor", function(d) {
+                        status = d.children || d._children ? "end" : "start"; 
+                        return d.children || d._children ? "end" : "start"; 
+                    })
                     .text(function(d) { return d.name; })
-                    .call(wrap, 30)
+                    .call(wrap, 25, status)
                     .style("fill-opacity", 1e-6);
-            
-//                var nodeText = nodeEnter.append("text");
-//                
-//                nodeText.attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-//                    .attr("dy", ".35em")
-//                    .attr("class", "label")
-//                    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-//                    .text(function(d) { 
-//                        if(d.name.length > 30) {
-//                            console.log(d.name.substring(0, 29));
-//                            nodeText.append('tspan')
-//                                    .attr("x", "-10")
-//                                    .attr("dy", ".35em")
-//                                    .text(d.name.substring(0,29));
-//                            console.log(d.name.substring(29, d.name.length));
-//                            nodeText.append('tspan')
-//                                    .attr("x", "-10")
-//                                    .attr("dy", "1.35em")
-//                                     .text(d.name.substring(29, d.name.length));
-//                        } else {
-//                                return d.name;
-//                        }
-//                    })
-//                    .style("fill-opacity", 1e-6);
-
-                // add the tool tip
-                var div = d3.select("body").append("div")
-                    .attr("class", "tooltip")
-                    .style("opacity", 0);
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -147,7 +132,7 @@ angular.module("myBiApp")
                     });
 
                 nodeUpdate.select("circle")
-                    .attr("r", 6)
+                    .attr("r", 7)
                     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
                 nodeUpdate.select("text")
@@ -198,31 +183,18 @@ angular.module("myBiApp")
                 });
             }
             
-            function wrap(text, width) {
+            function wrap(text, width, status) {
                 text.each(function() {
-                    var nodeText =d3.select(this).text();
-                    var nodeTextlength = nodeText.length;
-                    var nWords = (nodeTextlength > 30) ? [nodeText.substring(0,29), nodeText.substring(29,nodeText.length)] :[nodeText]; 
-                    var text = d3.select(this),
-//                        words = text.text().split(/\s+/).reverse(),
-                        words = (nodeTextlength > 30) ? [nodeText.substring(0,29), nodeText.substring(29,nodeText.length)].reverse() :[nodeText],
-                        word,
-                        line = [],
-                        lineNumber = 0,
-                        lineHeight = 1.1, // ems
+                    var nodeText = d3.select(this).text(),
+                        nodeTextlength = nodeText.length,
+                        nWords = (nodeTextlength > width) ? nodeText.substring(0,width-1)+'...' :nodeText,
+                        text = d3.select(this),
+                        x = text.attr("x"),
                         y = text.attr("y"),
-                        dy = parseFloat(text.attr("dy")),
-                        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-                    while (word = words.pop()) {
-                        line.push(word);
-                        tspan.text(line.join(" "));
-                        if (nodeTextlength > width) {
-                            line.pop();
-                            tspan.text(line.join(" "));
-                            line = [word];
-                            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                        }
-                    }
+                        dy = (status ===  'start') ? parseFloat(text.attr("dy")) : "-.35em",
+//                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy",dy);
+                        tspan.text(nWords);
                 });
             }
             

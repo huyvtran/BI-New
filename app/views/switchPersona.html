@@ -1,0 +1,24 @@
+<div id="GroupsModal">
+    <div class="modal-header">
+        <button type="button" class="close text-black" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Switch Persona</h3>
+    </div>
+    <div class="modal-body">
+        <form name="groupForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row updateNews">
+                        <div class="col-xs-12 align-left p-m">
+                            <p>Select a persona</p>
+                            <select ng-model="defaultPersona" class="persona-dropDown" ng-options="group.groupId as group.groupName for group in personaList"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success p-xs text-white" type="button" ng-click="setDefaultPersona()"> Apply </button>
+        <button class="btn btn-error p-xs text-white" type="button" ng-click="close()"> Cancel </button>
+    </div>
+</div>

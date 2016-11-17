@@ -1,30 +1,63 @@
 body {
-    /*background: #fff;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    color: #64686d;*/
     line-height: 26px;
     background: #fff;
-    font-family: 'MetaWeb-Normal';
+    font-family: 'Roboto-Regular';
     font-weight: 400;
     color: #64686d;
 }
 .logo{
-    margin-top: -15px;
-    height:90px; 
+    height: 32px;
+    padding: 7px;
 }
 a {
     text-decoration: none;
 }
-@media (min-width: 1200px){
-    .container {
+.help-icons {
+    float: right;
+    width: 15%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    .icons-header-dropdown {
         width: 100%;
+        height: 50px;
+        border-left: 1px solid #545252;
+        .faq-link {
+            img {
+                width: 24px;
+                height: 24px;
+                margin: 12px 0 0 0px;
+            }
+        }
+    }
+    .icons-header-container {
+        left: auto !important;
+        width: 300px;
+        padding: 10px!important;
+        margin: 0;
+        right: 17px;
+        span {
+            float: left;
+            padding: 10px;
+            h4 {
+                color: #a99797;
+            }
+            a {
+                font-size: 13px;
+            }
+        }
+        span.help-support {
+            width:60%;
+        }
+        span.contact {
+            width:40%;
+        }
     }
 }
 .form-control {
     box-shadow: none;
     -webkit-box-shadow: none;
-    font-family: arial;
+    font-family: 'Roboto-Regular';
 }
 .usr-image{
     border-radius: 32px;
@@ -34,23 +67,18 @@ a {
     margin-right: 5px;
 }
 #header{
-    background-color: #4e5052;
+    background-color: #262626;
     position: relative;
     z-index: 999;
 }
 .header-right{
-    /* border: 0;
-    height: 46px;
-    padding: 4px;
-    margin: 10px 10px 0;
-    background-color: none;
-    width: 210px;*/
     border: 0;
-    width: 100%;
+    width: 84%;
     text-align: right;
     text-overflow: ellipsis;
-    margin-top: 17px;
-    margin-right: 20px;
+    margin-top: 6px;
+    padding-right: 7px;
+    float: left;
 }
 .header-right > a {
     color: #ffffff;
@@ -83,8 +111,8 @@ span.input-group-addon {
     border: none;
 }
 .top-search {
-    margin: 20px 0 0;
-    width:70%;
+    margin: 10px 0 0;
+    width: 70%;
     background-color: #7D7D7D !important;
     border-radius: 32px 32px 32px 32px !important;
     input[type="text"] {
@@ -113,7 +141,6 @@ span.input-group-addon {
         border-radius:0;
     }
 }
-
 #imaginary_container{
     margin: 3% 5%; 
 }
@@ -131,118 +158,10 @@ span.input-group-addon {
     border-right:0;
     color: #DFE4ED;
 }
-@media (min-width: 300px)and (max-width: 768px){
-    .portal-name {
-        font-size: 12px !important;
-        margin-top: 15px !important;
-    }
-    .navbar-brand {
-        padding-top: 2px !important;
-        padding-left: 2px !important;
-        margin-left: 2px !important;
-        padding-right: 2px !important;
-    }
-    img.logo {
-        height: 60px;
-        padding-top: 20px;
-        margin-right: 5px;
-    }
-    .margin-padding-zero {
-        margin-left:0px !important;
-        padding-left: 0px !important;
-    }
-    .nav-header {
-        padding: 3px !important;
-    }
-    .metismenu {
-        left: -145px !important;
-    }
-    .profile-small{
-        height: 35px;
-        margin-top: 5px;
-        margin-right: 0px;
-    }
-    .globle-search-input{
-        border-right:0;
-        color: #2C95DD;
-    }
-    #header{
-        margin-bottom: 10px !important;
-    }
-    .xs-report-header{
-        font-family: arial;
-    }
-    .button-icon {
-        padding: 4px !important;
-        margin: 4px 0px !important;
-        color: #333333;
-    }
-    .glb-search-mob{
-        background-color: #333;
-        padding: 10px 10px 0px 10px;
-    }
-}
-@media (min-width: 300px)and (max-width: 374px){
-    .portal-name {
-        font-size: 8px !important;
-        margin-top: 15px !important;
-    }
-    .profile-small {
-        height: 30px;
-        margin-left: -5px;
-    }
-
-}
-@media (min-width: 768px)and (max-width: 991px){
-    .container {
-        width: 100%;
-    }
-    .portal-name {
-        font-size: 18px !important;
-        margin-top: 15px !important;
-    }
-    .navbar-brand {
-        padding-top: 5px !important;
-        padding-left: 0px !important;
-        margin-left: 0px !important;
-        padding-right: 5px !important;
-    }
-    img.logo {
-        height: 65px;
-        padding-top: 0px;
-        margin-right: 5px;
-        margin-top: -5px;
-    }
-    .margin-padding-zero {
-        margin-left:0px !important;
-        padding-left: 0px !important;
-    }
-    .usr-image {
-        width: 30px;
-        height: 30px;
-    }
-    .header-right {
-        height: 40px;
-        padding: 0px;
-        margin: 5px;
-        width: 175px;
-    }
-    .input-group-addon {  
-        padding: 5px 12px !important;
-    }
-}
-@media (min-width: 992px)and (max-width: 1199px){
-    .container {
-        width: 100%;
-    }
-    .portal-name {
-        font-size: 25px !important;
-    }
-}
-.profile-dropdown-menu{
-    margin-right: 23px;
-    top:68px !important;
-    left:138px !important;
+.profile-dropdown-menu {
+    top:49px !important;
+    left:auto !important;
+    right: 17%;
 }
 .header-menu {
     clear: both;
@@ -278,9 +197,9 @@ ul.submenu-list-admin {
         margin-top: 0px;
         margin-bottom: 0px;
         margin-left: 5px;
-        margin-right: 40px;
+        margin-right: 25px;
         a {
-		font-family:'MetaWeb-Normal';
+            font-family:'Roboto-Regular';
             color: #fff;
             padding: 0px 0px;
             text-decoration: none;
@@ -310,8 +229,6 @@ ul.submenu-list-admin {
 .close-icon {
     border: none;
     background-color: transparent;
-    /* display: inline-block; */
-    /* vertical-align: middle; */
     outline: 0;
     cursor: pointer;
     position: absolute;
@@ -322,4 +239,102 @@ ul.submenu-list-admin {
     right: 54px;
     z-index: 2;
     padding: 2px;
+}
+@media (min-width: 300px)and (max-width: 374px){
+    .profile-small {
+        height: 30px;
+        margin-left: -5px;
+    }
+
+}
+@media (min-width: 300px)and (max-width: 768px){
+    .navbar-brand {
+        padding-top: 2px !important;
+        padding-left: 2px !important;
+        margin-left: 2px !important;
+        padding-right: 2px !important;
+    }
+    img.logo {
+        height: 60px;
+        padding-top: 20px;
+        margin-right: 5px;
+    }
+    .margin-padding-zero {
+        margin-left:0px !important;
+        padding-left: 0px !important;
+    }
+    .nav-header {
+        padding: 3px !important;
+    }
+    .metismenu {
+        left: -145px !important;
+    }
+    .profile-small{
+        height: 35px;
+        margin-top: 5px;
+        margin-right: 0px;
+    }
+    .globle-search-input{
+        border-right:0;
+        color: #2C95DD;
+    }
+    #header{
+        margin-bottom: 10px !important;
+    }
+    .xs-report-header{
+        font-family: 'Roboto-Regular';
+    }
+    .button-icon {
+        padding: 4px !important;
+        margin: 4px 0px !important;
+        color: #333333;
+    }
+    .glb-search-mob{
+        background-color: #333;
+        padding: 10px 10px 0px 10px;
+    }
+}
+@media (min-width: 768px)and (max-width: 991px){
+    .container {
+        width: 100%;
+    }
+    .navbar-brand {
+        padding-top: 5px !important;
+        padding-left: 0px !important;
+        margin-left: 0px !important;
+        padding-right: 5px !important;
+    }
+    img.logo {
+        height: 65px;
+        padding-top: 0px;
+        margin-right: 5px;
+        margin-top: -5px;
+    }
+    .margin-padding-zero {
+        margin-left:0px !important;
+        padding-left: 0px !important;
+    }
+    .usr-image {
+        width: 30px;
+        height: 30px;
+    }
+    .header-right {
+        height: 40px;
+        padding: 0px;
+        margin: 5px;
+        width: 175px;
+    }
+    .input-group-addon {  
+        padding: 5px 12px !important;
+    }
+}
+@media (min-width: 992px)and (max-width: 1199px){
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 1200px){
+    .container {
+        width: 100%;
+    }
 }

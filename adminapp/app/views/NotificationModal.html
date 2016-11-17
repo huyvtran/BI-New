@@ -1,0 +1,59 @@
+<div id="BINewsModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title" ng-show="items.type">Add New Notification</h3>
+        <h3 class="modal-title" ng-hide="items.type">Edit Notification</h3>
+    </div>
+    <div class="modal-body">
+        <form name="NotificationForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Persona *</div>
+                        <div class="col-xs-8">
+                            <!--<dropdown-multiselect model="items.selectedGroupIdList" options="groupIdList" selected-model="selectedGroupIds" ng-if="groupIdList"></dropdown-multiselect>-->
+                            <select ng-options="group.groupId as group.groupName for group in groupIdList" ng-model="items.groupId" required>
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Header *</div>
+                        <div class="col-xs-8">
+                            <input type="text" name="header" ng-model="items.header" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Message Body *</div>
+                        <div class="col-xs-8">
+                           <input type="text" name="messageBody" ng-model="items.messageBody" class="col-xs-8">
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Notification Type</div>
+                        <div class="col-xs-8"> 
+                            <select ng-model="items.notificationType">
+                                <option value="A">Alert</option>
+                                <option value="M">Message</option>
+                                <option value="T">Task</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row updateNews">
+                        <div class="col-xs-4"> Is Active</div>
+                        <div class="col-xs-8  notification-radio"> 
+                            <input type="radio" ng-model="items.isActive" value="Y" checked>Active
+                            <input class="inactive" type="radio" ng-model="items.isActive" value="N">In Active
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="!items.header || !items.messageBody || !items.groupId" ng-click="save(items)">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

@@ -192,6 +192,16 @@ angular
                 }
             }
         })
+        .state('administration.list.notification', {
+            url: '/notification',
+            displayName: 'Notification',
+            views: {
+                '@': {
+                    templateUrl: 'views/UIGrid.html',
+                    controller: 'NotificationCtrl'
+                }
+            }
+        })
         .state('notauth', {
             url: '/notauth',
             displayName: 'Not Authorized',

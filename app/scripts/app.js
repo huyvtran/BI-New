@@ -105,10 +105,9 @@ angular
                         message: 'Please log into SSO again before continuing',
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 } else {
                     modalContent = {
@@ -116,10 +115,9 @@ angular
                         message: rejection.data,
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 }
                 return $q.reject(rejection);
@@ -132,9 +130,9 @@ angular
                         message: 'Please log into SSO again before continuing',
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 } else {
                     modalContent = {
@@ -142,10 +140,10 @@ angular
                         message: rejection.data,
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
 
-                    $rootScope.$broadcast('ShowUserAlert', modalContent);
+//                    $rootScope.$broadcast('RefreshSSO', modalContent);
                 }
                 return $q.reject(rejection);
             }
@@ -263,6 +261,22 @@ angular
                 label: 'Search'
             }
         })
+        .state('search.details.reportmeta', {
+            url: '/reportmeta',
+            views: {'@': {
+                    templateUrl: 'views/search.reportmeta.html',
+                    controller: 'SearchdetailsCtrl'
+                }
+            },
+            data: {
+                displayName: 'Search',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+            },
+            ncyBreadcrumb: {
+                label: 'Search'
+            }
+        })
         .state('reportsDashboard', {
             url: '/reportsDashboard',
             templateUrl: 'views/reportsDashboard.html',
@@ -305,6 +319,20 @@ angular
                 label: 'My Profile'
             }
         })
+        .state('helpSupport', {
+            url: '/helpSupport',
+            templateUrl: 'views/helpSupport.html',
+            controller: 'HelpSupportCtrl',
+            data: {
+                displayName: 'Help & Support',
+                subCaption: '',
+                classIcon: 'myprofile-header-icon',
+                breadcrumName: 'Help & Support'
+            },
+            ncyBreadcrumb: {
+                label: 'Help & Support'
+            }
+        })        
         .state('reports', {
             url: '/reports',
             abstract: true,
@@ -362,7 +390,25 @@ angular
                 label: '{{displayNameb}}'
             }
         })
-
+        .state('reports.viewAll', {
+            url: '/{levelId:[0-9]{1,10}}/viewAll',
+            views: {'report': {
+                    templateUrl: 'views/reports.list.level.html',
+                    controller: function ($scope, $stateParams) {
+                        $scope.access.subGroupItemsViewAll($stateParams.levelId);
+                    }
+                }
+            },
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: '{{displayNameb}}'
+            },
+            ncyBreadcrumb: {
+                label: '{{displayNameb}}'
+            }
+        })
         .state('reports.details.report', {
             url: '/{reportId:[0-9]{1,10}}',
             abstract: true,
@@ -396,7 +442,6 @@ angular
             ncyBreadcrumb: {
                 label: '{{reportName}}'
             }
-
         })
         .state('reports.details.report.about', {
             url: '/about',
