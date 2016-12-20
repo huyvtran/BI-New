@@ -10,7 +10,7 @@ angular.module('adminPageApp').controller('BICommunicationCtrl',function($scope,
     
     function columnDefs(){
         return[
-            {name: 'Options',  width:'10%', cellTemplate: 'views/adminDropdown.html',enableSorting: false},
+            {name: 'Action',  width:'10%', cellTemplate: 'views/adminDropdown.html',enableSorting: false},
             {name: 'communicationId',displayName: 'Communications ID', width:'12%', cellTooltip:true}, 
             {name: 'groupName',displayName: 'Persona', width:'12%', cellTooltip:true},
             {name: 'link',displayName: 'Op_Dashboard_Page', width:'24%', cellTooltip:true},
@@ -351,9 +351,9 @@ angular.module('adminPageApp').controller('BICommunicationModalInstanceCtrl',fun
         $scope.items = items.data;
         
         angular.forEach($scope.groups, function(group) {
-           if(group.groupId === items.data.groupId) {
-               $scope.items.groupName = group.groupName;
-           } 
+            if(group.groupId === items.data.groupId) {
+                $scope.items.groupName = group.groupName;
+            } 
         });
     }
 

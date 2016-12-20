@@ -11,7 +11,7 @@ angular.module('adminPageApp').controller('UsersCtrl', function ($scope, $q, $ui
     
     function columnDefs() {
         return [
-            {name: 'Options', width: '10%', cellTemplate: 'views/adminDropdown.html'},
+            {name: 'Action', width: '10%', cellTemplate: 'views/adminDropdown.html'},
             {name: 'fullName', displayName: 'Display Name', width: '20%', cellToolTip: true/*, cellTemplate:"<span>{{row.entity.lastName}}<span ng-show='row.entity.lastName && row.entity.firstName'>,</span> {{row.entity.firstName}}</span>"*/},
             {name: 'userName', displayName: 'Username', width: '25%', cellToolTip: true},
             {name: 'role', displayName: 'Role', width: '15%', cellToolTip: true},

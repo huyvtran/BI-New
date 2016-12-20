@@ -16,6 +16,8 @@ angular.module('myBiApp')
     $scope.mainState.$current.data.displayName = '';
     $scope.reportAccessData = {};
     $scope.isCollapsed = false;
+    $scope.pageBreadCrumb = '';
+    $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
     ($state.current.name !== 'reports.details.report.report' && $state.current.name !== 'reports.details.report.about') ? getBreadCrumbLevel($stateParams.reportId) : '';
     
     if ($stateParams.levelId && $stateParams.reportId) {
@@ -134,7 +136,7 @@ angular.module('myBiApp')
                             var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                         } else {
                             $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
-                            var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId);
+                            var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId, $rootScope.sourceReportId);
                         }
                     } else {
                         $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
@@ -200,7 +202,7 @@ angular.module('myBiApp')
                                 $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
                                 var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
                             }
-                            
+
                             $http.get(url).then(function (resp) {
                                 if(resp.data) {
                                     if(resp.data.length > 0) {
@@ -320,7 +322,6 @@ angular.module('myBiApp')
     
     function getBreadCrumbLevel(reportId) {
         if($rootScope.reportName && $rootScope.levelId) {
-//            console.log($localStorage.treeLevelId);
             if($window.innerWidth < 768) {
                 if($rootScope.reportName.length > 45) {
                     $scope.pageBreadCrumb = $rootScope.reportName.substr(0, 44)+'...';
@@ -363,7 +364,6 @@ angular.module('myBiApp')
                 }
             });
         } else {
-//            console.log($localStorage.treeLevelId);
             userDetailsService.userPromise.then(function (response) {
                 var urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, reportId);
                 $http.get(urlReports).then(function (resp) {

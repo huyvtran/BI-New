@@ -50,7 +50,7 @@
         }
     </style>
 </head>
-<body ng-app="myBiApp" ng-controller="ParentCtrl" ng-class="{'mini-navbar':toggleLeft, 'no-navbar':noNavBar}">
+<body ng-app="myBiApp" ng-controller="ParentCtrl" ng-class="{'mini-navbar':isMenuCollapsed && !isMobileDevice, 'no-navbar':noNavBar}" ng-cloak>
     <!--[if lt IE 7]>
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -61,7 +61,7 @@
         <div class="container">
             <div class="row visible-md visible-lg visible-sm hidden-xs v-offset-bottom-15px">
                 <div class="navbar-brand col-xl-6 col-md-6 col-lg-6 col-sm-6">
-                    <a class="navbar-minimalize" ng-click="toggleLeft = !toggleLeft" data-toggle="tooltip" data-placement="bottom" tooltip title="Main Menu">
+                    <a class="navbar-minimalize" ng-click="toggleLeftMenu()" data-toggle="tooltip" data-placement="bottom" tooltip title="Main Menu">
                         <img class="menu-hamburger" src="images/menu.png"/>
                     </a>
                     <a href="#/" class="logo-container">
@@ -88,38 +88,71 @@
                                         <span class="contact">
                                             <h4>INSIGHTS</h4>
                                             <p><a target="_blank" href="/doc/Insights%20User%20Documentation.pdf">About</a></p>
-                                            <p><a href="mailto:insights.portal.help@emc.com">Contact</a></p>
+                                            <p><a href="mailto:{{userObject.userinfo.group[0].contactEmail}}">Contact</a></p>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="notif-icon-container">
-                                <div dropdown dropdown-append-to-body class="help-icon">
+                                <div class="dropdown dropdown-append-to-body help-icon">
                                     <a class="notfy-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <!--<img src="images/help.png" />-->
-                                        <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
-                                        <span ng-show="notficationObj.newNotificationCount > 0" class="notfy-count">{{notficationObj.newNotificationCount}}</span>
+                                        <img src="images/notification.png" />
+                                        <span ng-show="notficationObj.newNotificationCount > 0" class="notfy-count" ng-bind-template="{{notficationObj.newNotificationCount}}"></span>
                                     </a>
                                     <div class="dropdown-menu animated fadeInRight notfy-wrapper" role="menu" ng-click="$event.stopPropagation()">
                                         <div class="notfy-title">
-                                            <h4>{{notficationObj.newNotificationCount}} {{(notficationObj.newNotificationCount > 0) ? 'Notifications': 'Notificiation'}}</h4>
+                                            <h4>{{notficationObj.newNotificationCount}} {{(notficationObj.newNotificationCount === 0) ? 'New Notification': ((notficationObj.newNotificationCount > 1)? 'New Notifications' : 'New Notification')}}</h4>
+                                            <span class="mark-delete-all" ng-hide="notficationObj.userNotificationList.length === 0">
+                                                <a ng-click="readAllNotification()" title="Mark all as read" ng-class="{'disabled link-disable' : notficationObj.newNotificationCount === 0}"> Mark all as read</a>
+                                                <a ng-click="dismissAllNotification()" title="Clear All" class="p-left"> Clear all</a>
+                                            </span>
                                         </div>
-                                        <div ng-scrollbars ng-scrollbars-config="notfyConfig" class="hidden-xs hidden-sm">
-                                            <div class="notfy-container" ng-repeat="notification in notficationObj.userNotificationList">
-                                                <div class="notfy-header">
-                                                    <b>{{notification.header}}</b>
-                                                    <span class="notfy-icons">
-                                                        <a ng-click="setReadNotification(notification.assignId)" title="Mark as Read">
-                                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                                        </a>
-                                                        <a ng-click="dismissNotification(notification.assignId)" title="Dismiss">
-                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                        </a>
-                                                    </span>
+                                        <div ng-style="notficationObj.userNotificationList.length === 0 && {'height':0}" class="hidden-xs hidden-sm">
+                                            <div class="notfy-container" ng-repeat="notification in notificationItems" ng-mouseenter="showDismissIcon(true, notification.assignId)" ng-mouseleave="showDismissIcon(false,  notification.assignId)">
+                                                <div class="notfy-typeIcon">
+                                                    <span class="alert-sign" aria-hidden="true" ng-show="notification.notificationType === 'A'"></span>
+                                                    <span class="message-sign" aria-hidden="true" ng-show="notification.notificationType === 'M'"></span>
                                                 </div>
-                                                <p class="notfy-body">{{notification.messageBody}}</p>
+                                                <div class="notfy-body">
+                                                    <div class="notfy-header">
+                                                        <a href="{{notification.moreInfoUrl}}" ng-show="notification.moreInfoUrl" target="_blank"></a>
+                                                        <span class="notfy-single-title pull-left">
+                                                            <a href="{{notification.moreInfoUrl}}" ng-show="notification.moreInfoUrl" target="_blank">{{notification.header}}</a>
+                                                            <span ng-hide="notification.moreInfoUrl">{{notification.header}}</span>
+                                                        </span>
+                                                        <span class="notfy-dismiss pull-right" ng-show="notification.assignId === dismissId">
+                                                            <a ng-click="dismissNotification(notification.assignId)" title="Clear">
+                                                                <span class="notfy-close-icon" aria-hidden="true"></span>
+                                                            </a>
+                                                        </span>
+                                                        <p class="notfy-date-owner">Created by <i><span ng-bind-template="{{notification.owner}}"></span></i> on <span class="notfy-create-date align-left">{{notification.biCreatedDate | date:"mediumDate"}}</span></p>
+                                                    </div>
+                                                    <div class="notfy-message">
+                                                        <p>{{notification.messageBody}}</p>
+                                                        <div class="notfy-icons">
+                                                            <span ng-hide="notification.readDate" class="notfy-read align-right">
+                                                                <a ng-click="setReadNotification(notification.assignId, true)" title="Mark as read">
+                                                                    <button class="mark-as-read" aria-hidden="true" title="Mark as read">&nbsp;</button>
+                                                                </a>
+                                                            </span>
+                                                            <span ng-hide="!notification.readDate" class="notfy-read align-right">
+                                                                <a ng-click="setReadNotification(notification.assignId, false)" title="Mark as unread" ng-show="notification.readDate && notification.assignId === dismissId">
+                                                                    <button class="mark-as-unread" aria-hidden="true" title="Mark as unread">&nbsp;</button>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <ul class="pagination" ng-hide="notficationObj.userNotificationList.length < 4">
+                                                <li ng-class="prevPageDisabled()" class="prev">
+                                                    <a href="#" ng-click="prevPage()">Previous</a>
+                                                </li>
+                                                <li ng-class="nextPageDisabled()" class="next">
+                                                    <a href="#" ng-click="nextPage()">Next</a>
+                                                </li>
+                                            </ul>
+                                        </div>    
                                     </div>    
                                 </div>
                             </div>
@@ -172,12 +205,75 @@
                         <span class="portal-name">INSIGHTS</span>
                     </a>
                 </div>
-                <div class="col-xs-2 glb-search-mob">
+                <div class="col-xs-1 glb-search-mob">
                     <search-report></search-report>
+                </div>
+                <div class="col-xs-1 glb-notification-mob">
+                    <a class="notfy-link" ng-click="openNotfyMobile()" aria-haspopup="true" aria-expanded="false">
+                        <img src="images/notification.png" />
+                        <span ng-show="notficationObj.newNotificationCount > 0" class="notfy-count" ng-bind-template="{{notficationObj.newNotificationCount}}"></span>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
+    <div class="notif-icon-container row" ng-class="userTheme+'-theme-header ' +userTheme+'-notfy'" ng-show="toggleNotfy">
+        <div class="animated fadeInRight notfy-wrapper hidden-md hidden-lg hidden-sm visible-xs">
+            <div class="notfy-title">
+                <h4>{{notficationObj.newNotificationCount}} {{(notficationObj.newNotificationCount === 0) ? 'New Notification': ((notficationObj.newNotificationCount > 1)? 'New Notifications' : 'New Notification')}}</h4>
+                <span class="mark-delete-all" ng-hide="notficationObj.userNotificationList.length === 0">
+                    <a ng-click="readAllNotification()" title="Mark all as read" ng-class="{'disabled link-disable' : notficationObj.newNotificationCount === 0}"> Mark all as read</a>
+                    <a ng-click="dismissAllNotification()" title="Clear All" class="p-left"> Clear all</a>
+                </span>
+            </div>
+            <div ng-style="notficationObj.userNotificationList.length === 0 && {'height':0}" class="hidden-md hidden-lg hidden-sm visible-xs">
+                <div class="notfy-container" ng-repeat="notification in notificationItems" ng-mouseenter="showDismissIcon(true, notification.assignId)" ng-mouseleave="showDismissIcon(false,  notification.assignId)">
+                    <div class="notfy-typeIcon">
+                        <span class="alert-sign" aria-hidden="true" ng-show="notification.notificationType === 'A'"></span>
+                        <span class="message-sign" aria-hidden="true" ng-show="notification.notificationType === 'M'"></span>
+                    </div>
+                    <div class="notfy-body">
+                        <div class="notfy-header">
+                            <a href="{{notification.moreInfoUrl}}" ng-show="notification.moreInfoUrl" target="_blank"></a>
+                            <span class="notfy-single-title pull-left">
+                                <a href="{{notification.moreInfoUrl}}" ng-show="notification.moreInfoUrl" target="_blank">{{notification.header}}</a>
+                                <span ng-hide="notification.moreInfoUrl">{{notification.header}}</span>
+                            </span>
+                            <span class="notfy-dismiss pull-right" ng-show="notification.assignId === dismissId">
+                                <a ng-click="dismissNotification(notification.assignId)" title="Clear">
+                                    <span class="notfy-close-icon" aria-hidden="true"></span>
+                                </a>
+                            </span>
+                            <p class="notfy-date-owner">Created by <i><span ng-bind-template="{{notification.owner}}"></span></i> on <span class="notfy-create-date align-left">{{notification.biCreatedDate | date:"mediumDate"}}</span></p>
+                        </div>
+                        <div class="notfy-message">
+                            <p>{{notification.messageBody}}</p>
+                            <div class="notfy-icons">
+                                <span ng-hide="notification.readDate" class="notfy-read align-right">
+                                    <a ng-click="setReadNotification(notification.assignId, true)" title="Mark as read">
+                                        <button class="mark-as-read" aria-hidden="true" title="Mark as read">&nbsp;</button>
+                                    </a>
+                                </span>
+                                <span ng-hide="!notification.readDate" class="notfy-read align-right">
+                                    <a ng-click="setReadNotification(notification.assignId, false)" title="Mark as unread" ng-show="notification.readDate && notification.assignId === dismissId">
+                                        <button class="mark-as-unread" aria-hidden="true" title="Mark as unread">&nbsp;</button>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="pagination" ng-hide="notficationObj.userNotificationList.length < 4">
+                    <li ng-class="prevPageDisabled()" class="prev">
+                        <a href="#" ng-click="prevPage()">Previous</a>
+                    </li>
+                    <li ng-class="nextPageDisabled()" class="next">
+                        <a href="#" ng-click="nextPage()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>    
+    </div>
     <!-- Header Ends -->
     
     <!-- Pace Done Starts-->
@@ -194,19 +290,6 @@
                                 <span ng-bind="" class="in-mobile-userName" title="{{userObject.userFullName}}">{{userObject.userFullName}}</span>
                             </span>
                         </a>
-<!--                        <span ng-show="userObject.userinfo.role.toLowerCase() === 'admin' || userObject.userinfo.role.toLowerCase() === 'buadmin'">
-                            <a class="user-icon-nav-header" href="javascript:void(0)">
-                                <div class="col-xs-4 leftpane-profileimage" style="">
-                                    <img alt="image" class="img-circle profile-small" ng-src="{{userPicUrl}}" err-src="images/charts/default_user.png">
-                                    <span ng-bind="" class="in-mobile-userName" title="{{userObject.userFullName}}">{{userObject.userFullName}}</span>
-                                </div>
-                            </a>
-                            <span class="persona-block" ng-if="personaList">
-                                <label>Persona:</label>
-                                <select ng-show="userObject.userinfo.isMultiplePersona" ng-model="defaultPersona" class="persona-dropDown" ng-options="group.groupId as group.groupName for group in personaList" ng-change="setNewPersona()"></select>
-                                <span ng-hide="userObject.userinfo.isMultiplePersona" ng-repeat="groups in userObject.userinfo.group">{{groups.groupName}}</span>
-                            </span>
-                        </span>    -->
                         <button class="color-white close-icon sidebar-close-button" ng-click="hideNavBar();"></button>
                     </span>
                     <ul class="nav metismenu" id="side-menu" style="display: block;">
@@ -215,6 +298,7 @@
                                 <div class="row">
                                     <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-homeIcon.png"/>
+                                        <p class="collapsed-label hom" ng-show="isMenuCollapsed && !isMobileDevice">Home</p>
                                     </div>
                                     <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Home</label>
@@ -227,6 +311,7 @@
                                 <div class="row">
                                     <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-reportDashboardIcon_leftNavigation.png"/>
+                                        <p class="collapsed-label opd" ng-show="isMenuCollapsed && !isMobileDevice">Operational Dashboard</p>
                                     </div>
                                     <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Operational Dashboard</label>
@@ -239,6 +324,7 @@
                                 <div class="row">
                                     <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-iconReports.png"/>
+                                        <p class="collapsed-label avr" ng-show="isMenuCollapsed && !isMobileDevice">Available Reports</p>
                                     </div>
                                     <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">Available Reports</label>
@@ -250,7 +336,7 @@
                                  data-tree-model="biGroup.biGroups"
                                  data-node-id="levelId"
                                  data-node-label="levelDesc"
-                                 data-node-children="children" ng-show="!toggleLeft">
+                                 data-node-children="children" ng-hide="isMenuCollapsed && !isMobileDevice">
                             </div>
                         </li>
                         <li ui-sref-active="active" class="favorites" title="My Favorites">
@@ -258,6 +344,7 @@
                                 <div class="row">
                                     <div class="col-md-3 col-lg-3 col-sm-3 col-xl-3 col-xs-2">
                                         <img src="images/default-iconFavorites.png"/>
+                                        <p class="collapsed-label myf" ng-show="isMenuCollapsed && !isMobileDevice">Favorites</p>
                                     </div>
                                     <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-xs-10">
                                         <label class="nav-label">My Favorites</label>
@@ -497,6 +584,7 @@
     <script src="scripts/services/userdetailsservice.js"></script>
     <script src="scripts/controllers/profile.js"></script>
     <script src="scripts/controllers/helpSupport.js"></script>
+    <script src="scripts/controllers/notification.js"></script>
     <script src="scripts/module/treeview.js"></script>
     <script src="scripts/services/useralertservice.js"></script>
     <script src="scripts/directives/loadtiles.js"></script>

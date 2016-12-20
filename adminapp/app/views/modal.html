@@ -12,7 +12,7 @@
                 {{(exFlag) ? 'Report Details' : 'Update Report'}}
             </a>
         </li>
-        <li ng-class="{'active':!updatefields}">
+        <li ng-class="{'active':!updatefields}"  ng-hide="!items.id">
             <a href="javascript:void(0);" ng-click="tabchange(false)">
                 Report Visibility
             </a>
@@ -23,19 +23,20 @@
 <!-- Code for Tab1-->
 <div class="modal-body">
     <span class="text-success">{{saveText}}</span>
+    <span class="text-danger" ng-show="!enableError">{{enableErrorMessage}}</span>
     <form name="reportForm" ng-show="updatefields" class="report-modal-form">
         <div class="row">
             <div style="" class="col-xs-6">
                 <div class="row"  >
                     <div class="col-xs-4"> Created Date</div>
-                    <div class="col-xs-8"> {{items.createdDate}} </div>
+                    <div class="col-xs-8">{{convertStringDate(items.createdDate) | date:'medium'}}</div>
                 </div>
             </div>
 
             <div class="col-xs-6" >
                 <div class="row"  >
                     <div class="col-xs-4"> Updated Date </div>
-                    <div class="col-xs-6">{{items.updatedDate}} </div>
+                    <div class="col-xs-6">{{convertStringDate(items.updatedDate) | date:'medium'}}</div>
                 </div>
             </div>
         </div>
@@ -197,7 +198,6 @@
         <!--End of row9-->   
         <div class="row">
             <div class="col-md-6">
-
                 <div class="row"  >
                     <div class="col-xs-4"> Link Hover Information</div>
                     <div class="col-xs-8">
@@ -244,19 +244,33 @@
         <hr />
 
         <div class="row">
-            <div class="col-xs-3">Set Level</div>
-            <div class="col-xs-3">Select Persona</div>
+            <div class="col-xs-2">Persona</div>
+            <div class="col-xs-2">Parent Level</div>
+            <div class="col-xs-2">Child Level</div>
+            <div class="col-xs-2">Sub-Child Level</div>
         </div>
         <hr />
 
-        <div class="row" ng-repeat="levelGroupMap in levelGroupMaps">
-            <div class="col-xs-3" >
-                <select ng-model="levelGroupMap.selectedlevel"  ng-options="level.levelId as level.levelDesc  for level in levelGroup.allLevels" ></select>     
+        <div class="row level-select" ng-repeat="levelGroupMap in levelGroupMaps">
+            <div class="col-xs-2">
+                <select ng-model="levelGroupMap.selectedGroup" ng-options="group.groupId as group.groupName for group in levelGroup.allGroups" ng-change="populateParentLevel(levelGroupMap.selectedGroup, $index, 'parentLevelList');" required></select>     
             </div>
-            <div class="col-xs-3" >
-                <select ng-model="levelGroupMap.selectedgroup"  ng-options="group.groupId as group.groupName for group in levelGroup.allGroups" ></select>     
+            <div class="col-xs-2">
+                <select ng-model="levelGroupMap.selectedParentLevel" ng-options="parentLevel.levelId as parentLevel.levelDesc for parentLevel in levelGroupMap.parentLevelList" ng-change="populateChildLevel(levelGroupMap.selectedParentLevel, $index, 'childLevelList');" required>
+                    <option value="">Select</option>
+                </select> 
             </div>
-            <div class="col-xs-6" style="margin-bottom: 10px">
+            <div class="col-xs-2">
+                <select ng-model="levelGroupMap.selectedChildLevel" ng-show="levelGroupMap.childLevelList.length > 0" ng-options="childLevel.levelId as childLevel.levelDesc for childLevel in levelGroupMap.childLevelList" ng-change="populateChildLevel(levelGroupMap.selectedChildLevel, $index, 'subChildLevelList');">
+                    <option value="">Select</option>
+                </select>     
+            </div>
+            <div class="col-xs-2">
+                <select ng-model="levelGroupMap.selectedSubChildLevel" ng-show="levelGroupMap.subChildLevelList.length > 0" ng-options="subChildLevel.levelId as subChildLevel.levelDesc for subChildLevel in levelGroupMap.subChildLevelList" ng-change="populateSubChildLevel(levelGroupMap.selectedSubChildLevel, $index, 'lastList');">
+                    <option value="">Select</option>
+                </select>     
+            </div>
+            <div class="col-xs-3" style="margin-bottom: 10px">
                 <button class="btn" type="button" ng-click="addLevelGroup()">+Add</button>
                 <button class="btn" type="button" ng-click="removeLevelGroup($index)">-Remove</button>
             </div>

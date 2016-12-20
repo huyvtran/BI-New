@@ -1,130 +1,555 @@
 /*
  *   Theme specific css changes
  */
-/* line 5, ../../app/styles/theme-default.scss */
+@media (min-width: 300px) and (max-width: 767px) {
+  /* line 6, ../../app/styles/theme-default.scss */
+  .black-notfy {
+    background: #999;
+  }
+
+  /* line 9, ../../app/styles/theme-default.scss */
+  .default-notfy {
+    background: #DDD;
+  }
+
+  /* line 13, ../../app/styles/theme-default.scss */
+  .default-theme-header .notfy-wrapper, .black-theme-header .notfy-wrapper {
+    color: #999;
+    padding: 0 !important;
+    margin: 0;
+    outline: none;
+    width: 100% !important;
+  }
+  /* line 19, ../../app/styles/theme-default.scss */
+  .default-theme-header .notfy-wrapper .notfy-body, .black-theme-header .notfy-wrapper .notfy-body {
+    width: 91% !important;
+  }
+  /* line 21, ../../app/styles/theme-default.scss */
+  .default-theme-header .notfy-wrapper .notfy-body .notfy-close-icon, .black-theme-header .notfy-wrapper .notfy-body .notfy-close-icon {
+    border: 1px solid transparent;
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: middle;
+    outline: 0;
+    cursor: pointer;
+    background: url(/images/cancel-grey.png) 0% 0%/75% no-repeat;
+    height: 17px;
+    width: 19px;
+  }
+}
+/* line 37, ../../app/styles/theme-default.scss */
 .default-theme-header .tooltip.top .tooltip-arrow {
   border-top-color: #000;
 }
-/* line 8, ../../app/styles/theme-default.scss */
+/* line 40, ../../app/styles/theme-default.scss */
 .default-theme-header .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #000;
 }
-/* line 11, ../../app/styles/theme-default.scss */
+/* line 43, ../../app/styles/theme-default.scss */
 .default-theme-header .tooltip.right .tooltip-arrow {
   border-right-color: #000;
 }
-/* line 14, ../../app/styles/theme-default.scss */
+/* line 46, ../../app/styles/theme-default.scss */
 .default-theme-header .tooltip.left .tooltip-arrow {
   border-left-color: #000;
 }
-/* line 17, ../../app/styles/theme-default.scss */
+/* line 49, ../../app/styles/theme-default.scss */
 .default-theme-header .tooltip-inner {
   background-color: #000;
   color: #FFF;
 }
+/* line 53, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-count {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 11px;
+  color: #fff;
+  line-height: 16px;
+  text-align: center;
+  background: #ea0808;
+  padding: 3px 3px 2px 3px;
+  position: absolute;
+  right: 10%;
+  top: 12%;
+}
+/* line 67, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper {
+  color: #999;
+  padding: 0 0 3px 0 !important;
+  left: auto !important;
+  width: 393px;
+  margin: 0;
+  right: 0%;
+  background: #DDD;
+  outline: none;
+}
+/* line 76, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-title {
+  background: #FFF;
+  color: #333;
+  padding: 0;
+  margin: 5px 9px 2px 10px;
+  height: 25px;
+}
+/* line 82, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-title h4 {
+  padding: 7px 0px 5px 5px;
+  margin-top: 0;
+  color: #333;
+  font-size: 13px;
+  display: inline-table;
+}
+/* line 89, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-title .mark-delete-all {
+  float: right;
+  font-size: 13px;
+  padding: 5px 5px 0px 0px;
+}
+/* line 93, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-title .mark-delete-all a {
+  padding-right: 4px;
+}
+/* line 98, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-container {
+  margin: 5px 10px;
+  background: #FFF;
+  font-size: 13px;
+  width: 95%;
+  float: left;
+}
+/* line 105, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper div.notfy-container:last-child {
+  margin-bottom: 5px;
+}
+/* line 108, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-typeIcon {
+  float: left;
+  font-size: 14px;
+  display: table;
+  width: 8%;
+  padding: 8px 0px 0px 8px;
+}
+/* line 114, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-typeIcon .message-sign {
+  background: url(/images/email-db.png);
+  width: 22px;
+  height: 15px;
+  display: inline-table;
+  background-size: 80%;
+  float: left;
+  background-repeat: no-repeat;
+}
+/* line 123, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-typeIcon .alert-sign {
+  background: url(/images/alert-db.png);
+  width: 22px;
+  height: 15px;
+  display: inline-table;
+  background-size: 80%;
+  float: left;
+  background-repeat: no-repeat;
+}
+/* line 133, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body {
+  width: 92%;
+  display: table;
+  padding: 4px 0px 0px 2px;
+}
+/* line 137, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-header {
+  width: 100%;
+  display: table;
+}
+/* line 140, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-header p.notfy-date-owner {
+  display: table;
+  clear: both;
+  font-size: 12px;
+}
+/* line 146, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-single-title {
+  font-weight: bold;
+}
+/* line 150, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-message p {
+  word-break: break-word;
+}
+/* line 154, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-icons {
+  float: right;
+  padding: 0px;
+  width: 15px;
+  height: 17px;
+  color: #cccccc;
+  margin-right: 3px;
+}
+/* line 161, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-icons .mark-as-read {
+  background: #0000FF;
+  outline: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+}
+/* line 170, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-icons .mark-as-unread {
+  background: #808080;
+  outline: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+}
+/* line 180, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .notfy-body .notfy-close-icon {
+  border: 1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+  background: url(/images/cancel-grey.png) 0% 0%/75% no-repeat;
+  height: 17px;
+  width: 19px;
+}
+/* line 192, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .pagination {
+  background: #FFF;
+  color: #333;
+  padding: 0;
+  margin: 3px 9px 0px 10px;
+  height: 25px;
+  width: 95%;
+  border-radius: 0;
+}
+/* line 200, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .pagination li a {
+  border: none;
+  color: #2c6790;
+}
+/* line 204, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .pagination li:last-child {
+  float: right;
+}
+/* line 207, ../../app/styles/theme-default.scss */
+.default-theme-header .notfy-wrapper .pagination a, .default-theme-header .notfy-wrapper .pagination a:hover, .default-theme-header .notfy-wrapper .pagination a:focus {
+  background: none;
+}
 
-/* line 23, ../../app/styles/theme-default.scss */
+/* line 214, ../../app/styles/theme-default.scss */
 .black-theme-header .tooltip.top .tooltip-arrow {
   border-top-color: #FFF;
 }
-/* line 26, ../../app/styles/theme-default.scss */
+/* line 217, ../../app/styles/theme-default.scss */
 .black-theme-header .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #FFF;
 }
-/* line 29, ../../app/styles/theme-default.scss */
+/* line 220, ../../app/styles/theme-default.scss */
 .black-theme-header .tooltip.right .tooltip-arrow {
   border-right-color: #FFF;
 }
-/* line 32, ../../app/styles/theme-default.scss */
+/* line 223, ../../app/styles/theme-default.scss */
 .black-theme-header .tooltip.left .tooltip-arrow {
   border-left-color: #FFF;
 }
-/* line 35, ../../app/styles/theme-default.scss */
+/* line 226, ../../app/styles/theme-default.scss */
 .black-theme-header .tooltip-inner {
   background-color: #FFF;
   color: #000;
 }
+/* line 230, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-count {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 11px;
+  color: #fff;
+  line-height: 16px;
+  text-align: center;
+  background: #ea0808;
+  padding: 3px 3px 2px 3px;
+  position: absolute;
+  right: 10%;
+  top: 12%;
+}
+/* line 244, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper {
+  color: #FFF;
+  padding: 0 0 3px 0 !important;
+  left: auto !important;
+  width: 393px;
+  margin: 0;
+  right: 0%;
+  background: #999;
+  outline: none;
+}
+/* line 253, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-title {
+  background: #333;
+  color: #FFF;
+  padding: 0;
+  margin: 5px 9px 2px 10px;
+  height: 25px;
+}
+/* line 259, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-title h4 {
+  padding: 7px 0px 5px 5px;
+  margin-top: 0;
+  color: #FFF;
+  font-size: 13px;
+  display: inline-table;
+}
+/* line 266, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-title .mark-delete-all {
+  float: right;
+  font-size: 13px;
+  padding: 5px 5px 0px 0px;
+}
+/* line 270, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-title .mark-delete-all a {
+  padding-right: 4px;
+}
+/* line 275, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-container {
+  margin: 5px 10px;
+  background: #333;
+  font-size: 13px;
+  width: 95%;
+  float: left;
+}
+/* line 282, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper div.notfy-container:last-child {
+  margin-bottom: 5px;
+}
+/* line 285, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-typeIcon {
+  float: left;
+  font-size: 14px;
+  display: table;
+  width: 8%;
+  padding: 8px 0px 0px 8px;
+}
+/* line 291, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-typeIcon .message-sign {
+  background: url(/images/email.png);
+  width: 22px;
+  height: 15px;
+  display: inline-table;
+  background-size: 80%;
+  float: left;
+  background-repeat: no-repeat;
+}
+/* line 300, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-typeIcon .alert-sign {
+  background: url(/images/alert.png);
+  width: 22px;
+  height: 15px;
+  display: inline-table;
+  background-size: 80%;
+  float: left;
+  background-repeat: no-repeat;
+}
+/* line 310, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body {
+  width: 92%;
+  display: table;
+  padding: 4px 0px 0px 2px;
+}
+/* line 314, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-header {
+  width: 100%;
+  display: table;
+}
+/* line 317, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-header p.notfy-date-owner {
+  display: table;
+  clear: both;
+  font-size: 12px;
+}
+/* line 323, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-single-title {
+  font-weight: bold;
+}
+/* line 327, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-message p {
+  word-break: break-word;
+}
+/* line 331, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-icons {
+  float: right;
+  padding: 0px;
+  width: 15px;
+  height: 17px;
+  color: #cccccc;
+  margin-right: 3px;
+}
+/* line 338, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-icons .mark-as-read {
+  background: #0000FF;
+  outline: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+}
+/* line 347, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-icons .mark-as-unread {
+  background: #808080;
+  outline: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+}
+/* line 357, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .notfy-body .notfy-close-icon {
+  border: 1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+  background: url(/images/cancel.png) 0% 0%/75% no-repeat;
+  height: 17px;
+  width: 19px;
+}
+/* line 369, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .pagination {
+  background: #333;
+  color: #FFF;
+  padding: 0;
+  margin: 3px 9px 0px 10px;
+  height: 25px;
+  width: 95%;
+  border-radius: 0;
+}
+/* line 377, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .pagination li a {
+  border: none;
+  color: #2c6790;
+}
+/* line 381, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .pagination li:last-child {
+  float: right;
+}
+/* line 384, ../../app/styles/theme-default.scss */
+.black-theme-header .notfy-wrapper .pagination a, .black-theme-header .notfy-wrapper .pagination a:hover, .black-theme-header .notfy-wrapper .pagination a:focus {
+  background: none;
+}
 
-/* line 46, ../../app/styles/theme-default.scss */
+/* line 394, ../../app/styles/theme-default.scss */
 .white-bg {
   background-color: #ffffff;
   padding-top: 0px;
 }
-/* line 51, ../../app/styles/theme-default.scss */
+/* line 399, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #F5F5F5;
 }
-/* line 53, ../../app/styles/theme-default.scss */
+/* line 401, ../../app/styles/theme-default.scss */
 .white-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background: #F5F5F5;
 }
-/* line 59, ../../app/styles/theme-default.scss */
+/* line 407, ../../app/styles/theme-default.scss */
 .white-bg hr {
   border-top: 1px solid #4e5052;
 }
 
-/* line 64, ../../app/styles/theme-default.scss */
+/* line 412, ../../app/styles/theme-default.scss */
 .default-bg {
   background-color: #EAEAEA;
   padding-top: 0px;
   /*color: #FFF;*/
 }
-/* line 68, ../../app/styles/theme-default.scss */
+/* line 416, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .reports-box .wrap-reportname {
   background: #FFF;
 }
-/* line 72, ../../app/styles/theme-default.scss */
+/* line 420, ../../app/styles/theme-default.scss */
 .default-bg .report-tile .favorite-button {
   background: url(../images/icon-favourites-stroke-black.png);
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 75, ../../app/styles/theme-default.scss */
+/* line 425, ../../app/styles/theme-default.scss */
 .default-bg .report-tile .favorite-button.favorite-selected {
   background: url(../images/icon-favourite-selected.png);
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 80, ../../app/styles/theme-default.scss */
+/* line 432, ../../app/styles/theme-default.scss */
 .default-bg .report-tile .open-exteranl {
   background-image: url("../images/icon-opennewtab-black.png");
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 85, ../../app/styles/theme-default.scss */
+/* line 441, ../../app/styles/theme-default.scss */
+.default-bg .search-article .report-title-detailed-view .favorite-button {
+  background: url(../images/icon-favourites-stroke-black.png);
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 446, ../../app/styles/theme-default.scss */
+.default-bg .search-article .report-title-detailed-view .favorite-button.favorite-selected {
+  background: url(../images/icon-favourite-selected.png);
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 453, ../../app/styles/theme-default.scss */
+.default-bg .search-article .report-title-detailed-view .open-exteranl {
+  background-image: url("../images/icon-opennewtab-black.png");
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 461, ../../app/styles/theme-default.scss */
 .default-bg .panel {
   border: 1px solid #cfcfcf;
   border-bottom: 3px solid #cfcfcf;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-/* line 93, ../../app/styles/theme-default.scss */
+/* line 469, ../../app/styles/theme-default.scss */
 .default-bg .reports-box .image-container {
   background: #FFF;
 }
-/* line 98, ../../app/styles/theme-default.scss */
+/* line 474, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .panel {
   border: none;
   border-bottom: none;
   border-radius: 0;
   box-shadow: none;
 }
-/* line 104, ../../app/styles/theme-default.scss */
+/* line 480, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .single-tile {
   background: #FFF;
   margin: 1px 0px;
   padding: 3px;
 }
-/* line 110, ../../app/styles/theme-default.scss */
+/* line 486, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #FFF;
 }
-/* line 112, ../../app/styles/theme-default.scss */
+/* line 488, ../../app/styles/theme-default.scss */
 .default-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background: #FFF;
 }
-/* line 118, ../../app/styles/theme-default.scss */
+/* line 494, ../../app/styles/theme-default.scss */
 .default-bg hr {
   border-top: 1px solid #4e5052;
 }
-/* line 121, ../../app/styles/theme-default.scss */
+/* line 497, ../../app/styles/theme-default.scss */
 .default-bg .background-box {
   background: #FFF;
   padding: 10px;
@@ -132,118 +557,118 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-/* line 127, ../../app/styles/theme-default.scss */
+/* line 503, ../../app/styles/theme-default.scss */
 .default-bg .background-box tr {
   border-top: 2px solid #EAEAEA;
   border-bottom: 2px solid #EAEAEA;
 }
-/* line 131, ../../app/styles/theme-default.scss */
+/* line 507, ../../app/styles/theme-default.scss */
 .default-bg .background-box tr:nth-child(even) {
   background: #333;
 }
-/* line 134, ../../app/styles/theme-default.scss */
+/* line 510, ../../app/styles/theme-default.scss */
 .default-bg .background-box tr:nth-child(even) {
   background: #FFF;
 }
-/* line 137, ../../app/styles/theme-default.scss */
+/* line 513, ../../app/styles/theme-default.scss */
 .default-bg .background-box li {
   border-bottom: 2px solid #EAEAEA;
 }
-/* line 140, ../../app/styles/theme-default.scss */
+/* line 516, ../../app/styles/theme-default.scss */
 .default-bg .background-box li:last-child {
   border-bottom: none;
 }
-/* line 143, ../../app/styles/theme-default.scss */
+/* line 519, ../../app/styles/theme-default.scss */
 .default-bg .background-box li:nth-child(even) {
   background-color: #FFF;
 }
-/* line 148, ../../app/styles/theme-default.scss */
+/* line 524, ../../app/styles/theme-default.scss */
 .default-bg .meta-type .glyphicon {
   color: #999;
 }
-/* line 151, ../../app/styles/theme-default.scss */
+/* line 527, ../../app/styles/theme-default.scss */
 .default-bg .meta-type .active {
   /*border:1px solid #999;*/
   color: #2c95dd;
 }
-/* line 155, ../../app/styles/theme-default.scss */
+/* line 531, ../../app/styles/theme-default.scss */
 .default-bg .meta-type span.meta-table-icon {
   color: #999;
 }
-/* line 158, ../../app/styles/theme-default.scss */
+/* line 534, ../../app/styles/theme-default.scss */
 .default-bg .meta-type span.meta-graph-icon {
   color: #999;
 }
-/* line 163, ../../app/styles/theme-default.scss */
+/* line 539, ../../app/styles/theme-default.scss */
 .default-bg .table-data .search-icon {
   color: #887979;
 }
-/* line 166, ../../app/styles/theme-default.scss */
+/* line 542, ../../app/styles/theme-default.scss */
 .default-bg .table-data input, .default-bg .table-data input:hover, .default-bg .table-data input:active {
   color: #000;
   border: 1px solid #9e9c9c;
   outline: none;
 }
-/* line 171, ../../app/styles/theme-default.scss */
+/* line 547, ../../app/styles/theme-default.scss */
 .default-bg .table-data .close-icon {
   color: #000;
 }
-/* line 175, ../../app/styles/theme-default.scss */
+/* line 551, ../../app/styles/theme-default.scss */
 .default-bg .table-data .meta-list tr {
   border-left: 2px solid #f5f5f6;
   border-right: 2px solid #f5f5f6;
 }
-/* line 179, ../../app/styles/theme-default.scss */
+/* line 555, ../../app/styles/theme-default.scss */
 .default-bg .table-data .meta-list th, .default-bg .table-data .meta-list td {
   border-left: none;
   border-right: none;
 }
-/* line 186, ../../app/styles/theme-default.scss */
+/* line 562, ../../app/styles/theme-default.scss */
 .default-bg .graph-container {
   /*border-top: 1px solid lightgrey;*/
 }
-/* line 190, ../../app/styles/theme-default.scss */
+/* line 566, ../../app/styles/theme-default.scss */
 .default-bg .meta-type span.meta-table-icon, .default-bg .meta-type span.meta-graph-icon {
   color: #999;
 }
-/* line 193, ../../app/styles/theme-default.scss */
+/* line 569, ../../app/styles/theme-default.scss */
 .default-bg .meta-type span.meta-table-icon-active, .default-bg .meta-type span.meta-graph-icon-active {
   color: #2c95dd;
 }
-/* line 197, ../../app/styles/theme-default.scss */
+/* line 573, ../../app/styles/theme-default.scss */
 .default-bg #d3d button {
   color: #FFF;
 }
-/* line 200, ../../app/styles/theme-default.scss */
+/* line 576, ../../app/styles/theme-default.scss */
 .default-bg .tooltip.top .tooltip-arrow {
   border-top-color: #000;
 }
-/* line 203, ../../app/styles/theme-default.scss */
+/* line 579, ../../app/styles/theme-default.scss */
 .default-bg .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #000;
 }
-/* line 206, ../../app/styles/theme-default.scss */
+/* line 582, ../../app/styles/theme-default.scss */
 .default-bg .tooltip.right .tooltip-arrow {
   border-right-color: #000;
 }
-/* line 209, ../../app/styles/theme-default.scss */
+/* line 585, ../../app/styles/theme-default.scss */
 .default-bg .tooltip.left .tooltip-arrow {
   border-left-color: #000;
 }
-/* line 212, ../../app/styles/theme-default.scss */
+/* line 588, ../../app/styles/theme-default.scss */
 .default-bg .tooltip-inner {
   background-color: #000;
   color: #FFF;
 }
-/* line 216, ../../app/styles/theme-default.scss */
+/* line 592, ../../app/styles/theme-default.scss */
 .default-bg .detailed-view-icon {
-  background: url(../images/grid-view-dark.png);
+  background: url(../images/detailed-view-dark.png);
   background-repeat: no-repeat;
   width: 20px;
   height: 16px;
   display: table;
 }
-/* line 223, ../../app/styles/theme-default.scss */
+/* line 599, ../../app/styles/theme-default.scss */
 .default-bg .grid-view-icon {
   background: url(../images/grid-view-dark.png);
   background-repeat: no-repeat;
@@ -251,7 +676,7 @@
   height: 16px;
   display: table;
 }
-/* line 230, ../../app/styles/theme-default.scss */
+/* line 606, ../../app/styles/theme-default.scss */
 .default-bg .list-view-icon {
   background: url(../images/list-view-dark.png);
   background-repeat: no-repeat;
@@ -259,81 +684,112 @@
   height: 16px;
   display: table;
 }
-/* line 237, ../../app/styles/theme-default.scss */
+/* line 613, ../../app/styles/theme-default.scss */
 .default-bg .report-collapse-icon {
   background: url(/images/arrow_close_report.png);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center;
 }
-/* line 243, ../../app/styles/theme-default.scss */
+/* line 619, ../../app/styles/theme-default.scss */
 .default-bg .report-expand-icon {
   background: url(/images/arrow_open_report.png);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center;
 }
-/* line 249, ../../app/styles/theme-default.scss */
+/* line 625, ../../app/styles/theme-default.scss */
 .default-bg .report-sort-arrow-down {
   background: url(/images/move-down.png);
   background-repeat: no-repeat;
   background-size: 90%;
 }
-/* line 254, ../../app/styles/theme-default.scss */
+/* line 630, ../../app/styles/theme-default.scss */
 .default-bg .report-sort-arrow-up {
   background: url(/images/move-up.png);
   background-repeat: no-repeat;
   background-size: 90%;
 }
+/* line 635, ../../app/styles/theme-default.scss */
+.default-bg .text-muted {
+  color: #888888;
+}
 
-/* line 261, ../../app/styles/theme-default.scss */
+/* line 640, ../../app/styles/theme-default.scss */
 .black-bg {
   background-color: #1F1F1F;
   padding-top: 0px;
   color: #FFF;
 }
-/* line 266, ../../app/styles/theme-default.scss */
+/* line 645, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title .dashed-box {
   background: linear-gradient(0deg, transparent 49%, #f5eeee 50%, transparent 52%) !important;
 }
-/* line 269, ../../app/styles/theme-default.scss */
+/* line 648, ../../app/styles/theme-default.scss */
 .black-bg .ibox-title h5 {
   color: #FFF;
   background: #1F1F1F;
 }
-/* line 274, ../../app/styles/theme-default.scss */
+/* line 653, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid {
   /*        .panel-footer {
               background: #333;
           }*/
 }
-/* line 279, ../../app/styles/theme-default.scss */
+/* line 658, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .favorite-button {
   background: url(../images/icon-favourites-stroke-white.png);
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 282, ../../app/styles/theme-default.scss */
+/* line 663, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .favorite-button.favorite-selected {
   background: url(../images/icon-favourite-selected.png);
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 287, ../../app/styles/theme-default.scss */
+/* line 670, ../../app/styles/theme-default.scss */
 .black-bg .container-fluid .report-tile .open-exteranl {
   background-image: url("../images/icon-opennewtab-white.png");
   outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
-/* line 293, ../../app/styles/theme-default.scss */
+/* line 680, ../../app/styles/theme-default.scss */
+.black-bg .search-article .report-title-detailed-view .favorite-button {
+  background: url(../images/icon-favourites-stroke-white.png);
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 685, ../../app/styles/theme-default.scss */
+.black-bg .search-article .report-title-detailed-view .favorite-button.favorite-selected {
+  background: url(../images/icon-favourite-selected.png);
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 692, ../../app/styles/theme-default.scss */
+.black-bg .search-article .report-title-detailed-view .open-exteranl {
+  background-image: url("../images/icon-opennewtab-white.png");
+  outline: none;
+  background-size: 75%;
+  background-repeat: no-repeat;
+}
+/* line 700, ../../app/styles/theme-default.scss */
 .black-bg .panel {
   border: 1px solid #1F1F1F;
   border-bottom: 3px solid #1F1F1F;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-/* line 301, ../../app/styles/theme-default.scss */
+/* line 708, ../../app/styles/theme-default.scss */
 .black-bg .reports-box .image-container {
   background: #333;
 }
-/* line 305, ../../app/styles/theme-default.scss */
+/* line 712, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view {
   /*        .wrap-reportname {
               background: #333;
@@ -342,7 +798,7 @@
               padding-bottom: 6px;
           }*/
 }
-/* line 306, ../../app/styles/theme-default.scss */
+/* line 713, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .panel {
   border: none;
   border-bottom: none;
@@ -350,45 +806,45 @@
   box-shadow: none;
   background: #333;
 }
-/* line 313, ../../app/styles/theme-default.scss */
+/* line 720, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .single-tile {
   background: #333;
   margin: 1px 0px;
   padding: 3px;
 }
-/* line 319, ../../app/styles/theme-default.scss */
+/* line 726, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) {
   background-color: #333;
 }
-/* line 321, ../../app/styles/theme-default.scss */
+/* line 728, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .report-tile:nth-child(even) .wrap-reportname {
   background-color: #333;
 }
-/* line 326, ../../app/styles/theme-default.scss */
+/* line 733, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .reports-box .wrap-reportname {
   background: #333;
 }
-/* line 329, ../../app/styles/theme-default.scss */
+/* line 736, ../../app/styles/theme-default.scss */
 .black-bg .tiles-list-view .panel-footer {
   background: #333;
 }
-/* line 339, ../../app/styles/theme-default.scss */
+/* line 746, ../../app/styles/theme-default.scss */
 .black-bg .list-unstyled li:nth-child(even) {
   background-color: #333333;
 }
-/* line 342, ../../app/styles/theme-default.scss */
+/* line 749, ../../app/styles/theme-default.scss */
 .black-bg .report-container tr:nth-child(even) {
   background: #333333;
 }
-/* line 345, ../../app/styles/theme-default.scss */
+/* line 752, ../../app/styles/theme-default.scss */
 .black-bg .table-hover > tbody > tr:hover {
   /* background-color: #E8E8E8; */
 }
-/* line 348, ../../app/styles/theme-default.scss */
+/* line 755, ../../app/styles/theme-default.scss */
 .black-bg hr {
   border-top: 1px solid #eeeeee;
 }
-/* line 351, ../../app/styles/theme-default.scss */
+/* line 758, ../../app/styles/theme-default.scss */
 .black-bg .background-box {
   background: #333;
   padding: 10px;
@@ -396,132 +852,132 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-/* line 357, ../../app/styles/theme-default.scss */
+/* line 764, ../../app/styles/theme-default.scss */
 .black-bg .background-box tr {
   border-top: 2px solid #1F1F1F;
   border-bottom: 2px solid #1F1F1F;
 }
-/* line 361, ../../app/styles/theme-default.scss */
+/* line 768, ../../app/styles/theme-default.scss */
 .black-bg .background-box tr:nth-child(even) {
   background: #333;
 }
-/* line 364, ../../app/styles/theme-default.scss */
+/* line 771, ../../app/styles/theme-default.scss */
 .black-bg .background-box li {
   border-bottom: 2px solid #1F1F1F;
 }
-/* line 367, ../../app/styles/theme-default.scss */
+/* line 774, ../../app/styles/theme-default.scss */
 .black-bg .background-box li:last-child {
   border-bottom: none;
 }
-/* line 370, ../../app/styles/theme-default.scss */
+/* line 777, ../../app/styles/theme-default.scss */
 .black-bg .background-box li:nth-child(even) {
   background-color: #333;
 }
-/* line 374, ../../app/styles/theme-default.scss */
+/* line 781, ../../app/styles/theme-default.scss */
 .black-bg .btn {
   color: #FFF;
 }
-/* line 377, ../../app/styles/theme-default.scss */
+/* line 784, ../../app/styles/theme-default.scss */
 .black-bg .btn.bordered {
   border: 1px solid #FFF;
 }
-/* line 380, ../../app/styles/theme-default.scss */
+/* line 787, ../../app/styles/theme-default.scss */
 .black-bg .image-container {
   padding: 0;
 }
-/* line 383, ../../app/styles/theme-default.scss */
+/* line 790, ../../app/styles/theme-default.scss */
 .black-bg .panel-footer {
   background: #333;
 }
-/* line 386, ../../app/styles/theme-default.scss */
+/* line 793, ../../app/styles/theme-default.scss */
 .black-bg .pagination {
   color: #000;
 }
-/* line 391, ../../app/styles/theme-default.scss */
+/* line 798, ../../app/styles/theme-default.scss */
 .black-bg .table-data .meta-list thead > tr > th {
   background-color: #999;
 }
-/* line 394, ../../app/styles/theme-default.scss */
+/* line 801, ../../app/styles/theme-default.scss */
 .black-bg .table-data .meta-list tr {
   border-left: 2px solid #1F1F1F;
   border-right: 2px solid #1F1F1F;
 }
-/* line 398, ../../app/styles/theme-default.scss */
+/* line 805, ../../app/styles/theme-default.scss */
 .black-bg .table-data .meta-list th, .black-bg .table-data .meta-list td {
   border-left: none;
   border-right: none;
 }
-/* line 402, ../../app/styles/theme-default.scss */
+/* line 809, ../../app/styles/theme-default.scss */
 .black-bg .table-data .meta-list tr:nth-of-type(odd) {
   background-color: #6f6e6e;
 }
-/* line 406, ../../app/styles/theme-default.scss */
+/* line 813, ../../app/styles/theme-default.scss */
 .black-bg .table-data .search-icon {
   color: #ded9d0;
 }
-/* line 409, ../../app/styles/theme-default.scss */
+/* line 816, ../../app/styles/theme-default.scss */
 .black-bg .table-data input, .black-bg .table-data input:hover, .black-bg .table-data input:active {
   background-color: #4F4F4F;
   color: #FFF;
   outline: none;
 }
-/* line 414, ../../app/styles/theme-default.scss */
+/* line 821, ../../app/styles/theme-default.scss */
 .black-bg .table-data .close-icon {
   color: #FFF;
   background: url(/images/cancel.png) 0% 0%/65% no-repeat !important;
 }
-/* line 418, ../../app/styles/theme-default.scss */
+/* line 825, ../../app/styles/theme-default.scss */
 .black-bg .table-data .pagination li a {
   background-color: #DDD;
   border-color: #333;
 }
-/* line 424, ../../app/styles/theme-default.scss */
+/* line 831, ../../app/styles/theme-default.scss */
 .black-bg .meta-type span.meta-table-icon, .black-bg .meta-type span.meta-graph-icon {
   color: #FFF;
 }
-/* line 427, ../../app/styles/theme-default.scss */
+/* line 834, ../../app/styles/theme-default.scss */
 .black-bg .meta-type span.meta-table-icon-active, .black-bg .meta-type span.meta-graph-icon-active {
   color: #2c95dd;
 }
-/* line 431, ../../app/styles/theme-default.scss */
+/* line 838, ../../app/styles/theme-default.scss */
 .black-bg #d3d {
   color: #333;
 }
-/* line 434, ../../app/styles/theme-default.scss */
+/* line 841, ../../app/styles/theme-default.scss */
 .black-bg .tooltip.top .tooltip-arrow {
   border-top-color: #FFF;
 }
-/* line 437, ../../app/styles/theme-default.scss */
+/* line 844, ../../app/styles/theme-default.scss */
 .black-bg .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #FFF;
 }
-/* line 440, ../../app/styles/theme-default.scss */
+/* line 847, ../../app/styles/theme-default.scss */
 .black-bg .tooltip.right .tooltip-arrow {
   border-right-color: #FFF;
 }
-/* line 443, ../../app/styles/theme-default.scss */
+/* line 850, ../../app/styles/theme-default.scss */
 .black-bg .tooltip.left .tooltip-arrow {
   border-left-color: #FFF;
 }
-/* line 446, ../../app/styles/theme-default.scss */
+/* line 853, ../../app/styles/theme-default.scss */
 .black-bg .tooltip-inner {
   background-color: #FFF;
   color: #000;
 }
-/* line 450, ../../app/styles/theme-default.scss */
+/* line 857, ../../app/styles/theme-default.scss */
 .black-bg .persona-dropDown {
   color: #FFF;
   background: #333;
 }
-/* line 454, ../../app/styles/theme-default.scss */
+/* line 861, ../../app/styles/theme-default.scss */
 .black-bg .detailed-view-icon {
-  background: url(../images/grid-view-white.png);
+  background: url(../images/detailed-view-white.png);
   background-repeat: no-repeat;
   width: 20px;
   height: 16px;
   display: table;
 }
-/* line 461, ../../app/styles/theme-default.scss */
+/* line 868, ../../app/styles/theme-default.scss */
 .black-bg .grid-view-icon {
   background: url(../images/grid-view-white.png);
   background-repeat: no-repeat;
@@ -529,7 +985,7 @@
   height: 16px;
   display: table;
 }
-/* line 468, ../../app/styles/theme-default.scss */
+/* line 875, ../../app/styles/theme-default.scss */
 .black-bg .list-view-icon {
   background: url(../images/list-view-white.png);
   background-repeat: no-repeat;
@@ -537,95 +993,112 @@
   height: 16px;
   display: table;
 }
-/* line 475, ../../app/styles/theme-default.scss */
+/* line 882, ../../app/styles/theme-default.scss */
 .black-bg .report-collapse-icon {
   background: url(/images/arrow_close_report-white.png);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center;
 }
-/* line 481, ../../app/styles/theme-default.scss */
+/* line 888, ../../app/styles/theme-default.scss */
 .black-bg .report-expand-icon {
   background: url(/images/arrow_open_report-white.png);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center;
 }
-/* line 487, ../../app/styles/theme-default.scss */
+/* line 894, ../../app/styles/theme-default.scss */
 .black-bg .report-sort-arrow-down {
   background: url(/images/move-down-white.png);
   background-repeat: no-repeat;
   background-size: 90%;
 }
-/* line 492, ../../app/styles/theme-default.scss */
+/* line 899, ../../app/styles/theme-default.scss */
 .black-bg .report-sort-arrow-up {
   background: url(/images/move-up-white.png);
   background-repeat: no-repeat;
   background-size: 90%;
 }
+/* line 905, ../../app/styles/theme-default.scss */
+.black-bg .reports-box-search .panel-heading {
+  border: 1px solid #1F1F1F;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* line 911, ../../app/styles/theme-default.scss */
+.black-bg .search-filter-dropdown {
+  background-color: #4F4F4F;
+  color: #FFF;
+  border: none;
+  outline: none;
+}
+/* line 917, ../../app/styles/theme-default.scss */
+.black-bg .text-muted {
+  color: #FFF;
+}
 
-/* line 499, ../../app/styles/theme-default.scss */
+/* line 922, ../../app/styles/theme-default.scss */
 .black-theme #wrapper, .default-theme #wrapper {
   background: #2C2C2C !important;
 }
 
-/* line 503, ../../app/styles/theme-default.scss */
+/* line 926, ../../app/styles/theme-default.scss */
 .black-wrapper, .default-wrapper {
   background: #333 !important;
 }
 
-/* line 507, ../../app/styles/theme-default.scss */
+/* line 930, ../../app/styles/theme-default.scss */
 .white-theme #wrapper {
   background: #E8E8E8 !important;
 }
-/* line 509, ../../app/styles/theme-default.scss */
+/* line 932, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default {
   background: #E8E8E8 !important;
 }
-/* line 511, ../../app/styles/theme-default.scss */
+/* line 934, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li {
   background-color: #E8E8E8 !important;
 }
-/* line 513, ../../app/styles/theme-default.scss */
+/* line 936, ../../app/styles/theme-default.scss */
 .white-theme #wrapper .navbar-default .nav > li a {
   color: #000 !important;
 }
-/* line 518, ../../app/styles/theme-default.scss */
+/* line 941, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li:hover {
   background: #2c6790 !important;
 }
-/* line 522, ../../app/styles/theme-default.scss */
+/* line 945, ../../app/styles/theme-default.scss */
 .white-theme #wrapper #side-menu li.reports:hover .tree-view ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 528, ../../app/styles/theme-default.scss */
+/* line 951, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] {
   background-color: #E8E8E8 !important;
   outline-color: #E8E8E8;
 }
-/* line 531, ../../app/styles/theme-default.scss */
+/* line 954, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul {
   outline-color: #E8E8E8;
 }
-/* line 534, ../../app/styles/theme-default.scss */
+/* line 957, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li:hover {
   background: #E8E8E8 !important;
 }
-/* line 538, ../../app/styles/theme-default.scss */
+/* line 961, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a:hover {
   text-decoration: underline;
 }
-/* line 541, ../../app/styles/theme-default.scss */
+/* line 964, ../../app/styles/theme-default.scss */
 .white-theme .nav > li:hover.active div[data-angular-treeview] ul li a span:hover {
   text-decoration: underline;
 }
 
-/* line 548, ../../app/styles/theme-default.scss */
+/* line 971, ../../app/styles/theme-default.scss */
 .white-portal-name {
   color: #333 !important;
 }
 
-/* line 551, ../../app/styles/theme-default.scss */
+/* line 974, ../../app/styles/theme-default.scss */
 .default-portal-name, .black-portal-name {
   color: #ffffff;
 }

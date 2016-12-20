@@ -61,10 +61,17 @@ angular.module('myBiApp')
         $scope.myLevel = $localStorage.myLevel;
     });
     
-    $scope.$on('myThemeSettings', function(event, theme, personalization){
+    $scope.$on('myThemeSettings', function(event, theme, personalization, isMenuCollapsed){
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
+        $localStorage.isMenuCollapsed = isMenuCollapsed
         $scope.userTheme = $localStorage.userTheme;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
     });
     
     $scope.$on('setSearchDisplayName', function(event, value){
@@ -328,8 +335,6 @@ angular.module('myBiApp')
     function setPersonalization() {
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
-//                (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
-                
                 if (response.data.isListViewed === null || !response.data.isListViewed) {
                     $localStorage.listViewStatus = 'grid';
                 } else {
@@ -339,6 +344,7 @@ angular.module('myBiApp')
                 (response.data.isRecommendedCollapsed === 1) ? $scope.isRecommendedCollapsed = false : $scope.isRecommendedCollapsed = true;
                 (response.data.isFavoriteCollapsed === 1) ? $scope.isFavoriteCollapsed = false : $scope.isFavoriteCollapsed = true;
                 (response.data.isMostViewedCollapsed === 1) ? $scope.isMostViewedCollapsed = false : $scope.isMostViewedCollapsed = true;
+                (response.data.isMenuCollapsed === 1) ? $scope.isMenuCollapsed = true : $scope.isMenuCollapsed = false;
                 var personalization = [];
                 
                 if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
@@ -351,19 +357,20 @@ angular.module('myBiApp')
                 
                 $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                 $scope.listViewStatus = $localStorage.listViewStatus;
+                $localStorage.isMenuCollapsed = $scope.isMenuCollapsed;
                 $scope.userTheme = $localStorage.userTheme;
                 $localStorage.personalization = personalization;
-                $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 $scope.reportPriorityList = personalization;
                 $scope.reportPanelList = [];
                 $scope.refreshPanelList($scope.reportPriorityList);
+                $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
             } else {
                 $scope.reportPriorityList = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                 $scope.reportPanelList = [];
-                $localStorage.userTheme = 'default';
+                $scope.userTheme = $localStorage.userTheme = 'default';                    
                 $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
-                $scope.userTheme = $localStorage.userTheme;
-                $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList);
+                $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList, $scope.isMenuCollapsed);
             }
         });
     }

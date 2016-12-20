@@ -20,12 +20,19 @@ angular.module('myBiApp')
         $scope.listViewStatus = status = $localStorage.listViewStatus;
     });
     
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
     setUserPreference();
     
     $scope.access.allReports = function () {
         $localStorage.treeLevelId = false;
-        $scope.selectedFilter = 'default';
-        $scope.defaultOption = 'Sort';
+        $scope.sortOption = 'ascName';
+        $scope.filterOption = 'filter';
+        $scope.defaultFilter = 'All';
+        
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].personaInfo.status === 'Error') {
                 $scope.setLoading(false);
@@ -77,8 +84,9 @@ angular.module('myBiApp')
 
     $scope.access.subGroupItems = function (levelid) {
         $localStorage.treeLevelId = true;
-        $scope.selectedFilter = 'default';
-        $scope.defaultOption = 'Sort';
+        $scope.sortOption = 'ascName';
+        $scope.filterOption = 'filter';
+        $scope.defaultFilter = 'All';
         $scope.$emit('setNavBar', true);
         $scope.biGroup.all().then(function () {
             //getBreadCrumbLevel(levelid);
@@ -258,11 +266,6 @@ angular.module('myBiApp')
                     } else {
                         personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     }
-
-                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $localStorage.personalization = personalization;
-                    
-//                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
                     
                     if (response.data.isListViewed === null || !response.data.isListViewed) {
                         $localStorage.listViewStatus = 'grid';
@@ -270,25 +273,29 @@ angular.module('myBiApp')
                         (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
                     }
                     
+                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                    $localStorage.personalization = personalization;
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     $localStorage.personalization = personalization;
-                    $localStorage.userTheme = 'default';
-                    $localStorage.listViewStatus = 'grid';
-                    $scope.userTheme = $localStorage.userTheme;
-                    $scope.listViewStatus = $localStorage.listViewStatus;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
             personalization = $localStorage.personalization;
             $scope.userTheme = $localStorage.userTheme;
-            $scope.listViewStatus = $localStorage.listViewStatus;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
     
@@ -308,13 +315,19 @@ angular.module('myBiApp')
         }
     }
     
-    $scope.getFilteredResult = function() {
-        if($scope.selectedFilter === 'default') {
-            $scope.defaultOption = 'Sort';
-        } else {
-            $scope.defaultOption = 'Default';
-        }
-        $scope.$broadcast('sortReports', $scope.selectedFilter);
+    $scope.sortReports = function() {        
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'sort');
+    }
+    
+    $scope.filterReports = function() {
+//        if($scope.filterOption === 'filter') {
+//            $scope.defaultFilter = 'Filter';
+//        } else {
+//            $scope.defaultFilter = 'Default';
+//        }
+        
+        $scope.defaultFilter = 'All';
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'filter');
     }
     
     function updateListView(status) {

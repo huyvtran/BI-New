@@ -54,22 +54,49 @@ angular.module('myBiApp')
             scope.$watch('tilesData', function (value) {
                 scope['panel'] = value;
             });
-            scope.$on('sortReports', function(event, filter) {
-                if(filter === 'asc_name') {
-                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name');
-                } else if(filter === 'des_name'){
-                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name').reverse();
-                } else if(filter === 'asc_date'){
-                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createDate');
-                } else if(filter === 'des_date'){
-                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createDate').reverse();
-                } else if(filter === 'bobj_report'){
+            scope.$on('sortFilterReportsBroadCast', function(event, sort, filter, option) {
+                sortReportWithOption(sort);
+                filterReportsWithOption(filter);
+            });
+            
+            function sortReportWithOption(sort) {
+                if(sort === 'ascName') {
+                    scope.panel.service.reports = sortList(scope.panel.service.reports, 'name', 'ascName', 1);
+//                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name');
+                } else if(sort === 'desName'){
+                    scope.panel.service.reports = sortList(scope.panel.service.reports, 'name', 'desName', -1);
+//                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name').reverse();
+                } else if(sort === 'ascCDate'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createdDate');
+                } else if(sort === 'desCDate'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createdDate').reverse();
+                } else if(sort === 'mostViewed'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'viewCount').reverse();
+                } else if(sort === 'recenltyAdded'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'provisionedDate').reverse();
+                }
+            }
+            
+            function sortList(list, sortBy, order, Num) {
+                list.sort(function(a, b){
+                    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                    if (nameA < nameB) //sort string ascending
+                        return -Num;
+                    if (nameA > nameB)
+                        return Num;
+                    return 0; //default return value (no sorting)
+                });
+                return list;
+            }
+            
+            function filterReportsWithOption(filter) {
+                if(filter === 'bobjReports'){
                     scope.reportFlagType = 'Webi';
                     scope.sortReportCounts = getReportCount('Webi', scope.panel.service.reports);
-                } else if(filter === 'tableau_report'){
+                } else if(filter === 'tableauReports'){
                     scope.reportFlagType = 'Tableau';
                     scope.sortReportCounts = getReportCount('Tableau', scope.panel.service.reports);
-                } else if(filter === 'external_report'){
+                } else if(filter === 'externalReports'){
                     scope.reportFlagType = 'HTTP';
                     scope.sortReportCounts = getReportCount('HTTP', scope.panel.service.reports);
                 } else {
@@ -77,7 +104,7 @@ angular.module('myBiApp')
                     scope.reportFlagType = '';
                     scope.sortReportCounts = '';
                 }
-            });
+            }
             
             function getReportCount(reportType, report) {
                 var sortReport = [];
@@ -334,8 +361,6 @@ angular.module('myBiApp')
                         'isMostViewedCollapsed' : ($scope.panel.open === false) ? 1 : 0
                     };
                 }
-                
-                console.log(putObj);
                 
                 $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
                     .then(function (resp, status, headers) {

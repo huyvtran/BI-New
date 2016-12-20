@@ -160,8 +160,8 @@ angular.module('myBiApp')
     /**
     *prepare the get Metadata Url
     */
-    this.prepareMetaDataUrlWork = function(offset, limit, sourceSystem, workbookId) {
-        return  this.replaceStringWithValues(WEBSERVICEURL.metadataWork, {'offset':offset, 'limit':limit, 'sourceSystem':sourceSystem, 'workbookId':workbookId});
+    this.prepareMetaDataUrlWork = function(offset, limit, sourceSystem, workbookId, sourceReportId) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.metadataWork, {'offset':offset, 'limit':limit, 'sourceSystem':sourceSystem, 'workbookId':workbookId, 'sourceReportId':sourceReportId});
     };
     
     /**

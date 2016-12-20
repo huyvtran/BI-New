@@ -44,9 +44,8 @@ angular
     },
     userTheme: {
         '0':'default',  
-        '1':'white',
-        '2':'black'
-    } 
+        '1':'black'
+    }
 })
 .config(["CONFIG", "$provide", function (CONFIG, $provide) {
     //Only load mock data, if config says so
@@ -75,6 +74,7 @@ angular
         prefixStateName: 'home',
         template: 'bootstrap2'
     });
+    
     $httpProvider.interceptors.push(["$q", "$timeout", "CONFIG", "$rootScope", function ($q, $timeout, CONFIG, $rootScope) {
         /**
          * Function which add new params to url 
@@ -105,10 +105,9 @@ angular
                         message: 'Please log into SSO again before continuing',
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 } else {
                     modalContent = {
@@ -116,10 +115,9 @@ angular
                         message: rejection.data,
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 }
                 return $q.reject(rejection);
@@ -132,9 +130,9 @@ angular
                         message: 'Please log into SSO again before continuing',
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
-
+                    
                     $rootScope.$broadcast('ShowUserAlert', modalContent);
                 } else {
                     modalContent = {
@@ -142,10 +140,10 @@ angular
                         message: rejection.data,
                         ok: false,
                         cancel: {text: 'OK', callback: function () {
-                            }}
+                        }}
                     };
 
-                    $rootScope.$broadcast('ShowUserAlert', modalContent);
+                    $rootScope.$broadcast('RefreshSSO', modalContent);
                 }
                 return $q.reject(rejection);
             }
@@ -263,6 +261,22 @@ angular
                 label: 'Search'
             }
         })
+        .state('search.details.reportmeta', {
+            url: '/reportmeta',
+            views: {'@': {
+                    templateUrl: 'views/search.reportmeta.html',
+                    controller: 'SearchdetailsCtrl'
+                }
+            },
+            data: {
+                displayName: 'Search',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+            },
+            ncyBreadcrumb: {
+                label: 'Search'
+            }
+        })
         .state('reportsDashboard', {
             url: '/reportsDashboard',
             templateUrl: 'views/reportsDashboard.html',
@@ -305,11 +319,31 @@ angular
                 label: 'My Profile'
             }
         })
+        .state('helpSupport', {
+            url: '/helpSupport',
+            templateUrl: 'views/helpSupport.html',
+            controller: 'HelpSupportCtrl',
+            data: {
+                displayName: 'Help & Support',
+                subCaption: '',
+                classIcon: 'myprofile-header-icon',
+                breadcrumName: 'Help & Support'
+            },
+            ncyBreadcrumb: {
+                label: 'Help & Support'
+            }
+        })        
         .state('reports', {
             url: '/reports',
             abstract: true,
             templateUrl: 'views/reports.html',
             controller: 'ReportsCtrl',
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: 'Available Reports'
+            }
             /*resolve: {
              reportsMenuResolve: ['reportsMenu',
              function( reportsMenu){
@@ -356,19 +390,40 @@ angular
                 label: '{{displayNameb}}'
             }
         })
-
+        .state('reports.viewAll', {
+            url: '/{levelId:[0-9]{1,10}}/viewAll',
+            views: {'report': {
+                    templateUrl: 'views/reports.list.level.html',
+                    controller: ["$scope", "$stateParams", function ($scope, $stateParams) {
+                        $scope.access.subGroupItemsViewAll($stateParams.levelId);
+                    }]
+                }
+            },
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: '{{displayNameb}}'
+            },
+            ncyBreadcrumb: {
+                label: '{{displayNameb}}'
+            }
+        })
         .state('reports.details.report', {
             url: '/{reportId:[0-9]{1,10}}',
             abstract: true,
             data: {
                 displayName: 'Available Reports',
-                subCaption: '',
+                subCaption: '---',
                 classIcon: 'recommended-header-icon',
                 breadcrumName: '{{reportName}}'
             },
             ncyBreadcrumb: {
                 label: '{{reportName}}'
-            }
+            },
+            params: {
+                'reportName':null
+            },
 
         })
         .state('reports.details.report.report', {
@@ -387,7 +442,6 @@ angular
             ncyBreadcrumb: {
                 label: '{{reportName}}'
             }
-
         })
         .state('reports.details.report.about', {
             url: '/about',
@@ -429,6 +483,24 @@ angular
             url: '/feedback',
             views: {'report@reports': {
                     templateUrl: 'views/search.feedback.html',
+                    controller: 'ReportCtrl'
+                }
+            },
+            data: {
+                displayName: 'Available Reports',
+                subCaption: '',
+                classIcon: 'recommended-header-icon',
+                breadcrumName: '{{reportName}}'
+            },
+            ncyBreadcrumb: {
+                label: '{{reportName}}'
+            }
+
+        })
+        .state('reports.details.report.reportmeta', {
+            url: '/reportmeta',
+            views: {'report@reports': {
+                    templateUrl: 'views/search.reportmeta.html',
                     controller: 'ReportCtrl'
                 }
             },
@@ -555,41 +627,39 @@ angular.module('myBiApp')
 
     //GET tag/
     $httpBackend.whenGET(/getUserDetails/).respond(function (/*method, url, data, headers*/) {
-        //return [200, '[{"uid":"975409","userFullName":"Vidyadhar Guttikonda","emcIdentityType":"V","title":"Mobile Developer","mail":"Vidyadhar.Guttikonda@emc.com","emcCostCenter":"IN1218315","emcGeography":null,"emcOrgCode":null,"emcOrgName":"IT","emcEntitlementsCountry":"IN","emcLoginName":"guttiv","emctelephoneextension":null,"telephonenumber":"91  7702466463"}]', {/*headers*/}];
-        return [200, '[{"uid":"990865","userFullName":"Sarunkumar Moorthy","emcIdentityType":"V","title":"web developer","mail":"Sarunkumar.Moorthy@emc.com","emcCostCenter":"US1018315","emcGeography":null,"emcOrgCode":null,"emcOrgName":"IT","emcEntitlementsCountry":"IN","emcLoginName":"moorts5","emctelephoneextension":null,"telephonenumber":"91 9895130422"}]', {/*headers*/}];
+        return [200, '[{"uid":"990865","userFullName":"Sarunkumar Moorthy","emcIdentityType":"V","title":"web developer","mail":"Sarunkumar.Moorthy@emc.com","emcCostCenter":"US1018315","emcGeography":null,"emcOrgCode":null,"emcOrgName":null,"emcEntitlementsCountry":"IN","emcLoginName":"moorts5","emctelephoneextension":"0","telephonenumber":null}]', {/*headers*/}];
     });
 
     $httpBackend.whenGET(/userinfo\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"group":[{"groupId":1,"groupName":"Manufacturing"}],"role":"Admin","badge":"Gold"}'];
+        return [200, '{"group":[{"groupId":37,"groupName":"Admin_Mobile","pageLink":"https://inside.emc.com/community/active/tableau_users_forum","helpLinkLabel":"Click here for help","contactEmail":"insights.portal.help@emc.com"}],"role":"Admin","badge":"Bronze","userId":3034,"fullName":"Sarunkumar Moorthy","userPersonaList":[{"groupId":12,"groupName":"Admin"},{"groupId":24,"groupName":"GBS_Commercial Services"},{"groupId":37,"groupName":"Admin_Mobile"}],"isMultiplePersona":true}'];
     });
 
     $httpBackend.whenGET(/userExistInBITool\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"status":"Success","message":"Your account has not been setup in the Insights Portal with an associated Persona. Please contact \'insights.portal.help@emc.com\' for further assistance."}'];
+//        return [200, '{"communicationList":[{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"communicationId":119,"groupId":0,"link":"https://bipduruat01.corp.emc.com","title":"Welcome to Insights","details":"Click for more info","image":"https://bipduruat01.corp.emc.com/banners/banner1.png","groupIdList":null}],"allGroups":null,"status":"Error","message":"Your account has not been setup in the Insights Portal with an associated Persona. Please contact \'insights.portal.help@emc.com\' for further assistance."}'];
+        return [200, '{"communicationList":[],"allGroups":null,"status":"Success","message":"Your account has not been setup in the Insights Portal with an associated Persona. Please contact insights.portal.help@emc.com for further assistance.","isApplicationRunning":true}'];
+//        return [200, '{"communicationList":null,"allGroups":null,"status":"Error","isApplicationRunning":false,"message":"EMC Insight portal is under maintenance due to August Release. Sorry for inconvenience. It will be resumed at 7.00AM UST"}'];
     });
 
     $httpBackend.whenGET(/dashboard\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"userName":"Manasa","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"userName":"Manasa","name":"Parameter Dashboard","reportDesc":null,"id":8,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/Averagedaysofsupply/ParameterDashboard","addToGallery":"N","viewCount":5,"lastViewed":1445282484297,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Yield Overview Dashboard","reportDesc":null,"id":30,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/FirstPassandThroughputYield/YieldOverviewDashboard","addToGallery":"N","viewCount":2,"lastViewed":1445287452729,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Landing Page","reportDesc":null,"id":47,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/FreightSpend/LandingPage","addToGallery":"N","viewCount":1,"lastViewed":1446528951087,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Non-Freight by Region","reportDesc":null,"id":35,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/FreightBillBack/Non-FreightbyRegion","addToGallery":"N","viewCount":1,"lastViewed":1445287471684,"favorite":"N","levelId":null},{"userName":"Manasa","name":"Early Life Drive Reliability by System","reportDesc":null,"id":25,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/EarlyLifeFieldQualityDrives/EarlyLifeDriveReliabilitybySystem","addToGallery":"N","viewCount":1,"lastViewed":1445242726802,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Drives","reportDesc":null,"id":7,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/Averagedaysofsupply/Drives","addToGallery":"N","viewCount":1,"lastViewed":1444777663594,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Rate per Kilo","reportDesc":null,"id":48,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/FreightSpend/RateperKilo","addToGallery":"N","viewCount":1,"lastViewed":1446581626704,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Issues Per Period","reportDesc":null,"id":60,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/InventoryControlIssues_0/IssuesPerPeriod","addToGallery":"N","viewCount":1,"lastViewed":1446798850789,"favorite":"N","levelId":null},{"userName":"Manasa","name":"PWR Dash","reportDesc":null,"id":70,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/NTFByCommodity/PWRDash","addToGallery":"N","viewCount":1,"lastViewed":1446798902743,"favorite":"N","levelId":null},{"userName":"Manasa","name":"WB Dash","reportDesc":null,"id":71,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/NTFByCommodity/WBDash","addToGallery":"N","viewCount":1,"lastViewed":1446798914337,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Content","reportDesc":null,"id":72,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/OperationalExcellence/Content","addToGallery":"N","viewCount":1,"lastViewed":1446798920431,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Growth By Plant","reportDesc":null,"id":73,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/RevenueGrowthMetrics/GrowthByPlant","addToGallery":"N","viewCount":1,"lastViewed":1446798925900,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Growth by Product","reportDesc":null,"id":74,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/RevenueGrowthMetrics/GrowthbyProduct","addToGallery":"N","viewCount":1,"lastViewed":1446798942744,"favorite":"N","levelId":null},{"userName":"Manasa","name":"Code Version Summary","reportDesc":null,"id":75,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/RMALogFileDetails/CodeVersionSummary","addToGallery":"N","viewCount":1,"lastViewed":1446798947463,"favorite":"N","levelId":null},{"userName":"Manasa","name":"Product Family Detail","reportDesc":null,"id":88,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/WWLeadTimeAllSales/ProductFamilyDetail","addToGallery":"N","viewCount":0,"lastViewed":1447440893399,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"Customer Detail","reportDesc":null,"id":89,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/WWSalesOrderLeadTimebyOEMCustomer_0/CustomerDetail","addToGallery":"N","viewCount":0,"lastViewed":1447441074164,"favorite":"Y","levelId":null},{"userName":"Manasa","name":"OEM Trend","reportDesc":null,"id":90,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/WWSalesOrderLeadTimebyOEMCustomer_0/OEMTrend","addToGallery":"N","viewCount":0,"lastViewed":1447441684782,"favorite":"Y","levelId":null}],"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":null,"userRoles":["Rep","Presales ASE"],"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null}'];
+        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Biz Ops FPY Dashboard","type":"Tableau","owner":"georgb3","reportDesc":null,"id":137,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/GBSBizOpsFPYDashboard/CoverPage","functionalArea":"GBS_CC","functionalAreaLvl1":"Commercial Services","functionalAreaLvl2":"GBS Biz Ops FPY Dashboard","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"173788","additionalInfo":"31274","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1467000000000,"updateDate":1471838400000,"addToGallery":null,"viewCount":null,"lastViewed":1478585156497,"favorite":"Y","levelId":70,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N"},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Deal Registration Dashboard","type":"Tableau","owner":"georgb3","reportDesc":null,"id":136,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/DealRegistrationDashboard/CoverPage","functionalArea":"GBS_CC","functionalAreaLvl1":"Commercial Services","functionalAreaLvl2":"Deal Registration Dashboard","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"172430","additionalInfo":"31067","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1465963200000,"updateDate":1471838400000,"addToGallery":null,"viewCount":null,"lastViewed":1478098743360,"favorite":"N","levelId":72,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N"},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Deal Reg SLA Cases","type":"Webi","owner":"bosew","reportDesc":"","id":64,"reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AUGAgijOettPlk62MiT5deU","functionalArea":"GBS Command Center","functionalAreaLvl1":"Commercial Services","functionalAreaLvl2":"Deal Registration","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AUGAgijOettPlk62MiT5deU","additionalInfo":"GBS Command Center/Commercial Services/Deal Registration","systemDescription":"BAAAS BOBJ PRD","createDate":1459770472000,"updateDate":1459957849000,"addToGallery":null,"viewCount":null,"lastViewed":1478595995927,"favorite":"N","levelId":34,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N"},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Unresolved Unquoted Oppty","type":"Tableau","owner":"dulons","reportDesc":null,"id":53,"reportLink":"https://baaastableau.corp.emc.com/t/GSMR/views/UnresolvedQuotableOpportunity/WoWSummary","functionalArea":"GSMR","functionalAreaLvl1":"Unresolved Quotable Opportunity","functionalAreaLvl2":"Unresolved Quotable Opportunity","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"158702","additionalInfo":"28498","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1446526800000,"updateDate":1471838400000,"addToGallery":null,"viewCount":null,"lastViewed":1474289509130,"favorite":"N","levelId":41,"refreshStatus":"Y","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N"},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"PSS SLA Dashboard","type":"Tableau","owner":"grendm","reportDesc":null,"id":134,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/PSSSLADashboard/DeliveryCenterTAT","functionalArea":"GBS_CC","functionalAreaLvl1":"Commercial Services","functionalAreaLvl2":"PSS SLA Dashboard","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"173377","additionalInfo":"31225","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1466654400000,"updateDate":1471492800000,"addToGallery":null,"viewCount":null,"lastViewed":1478157918857,"favorite":"N","levelId":40,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N"}],"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
 
     $httpBackend.whenGET(/report\/level\/*/).respond(function (/*method, url, data*/) {
         //return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":1,"name":"Main Dashboard","type":"pdf","owner":"ahernp2","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/#/site/GPO_BI/views/InventoryWebsite/MainDashboard","functionalArea":"GPO_BI","functionalAreaLvl1":"Global Inventory Website","functionalAreaLvl2":"Inventory Website","linkTitle":" ","linkHoverInfo":" ","createDate":1424149200000,"updateDate":1424149200000,"favorite":"N","levelId":15},{"id":2,"name":"Issues Timeline","type":"Tableau","owner":"ahernp2","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/site/GPO_BI/views/InventoryControlIssues_0/MainDashboard","functionalArea":"GPO_BI","functionalAreaLvl1":"Global Inventory Website","functionalAreaLvl2":"Inventory Website","linkTitle":" ","linkHoverInfo":" ","createDate":1424149200000,"updateDate":1424149200000,"favorite":"N","levelId":15},{"id":3,"name":"Issues Per Period","type":"eXcel","owner":"ahernp2","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/#/site/GPO_BI/views/InventoryWebsite/IssuesPerPeriod","functionalArea":"GPO_BI","functionalAreaLvl1":"Global Inventory Website","functionalAreaLvl2":"Inventory Website","linkTitle":" ","linkHoverInfo":" ","createDate":1424149200000,"updateDate":1424149200000,"favorite":"N","levelId":15},{"id":4,"name":"Cover","type":"tableau","refreshStatus":"Y","owner":"dexhem","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/GPO_BI/views/V3GRDiskinfoAnalysisECPS_0/SSDWritesPerDay","functionalArea":"GPO_BI","functionalAreaLvl1":"GWT Metrics","functionalAreaLvl2":"GWT Metrics","linkTitle":" ","linkHoverInfo":" ","createDate":1425272400000,"updateDate":1425272400000,"favorite":"N","levelId":15}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null}'];
-        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":74,"name":"New Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"New Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/NewDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9677","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":75,"name":"Closed Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"Closed Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ClosedDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9678","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":76,"name":"Bus Priority","type":"Tableau","owner":"matheb4","reportDesc":"Business Priority","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/BusPriority","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9679","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":77,"name":"Service Center Prioritization","type":"Tableau","owner":"matheb4","reportDesc":"Service Center Prioritization","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ServiceCenterPrioritization","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9680","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":74,"name":"New Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"New Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/NewDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9677","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":75,"name":"Closed Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"Closed Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ClosedDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9678","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":76,"name":"Bus Priority","type":"Tableau","owner":"matheb4","reportDesc":"Business Priority","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/BusPriority","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9679","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":77,"name":"Service Center Prioritization","type":"Tableau","owner":"matheb4","reportDesc":"Service Center Prioritization","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ServiceCenterPrioritization","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9680","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":74,"name":"New Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"New Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/NewDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9677","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":75,"name":"Closed Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":"Closed Demand Exec Dashboard","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ClosedDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9678","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":76,"name":"Bus Priority","type":"Tableau","owner":"matheb4","reportDesc":"Business Priority","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/BusPriority","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9679","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":77,"name":"Service Center Prioritization","type":"Tableau","owner":"matheb4","reportDesc":"Service Center Prioritization","reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ServiceCenterPrioritization","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9680","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+//        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
     $httpBackend.whenGET(/reportDashboard\/report\/group\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":1,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":"test sm","reportLink":"https://baaastableau.corp.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":28,"name":"Tech Draw Dashboard","type":"Tableau","owner":"rnp","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/MBO_Metrics_table_0/TechDrawDashboard","functionalArea":"GBS_CC","functionalAreaLvl1":"Executive Summary Dashboard","functionalAreaLvl2":"MBO_Metrics_table","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"164713","additionalInfo":"29455","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1454043600000,"updateDate":1454043600000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":45,"name":"VPLEX EWMA Calcs","type":"Webi","owner":"Administrator","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_.CIY.1N1GgHnJWNloPs8","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"VPLEX EWMA Calcs","linkHoverInfo":"VPLEX EWMA Calcs","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa_.CIY.1N1GgHnJWNloPs8","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ PRD","createDate":1408109070000,"updateDate":1433153781000,"favorite":"N","levelId":25,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":65,"name":"Account Loyalty Matrix","type":"Tableau","owner":"karths1","reportDesc":"Translate account insights & predict future direction to guide conversations between EMC Sales/Go-To-Market teams  and Customers","reportLink":"https://baaastableau.corp.emc.com/t/TCE/views/TCEE2EAccountLoyaltyMatrix/TCEE2EAccountLoyaltyMatrix","functionalArea":"TCE","functionalAreaLvl1":"TCE A&I","functionalAreaLvl2":"TCE E2E Account Loyalty Matrix","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"168573","additionalInfo":"30198","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1460088000000,"updateDate":1464753600000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":108,"name":"Inventory Control Issues Dashboard","type":"VISILums","owner":"Administrator","reportDesc":"","reportLink":"https://sapbip.propel.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AcIvqa9wciJCjdbqMy7RF9Q","functionalArea":"Auditing","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Inventory Control Issues Dashboard","linkHoverInfo":"Inventory Control Issues Dashboard","sourceSystem":"PROPEL BOBJ PRD","sourceReportId":"AcIvqa9wciJCjdbqMy7RF9Q","additionalInfo":"Auditing","systemDescription":"PROPEL BOBJ PRD","createDate":1460773705000,"updateDate":1464321129000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":126,"name":"PDF Testing","type":"PDF","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01/share/TCE_PDF.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL2","additionalInfo":"#ffee00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465926802000,"updateDate":1465926802000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":127,"name":"HTTP Link PDF","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/Insights%20User%20Documentation.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#ffeeee","systemDescription":"EXTERNAL_SYSTEM","createDate":1465927200000,"updateDate":1465927200000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":128,"name":"TXT File","type":"txt","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01.corp.emc.com/share/file.txt","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#ffee32","systemDescription":"EXTERNAL_SYSTEM","createDate":1465930236000,"updateDate":1465930236000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130,"name":"HTML File","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/External.html","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL6","additionalInfo":"#FFEE00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465993976000,"updateDate":1465993976000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":134,"name":"Tableau User Forum","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Inside EMC Link for Tableau User Forum","reportLink":"https://inside.emc.com/community/active/tableau_users_forum","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL10","additionalInfo":"#ffa699","systemDescription":"EXTERNAL_SYSTEM","createDate":1465998052000,"updateDate":1465998052000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":135,"name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"linkTitle":"Backcapture","linkHoverInfo":"Backcapture","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1455549729000,"updateDate":1455549730000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":137,"name":"Sample KPI Report","type":"Webi","owner":"Administrator","reportDesc":"Tesm sm","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1q2IUDLKpGrQ.a5hWbRsw","functionalArea":"Global Services","functionalAreaLvl1":"Service Request","functionalAreaLvl2":"Custom","linkTitle":"Sample KPI Report","linkHoverInfo":"Sample KPI Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1q2IUDLKpGrQ.a5hWbRsw","additionalInfo":"Global Services/Service Request/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1352215277000,"updateDate":1354323781000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":142,"name":"Alliance Partner Exam and Cert Report","type":"Webi","owner":"SampaR","reportDesc":"This  report is requested by Turner-Corey. Will be scheduled to run twice a month. This is all exam and certification details for the Aliance partners for the lsit provided by Corey","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa3.8C24qLlFnQyQYigofIA","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"External","linkTitle":"Alliance Partner Exam and Cert Report","linkHoverInfo":"Alliance Partner Exam and Cert Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa3.8C24qLlFnQyQYigofIA","additionalInfo":"Education Services and Dev/Certification/External","systemDescription":"BAAAS BOBJ PRD","createDate":1438191340000,"updateDate":1463077852000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":143,"name":"Credential Adoption Report","type":"Webi","owner":"SampaR","reportDesc":"This report gives a number of standard Certification metrics used for Monthly reporting","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa3iXPr0ELpNknQoxymQDaA","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Certification","linkTitle":"Credential Adoption Report","linkHoverInfo":"Credential Adoption Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa3iXPr0ELpNknQoxymQDaA","additionalInfo":"Education Services and Dev/Certification/Certification","systemDescription":"BAAAS BOBJ PRD","createDate":1352229656000,"updateDate":1441217689000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":145,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/views/Variety/SATPerformance","functionalArea":"","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":146,"name":"EWMA Impact Event Rate by Cause B","type":"Webi","owner":"Administrator","reportDesc":"Slide 5-10. Used for publication Pupose","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaFP5hAmL1ZNg6GGZo1c4G0","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"EWMA Impact Event Rate by Cause B","linkHoverInfo":"EWMA Impact Event Rate by Cause B","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AaFP5hAmL1ZNg6GGZo1c4G0","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ PRD","createDate":1418036696000,"updateDate":1433153282000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":147,"name":"Cross Sell","type":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/SO_Analytics/views/myPrismPlays/CrossSell","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"100239","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1421730000000,"updateDate":1421730000000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":148,"name":"Quarterly Certification & KPI Report1","type":"Webi","owner":"SampaR","reportDesc":"this report is based on the Credential Adoption Report.  It provides summary reports with an date limit prompt to give data through end of Q","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AacwbbmvQj1Lnzy_lRkyXJM","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":null,"linkTitle":"Quarterly Certification & KPI Report1","linkHoverInfo":"Quarterly Certification & KPI Report1","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AacwbbmvQj1Lnzy_lRkyXJM","additionalInfo":"Education Services and Dev/Certification","systemDescription":"BAAAS BOBJ PRD","createDate":1444142294000,"updateDate":1444144725000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":149,"name":"FSS Overall Hours Logged Breakdown-by Team","type":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/FSSOverallHoursLoggedBreakdown-byTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"100324","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1421816400000,"updateDate":1464667200000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":151,"name":"Overall Summary","type":"Tableau","owner":"pendyv","reportDesc":"test","reportLink":"https://entbidashboard.emc.com/t/DRR/views/DRR_Demo25_proddb/OverallSummary","functionalArea":"DRR","functionalAreaLvl1":"DRR","functionalAreaLvl2":"DRR_Demo25_proddb","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1258","additionalInfo":"282","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1388638800000,"updateDate":1445313600000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
-        //return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":74,"name":"New Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":null,"reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/NewDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9677","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":75,"name":"Closed Demand Exec Dashboard","type":"Tableau","owner":"matheb4","reportDesc":null,"reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ClosedDemandExecDashboard","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9678","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":76,"name":"Bus Priority","type":"Tableau","owner":"matheb4","reportDesc":null,"reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/BusPriority","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9679","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":77,"name":"Service Center Prioritization","type":"Tableau","owner":"matheb4","reportDesc":null,"reportLink":"https://entbidashboard.emc.com/t/IT/views/DemandDashboard/ServiceCenterPrioritization","functionalArea":"IT","functionalAreaLvl1":"IT","functionalAreaLvl2":"Demand Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9680","additionalInfo":"3104","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1460433600000,"updateDate":1462852800000,"favorite":"N","levelId":113,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
-        //return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","linkTitle":"onlinelabiV1","linkHoverInfo":"onlinelabiV1","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"favorite":"Y","levelId":50,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130217,"name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","linkTitle":"Training Unit Balance - APJ","linkHoverInfo":"Training Unit Balance - APJ","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1420827506000,"favorite":"N","levelId":51,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130221,"name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"favorite":"N","levelId":51,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130224,"name":"SLA Metrics","type":"Webi","owner":"Administrator","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaX8T355XQRKoBboH07dGgY","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"SLA Metrics","linkHoverInfo":"SLA Metrics","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaX8T355XQRKoBboH07dGgY","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","createDate":1443692957000,"updateDate":1459356727000,"favorite":"N","levelId":51,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130225,"name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","linkTitle":"Objects - Events and Details - by User and Event Type","linkHoverInfo":"Objects - Events and Details - by User and Event Type","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"favorite":"N","levelId":50,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130226,"name":"PAS Report","type":"Webi","owner":"Administrator","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AendAWa9byZOuAlAnrStXXU","functionalArea":"Global Services","functionalAreaLvl1":"EAS","functionalAreaLvl2":null,"linkTitle":"PAS Report","linkHoverInfo":"PAS Report","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AendAWa9byZOuAlAnrStXXU","additionalInfo":"Global Services/EAS","systemDescription":"BAAAS BOBJ TST","createDate":1343664930000,"updateDate":1343664931000,"favorite":"N","levelId":50,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130227,"name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"favorite":"N","levelId":50,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","linkTitle":"onlinelabiV1","linkHoverInfo":"onlinelabiV1","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"favorite":"Y","levelId":50,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130207,"name":"Summarized Documents","type":"Webi","owner":"Administrator","reportDesc":null,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaDCB93DC29OgSF8GVsnyGw","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"Summarized Documents","linkHoverInfo":"Summarized Documents","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaDCB93DC29OgSF8GVsnyGw","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","createDate":1443692958000,"updateDate":1451544398000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":26048,"name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"favorite":"N","levelId":46,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+//        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":478,"name":"*Information","type":"Tableau","owner":"broenp","reportDesc":"test sm","reportLink":"https://baaastableau.corp.emc.com/t/CSEMEA_VBOT/views/VBOT106_EASShiftLeadTime/Information","functionalArea":"CSEMEA_VBOT","functionalAreaLvl1":"EMEA Field","functionalAreaLvl2":"VBOT106_EAS Shift LeadTime","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"109433","additionalInfo":"19469","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1472208601640,"updateDate":1479829064243,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"T","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":481,"name":"Division Review","type":"Tableau","owner":"maniva1","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/OilWellManagement","functionalArea":"SO_Analytics","functionalAreaLvl1":"myFI","functionalAreaLvl2":"myFI","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"153819","additionalInfo":"27778","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1472236520347,"updateDate":1472097600000,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":510,"name":"Entitlement Check Status Cover","type":"Tableau","owner":"mended","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/IIG/views/EntitlementCheckStatus/EntitlementCheckStatusCover","functionalArea":"IIG","functionalAreaLvl1":"ENTITLEMENT CHECKS","functionalAreaLvl2":"Entitlement Check Status","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"12770","additionalInfo":"2106","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1479828523613,"updateDate":1479828523613,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":511,"name":"Entitlement Checks by GEO","type":"Tableau","owner":"mended","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/IIG/views/EntitlementCheckStatus/EntitlementChecksbyGEO","functionalArea":"IIG","functionalAreaLvl1":"ENTITLEMENT CHECKS","functionalAreaLvl2":"Entitlement Check Status","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"12772","additionalInfo":"2106","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1479829202670,"updateDate":1479829202670,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":482,"name":"expenseExec","type":"Tableau","owner":"kruzem","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/BusinessDashboard/AreaSalesPerformance","functionalArea":"SIP","functionalAreaLvl1":"Travel","functionalAreaLvl2":"te.expense.overview","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9123","additionalInfo":"2855","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1472236550660,"updateDate":1479741883467,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"T","isHeaderFlag":0,"isMobileEnabled":"Y","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":479,"name":"Professional Services - PM Dashboard - Project Data - Production","type":"Webi","owner":"AZAMJ","reportDesc":"","reportLink":"https://SAPBIP-prf.propel.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=ASf6YXJMH7dGlt9PM4JtBJQ","functionalArea":"Professional Services","functionalAreaLvl1":"Global Standard Reports","functionalAreaLvl2":"LightSpeed","linkTitle":"Professional Services - PM Dashboard - Project Data - Production","linkHoverInfo":"Professional Services - PM Dashboard - Project Data - Production","sourceSystem":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","additionalInfo":"Professional Services/Global Standard Reports/LightSpeed","systemDescription":"PROPEL BOBJ PRD","createDate":1472236431747,"updateDate":1456437762000,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"Y","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":270,"name":"Remote CSAT Dashboard","type":"Tableau","owner":"sharmr25","reportDesc":"This is the transactional CSAT dashboard that shows the results for service requests worked by the Remote Reactive","reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/TB007_E2ECSAT-Remote/RemoteCSATDashboard","functionalArea":"GS_BI","functionalAreaLvl1":"Customer Services","functionalAreaLvl2":"TB007_E2E CSAT - Remote","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"152656","additionalInfo":"27517","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1438574400000,"updateDate":1472236338963,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":490,"name":"SalesQuest QA","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Sales Quest QA","reportLink":"https://salesquestqa.corp.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"","linkHoverInfo":"","sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL143","additionalInfo":"#0000FF","systemDescription":"EXTERNAL_SYSTEM","createDate":1473689398393,"updateDate":1476975298677,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"Y","isHeaderFlag":1,"isMobileEnabled":"Y","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":1,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1472159796377,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"Y","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":480,"name":"SLA Metrics Raw Data","type":"Webi","owner":"mourat1","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaQbsUTFXVFOkXkKFhbAtgM","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"linkTitle":"SLA Metrics Raw Data","linkHoverInfo":"SLA Metrics Raw Data","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AaQbsUTFXVFOkXkKFhbAtgM","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1472236482250,"updateDate":1455114384000,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":409,"name":"Tile","type":"Tableau","owner":"dexhem","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/ShiptoCommit-Insights/Tile","functionalArea":"GPO_BI","functionalAreaLvl1":"EMC Insights Page","functionalAreaLvl2":"Ship to Commit - Insights","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"177401","additionalInfo":"31886","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1471838400000,"updateDate":1472011200000,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"Y","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":12,"deletedBy":null,"deletedDate":null,"id":487,"name":"Traffic Generation","type":"Tableau","owner":"ipebordt","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/DIGITAL_OPERATIONS/views/MarketingInvestmentsandResults/TrafficGeneration","functionalArea":"DIGITAL_OPERATIONS","functionalAreaLvl1":"METS","functionalAreaLvl2":"Marketing Investments and Results","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"170366","additionalInfo":"30560","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1472714187520,"updateDate":1472097600000,"favorite":"N","levelId":37,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":12}'];
+        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"createdBy":null,"createdDate":1472208601640,"updatedBy":null,"updatedDate":1479829064243,"rowCount":12,"deletedBy":null,"deletedDate":null,"userName":null,"name":"*Information","type":"Tableau","owner":"broenp","reportDesc":"test sm","id":478,"reportLink":"https://baaastableau.corp.emc.com/t/CSEMEA_VBOT/views/VBOT106_EASShiftLeadTime/Information","functionalArea":"CSEMEA_VBOT","functionalAreaLvl1":"EMEA Field","functionalAreaLvl2":"VBOT106_EAS Shift LeadTime","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"109433","additionalInfo":"19469","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":19,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"T","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1424926800000,"sysUpdatedDate":1472097600000,"provisionedDate":1479908543760},{"createdBy":null,"createdDate":1472236520347,"updatedBy":null,"updatedDate":1472097600000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Division Review","type":"Tableau","owner":"maniva1","reportDesc":null,"id":481,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/OilWellManagement","functionalArea":"SO_Analytics","functionalAreaLvl1":"myFI","functionalAreaLvl2":"myFI","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"153819","additionalInfo":"27778","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":39,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1440561600000,"sysUpdatedDate":1472097600000,"provisionedDate":1472236525707},{"createdBy":null,"createdDate":1479828523613,"updatedBy":null,"updatedDate":1479828523613,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Entitlement Check Status Cover","type":"Tableau","owner":"mended","reportDesc":null,"id":510,"reportLink":"https://baaastableau.corp.emc.com/t/IIG/views/EntitlementCheckStatus/EntitlementCheckStatusCover","functionalArea":"IIG","functionalAreaLvl1":"ENTITLEMENT CHECKS","functionalAreaLvl2":"Entitlement Check Status","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"12770","additionalInfo":"2106","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1379563200000,"sysUpdatedDate":1472097600000,"provisionedDate":1479828604647},{"createdBy":null,"createdDate":1479829202670,"updatedBy":null,"updatedDate":1479829202670,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Entitlement Checks by GEO","type":"Tableau","owner":"mended","reportDesc":null,"id":511,"reportLink":"https://baaastableau.corp.emc.com/t/IIG/views/EntitlementCheckStatus/EntitlementChecksbyGEO","functionalArea":"IIG","functionalAreaLvl1":"ENTITLEMENT CHECKS","functionalAreaLvl2":"Entitlement Check Status","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"12772","additionalInfo":"2106","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1379563200000,"sysUpdatedDate":1472097600000,"provisionedDate":1479829214670},{"createdBy":null,"createdDate":1472236550660,"updatedBy":null,"updatedDate":1479741883467,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"expenseExec","type":"Tableau","owner":"kruzem","reportDesc":null,"id":482,"reportLink":"https://entbitdashboard-dev.emc.com/views/BusinessDashboard/AreaSalesPerformance","functionalArea":"SIP","functionalAreaLvl1":"Travel","functionalAreaLvl2":"te.expense.overview","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9123","additionalInfo":"2855","systemDescription":"Enterprise Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":130,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"T","isHeaderFlag":0,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1438056000000,"sysUpdatedDate":1472097600000,"provisionedDate":1478278092957},{"createdBy":null,"createdDate":1472236431747,"updatedBy":null,"updatedDate":1456437762000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Professional Services - PM Dashboard - Project Data - Production","type":"Webi","owner":"AZAMJ","reportDesc":"","id":479,"reportLink":"https://SAPBIP-prf.propel.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=ASf6YXJMH7dGlt9PM4JtBJQ","functionalArea":"Professional Services","functionalAreaLvl1":"Global Standard Reports","functionalAreaLvl2":"LightSpeed","sourceSystem":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","additionalInfo":"Professional Services/Global Standard Reports/LightSpeed","systemDescription":"PROPEL BOBJ PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":59,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":"Professional Services - PM Dashboard - Project Data - Production","linkHoverInfo":"Professional Services - PM Dashboard - Project Data - Production","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1433525390000,"sysUpdatedDate":1456437762000,"provisionedDate":1472236439093},{"createdBy":null,"createdDate":1438574400000,"updatedBy":null,"updatedDate":1472236338963,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Remote CSAT Dashboard","type":"Tableau","owner":"sharmr25","reportDesc":"This is the transactional CSAT dashboard that shows the results for service requests worked by the Remote Reactive","id":270,"reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/TB007_E2ECSAT-Remote/RemoteCSATDashboard","functionalArea":"GS_BI","functionalAreaLvl1":"Customer Services","functionalAreaLvl2":"TB007_E2E CSAT - Remote","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"152656","additionalInfo":"27517","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":23,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1438574400000,"sysUpdatedDate":1472011200000,"provisionedDate":1472236243617},{"createdBy":null,"createdDate":1473689398393,"updatedBy":null,"updatedDate":1476975298677,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"SalesQuest QA","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Sales Quest QA","id":490,"reportLink":"https://salesquestqa.corp.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL143","additionalInfo":"#0000FF","systemDescription":"EXTERNAL_SYSTEM","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":59,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":"","linkHoverInfo":"","displayType":"Y","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1473689363000,"sysUpdatedDate":1474865758000,"provisionedDate":1473689409063},{"createdBy":null,"createdDate":1320206400000,"updatedBy":null,"updatedDate":1472159796377,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"id":1,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":192,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1320206400000,"sysUpdatedDate":1320206400000,"provisionedDate":1472159696203},{"createdBy":null,"createdDate":1472236482250,"updatedBy":null,"updatedDate":1455114384000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"SLA Metrics Raw Data","type":"Webi","owner":"mourat1","reportDesc":"","id":480,"reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaQbsUTFXVFOkXkKFhbAtgM","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AaQbsUTFXVFOkXkKFhbAtgM","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":12,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":"SLA Metrics Raw Data","linkHoverInfo":"SLA Metrics Raw Data","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1392344820000,"sysUpdatedDate":1455114384000,"provisionedDate":1472236489423},{"createdBy":null,"createdDate":1471838400000,"updatedBy":null,"updatedDate":1472011200000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Tile","type":"Tableau","owner":"dexhem","reportDesc":null,"id":409,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/ShiptoCommit-Insights/Tile","functionalArea":"GPO_BI","functionalAreaLvl1":"EMC Insights Page","functionalAreaLvl2":"Ship to Commit - Insights","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"177401","additionalInfo":"31886","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":20,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N","sysCreatedDate":1471838400000,"sysUpdatedDate":1472011200000,"provisionedDate":1472209497093},{"createdBy":null,"createdDate":1472714187520,"updatedBy":null,"updatedDate":1472097600000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Traffic Generation","type":"Tableau","owner":"ipebordt","reportDesc":null,"id":487,"reportLink":"https://baaastableau.corp.emc.com/t/DIGITAL_OPERATIONS/views/MarketingInvestmentsandResults/TrafficGeneration","functionalArea":"DIGITAL_OPERATIONS","functionalAreaLvl1":"METS","functionalAreaLvl2":"Marketing Investments and Results","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"170366","additionalInfo":"30560","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":5,"lastViewed":null,"favorite":"N","levelId":37,"refreshStatus":"N","recommendedSeq":null,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1463371200000,"sysUpdatedDate":1472097600000,"provisionedDate":1472714196477}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
 
     $httpBackend.whenGET(/reportDashboard\/*/).respond(function (/*method, url, data*/) {
-//        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":[{"id":1,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":"test sm","reportLink":"https://baaastableau.corp.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":28,"name":"Tech Draw Dashboard","type":"Tableau","owner":"rnp","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/MBO_Metrics_table_0/TechDrawDashboard","functionalArea":"GBS_CC","functionalAreaLvl1":"Executive Summary Dashboard","functionalAreaLvl2":"MBO_Metrics_table","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"164713","additionalInfo":"29455","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1454043600000,"updateDate":1454043600000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":45,"name":"VPLEX EWMA Calcs","type":"Webi","owner":"Administrator","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa_.CIY.1N1GgHnJWNloPs8","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"VPLEX EWMA Calcs","linkHoverInfo":"VPLEX EWMA Calcs","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa_.CIY.1N1GgHnJWNloPs8","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ PRD","createDate":1408109070000,"updateDate":1433153781000,"favorite":"N","levelId":25,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":65,"name":"Account Loyalty Matrix","type":"Tableau","owner":"karths1","reportDesc":"Translate account insights & predict future direction to guide conversations between EMC Sales/Go-To-Market teams  and Customers","reportLink":"https://baaastableau.corp.emc.com/t/TCE/views/TCEE2EAccountLoyaltyMatrix/TCEE2EAccountLoyaltyMatrix","functionalArea":"TCE","functionalAreaLvl1":"TCE A&I","functionalAreaLvl2":"TCE E2E Account Loyalty Matrix","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"168573","additionalInfo":"30198","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1460088000000,"updateDate":1464753600000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":108,"name":"Inventory Control Issues Dashboard","type":"VISILums","owner":"Administrator","reportDesc":"","reportLink":"https://sapbip.propel.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AcIvqa9wciJCjdbqMy7RF9Q","functionalArea":"Auditing","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"Inventory Control Issues Dashboard","linkHoverInfo":"Inventory Control Issues Dashboard","sourceSystem":"PROPEL BOBJ PRD","sourceReportId":"AcIvqa9wciJCjdbqMy7RF9Q","additionalInfo":"Auditing","systemDescription":"PROPEL BOBJ PRD","createDate":1460773705000,"updateDate":1464321129000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":126,"name":"PDF Testing","type":"PDF","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01/share/TCE_PDF.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL2","additionalInfo":"#ffee00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465926802000,"updateDate":1465926802000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":127,"name":"HTTP Link PDF","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/Insights%20User%20Documentation.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#ffeeee","systemDescription":"EXTERNAL_SYSTEM","createDate":1465927200000,"updateDate":1465927200000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":128,"name":"TXT File","type":"txt","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01.corp.emc.com/share/file.txt","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#ffee32","systemDescription":"EXTERNAL_SYSTEM","createDate":1465930236000,"updateDate":1465930236000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130,"name":"HTML File","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/External.html","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL6","additionalInfo":"#FFEE00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465993976000,"updateDate":1465993976000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":134,"name":"Tableau User Forum","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Inside EMC Link for Tableau User Forum","reportLink":"https://inside.emc.com/community/active/tableau_users_forum","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL10","additionalInfo":"#ffa699","systemDescription":"EXTERNAL_SYSTEM","createDate":1465998052000,"updateDate":1465998052000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":135,"name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"linkTitle":"Backcapture","linkHoverInfo":"Backcapture","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1455549729000,"updateDate":1455549730000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":137,"name":"Sample KPI Report","type":"Webi","owner":"Administrator","reportDesc":"Tesm sm","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1q2IUDLKpGrQ.a5hWbRsw","functionalArea":"Global Services","functionalAreaLvl1":"Service Request","functionalAreaLvl2":"Custom","linkTitle":"Sample KPI Report","linkHoverInfo":"Sample KPI Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1q2IUDLKpGrQ.a5hWbRsw","additionalInfo":"Global Services/Service Request/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1352215277000,"updateDate":1354323781000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":142,"name":"Alliance Partner Exam and Cert Report","type":"Webi","owner":"SampaR","reportDesc":"This  report is requested by Turner-Corey. Will be scheduled to run twice a month. This is all exam and certification details for the Aliance partners for the lsit provided by Corey","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa3.8C24qLlFnQyQYigofIA","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"External","linkTitle":"Alliance Partner Exam and Cert Report","linkHoverInfo":"Alliance Partner Exam and Cert Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa3.8C24qLlFnQyQYigofIA","additionalInfo":"Education Services and Dev/Certification/External","systemDescription":"BAAAS BOBJ PRD","createDate":1438191340000,"updateDate":1463077852000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":143,"name":"Credential Adoption Report","type":"Webi","owner":"SampaR","reportDesc":"This report gives a number of standard Certification metrics used for Monthly reporting","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa3iXPr0ELpNknQoxymQDaA","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Certification","linkTitle":"Credential Adoption Report","linkHoverInfo":"Credential Adoption Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa3iXPr0ELpNknQoxymQDaA","additionalInfo":"Education Services and Dev/Certification/Certification","systemDescription":"BAAAS BOBJ PRD","createDate":1352229656000,"updateDate":1441217689000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":145,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/views/Variety/SATPerformance","functionalArea":"","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":146,"name":"EWMA Impact Event Rate by Cause B","type":"Webi","owner":"Administrator","reportDesc":"Slide 5-10. Used for publication Pupose","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaFP5hAmL1ZNg6GGZo1c4G0","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":null,"linkTitle":"EWMA Impact Event Rate by Cause B","linkHoverInfo":"EWMA Impact Event Rate by Cause B","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AaFP5hAmL1ZNg6GGZo1c4G0","additionalInfo":"TCE/TCE Publications","systemDescription":"BAAAS BOBJ PRD","createDate":1418036696000,"updateDate":1433153282000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":147,"name":"Cross Sell","type":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/SO_Analytics/views/myPrismPlays/CrossSell","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"100239","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1421730000000,"updateDate":1421730000000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":148,"name":"Quarterly Certification & KPI Report1","type":"Webi","owner":"SampaR","reportDesc":"this report is based on the Credential Adoption Report.  It provides summary reports with an date limit prompt to give data through end of Q","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AacwbbmvQj1Lnzy_lRkyXJM","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":null,"linkTitle":"Quarterly Certification & KPI Report1","linkHoverInfo":"Quarterly Certification & KPI Report1","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"AacwbbmvQj1Lnzy_lRkyXJM","additionalInfo":"Education Services and Dev/Certification","systemDescription":"BAAAS BOBJ PRD","createDate":1444142294000,"updateDate":1444144725000,"favorite":"N","levelId":0,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":149,"name":"FSS Overall Hours Logged Breakdown-by Team","type":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/FSSOverallHoursLoggedBreakdown-byTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"100324","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1421816400000,"updateDate":1464667200000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":151,"name":"Overall Summary","type":"Tableau","owner":"pendyv","reportDesc":"test","reportLink":"https://entbidashboard.emc.com/t/DRR/views/DRR_Demo25_proddb/OverallSummary","functionalArea":"DRR","functionalAreaLvl1":"DRR","functionalAreaLvl2":"DRR_Demo25_proddb","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1258","additionalInfo":"282","systemDescription":"Enterprise Taleau Instance-PRD","createDate":1388638800000,"updateDate":1445313600000,"favorite":"N","levelId":78,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}],"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
-        //return [200, '{"error":"Something went wrong while loading ... unexpected end of subtree [select operationDashboardPage from com.emc.rest.entity.BIGroup where groupId IN ()]"}'];
-        return [200, '{"userName":"guttiv","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":{"2":[{"levelId":15,"levelNumber":2,"levelDesc":"Bookings","parentLevelId":14},{"levelId":16,"levelNumber":2,"levelDesc":"Billings Reports BILLINGS REPORTS","parentLevelId":14}],"1":[{"levelId":14,"levelNumber":1,"levelDesc":"Sales","parentLevelId":null}]},"dynamicReports":null,"bigroups":null,"grpLevels":[{"groupId":7,"groupName":"Sales Exec","numberOfLevels":2,"levels":null,"levelMaps":null}],"grpNLevelMap":{"7":[14,15,16]},"operationalDashboardPage":"https://sapbip-prf.propel.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXzRrgvPEjlGq7wh.xLiv3g"}'];
+        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":null,"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":{"3":[{"levelId":78,"levelNumber":3,"levelDesc":"Account Services","parentLevelId":52,"createdBy":null,"createdDate":null,"updatedBy":223,"updatedDate":1475132049520},{"levelId":70,"levelNumber":3,"levelDesc":"Business Operations Specialists","parentLevelId":36,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":72,"levelNumber":3,"levelDesc":"Deal Registration","parentLevelId":36,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":73,"levelNumber":3,"levelDesc":"Field Inventory Management","parentLevelId":36,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null}],"2":[{"levelId":52,"levelNumber":2,"levelDesc":"CS Support Services","parentLevelId":45,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":40,"levelNumber":2,"levelDesc":"Presales","parentLevelId":34,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":41,"levelNumber":2,"levelDesc":"Recurring Revenue Solutions","parentLevelId":34,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":36,"levelNumber":2,"levelDesc":"SE&M","parentLevelId":34,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null}],"1":[{"levelId":34,"levelNumber":1,"levelDesc":"Commercial Services","parentLevelId":null,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null},{"levelId":45,"levelNumber":1,"levelDesc":"Customer and Professional Services","parentLevelId":null,"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null}]},"dynamicReports":null,"bigroups":null,"grpLevels":[{"groupId":24,"groupName":"GBS_Commercial Services","numberOfLevels":3,"buGroupName":null}],"grpNLevelMap":{"24":[34,36,40,41,70,72,73,78]},"operationalDashboardPage":"https://bipduruat01.corp.emc.com/admin/#/administration/groups","sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
 
     $httpBackend.whenGET(/reportSummary\/*/).respond(function (/*method, url, data*/) {
-//        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[],"recentViewedReports":[],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
-        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"userName":"MOORTS5","name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"id":26048,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"addToGallery":null,"viewCount":null,"lastViewed":1463058672200,"favorite":"N","levelId":46,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"GSC Accreditation","type":"Webi","owner":"SampaR","reportDesc":null,"id":130193,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa9cWof0tYFJt967esggoAc","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Proven","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa9cWof0tYFJt967esggoAc","additionalInfo":"Education Services and Dev/Curriculum/Proven","systemDescription":"BAAAS BOBJ TST","createDate":1440446089000,"updateDate":1440694808000,"addToGallery":null,"viewCount":null,"lastViewed":1464257593400,"favorite":"N","levelId":26,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Income Statement","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130205,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","createDate":1320086467000,"updateDate":1320086467000,"addToGallery":null,"viewCount":null,"lastViewed":1464257584777,"favorite":"N","levelId":0,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":null,"id":130221,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"addToGallery":null,"viewCount":null,"lastViewed":1464257616807,"favorite":"N","levelId":51,"refreshStatus":"Y","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":null,"lastViewed":1464014075197,"favorite":"N","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"recentViewedReports":[{"userName":"moorts5","name":"ART System","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"URL to the ART System","id":132,"reportLink":"http://art.cit.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL8","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996358000,"updateDate":1465996358000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":1,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"ScaleIO","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"ScaleIO Inside EMC Link","id":133,"reportLink":"https://inside.emc.com/community/active/scaleio","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL9","additionalInfo":"#526663","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996418000,"updateDate":1465996769000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"EMEA - Forecast Dashboard","type":"HTTP","owner":"John Murray","reportDesc":"EMEA SalesForce Forecast Dashboard","id":129,"reportLink":"https://emc.my.salesforce.com/01Z70000000n6wh","functionalArea":"Sales","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0066ff","systemDescription":"EXTERNAL_SYSTEM","createDate":1465985965000,"updateDate":1465987494000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"EMEA - Forecast Dashboard","linkHoverInfo":"Dashboard"},{"userName":"moorts5","name":"Unity Link","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Service Now HTTP Link","id":131,"reportLink":"https://emc.service-now.com","functionalArea":"EMC IT","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL7","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996329000,"updateDate":1465996329000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":4,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Sample External Content","type":"CSV","owner":null,"reportDesc":"Desc 2","id":130258,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#F5A9D0","systemDescription":"EXTERNAL_SYSTEM","createDate":1464180268000,"updateDate":1464715408000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":"N","levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info"},{"userName":"MOORTS5","name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"id":130227,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"addToGallery":null,"viewCount":596,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":2,"linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition"},{"userName":"MOORTS5","name":"Sample Http","type":"HTTP","owner":null,"reportDesc":null,"id":130259,"reportLink":"https://bipdurdev01.corp.emc.com/BITool/report/pdf.pdf","functionalArea":"Yes this is the functional area","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#31B404","systemDescription":"EXTERNAL_SYSTEM","createDate":1464181841000,"updateDate":1464181841000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":3,"linkTitle":"Yes this is title","linkHoverInfo":"This is hover"},{"userName":"MOORTS5","name":"Sample External Content","type":"CSV","owner":null,"reportDesc":null,"id":130258,"reportLink":"//bipdurdev01/ThirdPartyCollaterals/AuditReport.csv","functionalArea":"Function Area not defined","functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#93FFFE","systemDescription":"EXTERNAL_SYSTEM","createDate":1464180268000,"updateDate":1464347785000,"addToGallery":null,"viewCount":null,"lastViewed":null,"favorite":null,"levelId":null,"refreshStatus":"N","recommendedSeq":4,"linkTitle":"Link Title","linkHoverInfo":"Link Hover Info"}],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1464257575433,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1463994978290,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"MOORTS5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1463992180277,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+        return [200, '{"userName":"moorts5","reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":[{"createdBy":null,"createdDate":1455549729000,"updatedBy":null,"updatedDate":1455549730000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","id":146,"reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":11,"lastViewed":1477831658610,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1455549729000,"sysUpdatedDate":1455549730000,"provisionedDate":null},{"createdBy":null,"createdDate":1467290450000,"updatedBy":null,"updatedDate":1477831629250,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Google","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Google Description","id":145,"reportLink":"https://www.google.com","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0000ff","systemDescription":"EXTERNAL_SYSTEM","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":5,"lastViewed":1477831640923,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"Y","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1467290450000,"sysUpdatedDate":1467290450000,"provisionedDate":null},{"createdBy":null,"createdDate":1470369600000,"updatedBy":null,"updatedDate":1472011200000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"GBS Collections Analytics","type":"Tableau","owner":"mclelj","reportDesc":null,"id":286,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/GBS_Collectionsdemo8-5/GBSCollectionsDashboard","functionalArea":"GBS_CC","functionalAreaLvl1":"GBS Management","functionalAreaLvl2":"GBS_Collections demo 8-5","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"176550","additionalInfo":"31718","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":4,"lastViewed":1474276816790,"favorite":"Y","levelId":188,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N","sysCreatedDate":1470369600000,"sysUpdatedDate":1472011200000,"provisionedDate":1479899283657},{"createdBy":null,"createdDate":1320206400000,"updatedBy":null,"updatedDate":1472159796377,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"id":1,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":3,"lastViewed":1477831395400,"favorite":"N","levelId":24,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1320206400000,"sysUpdatedDate":1320206400000,"provisionedDate":null}],"recentViewedReports":[{"createdBy":null,"createdDate":1320206400000,"updatedBy":null,"updatedDate":1472159796377,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"id":1,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":192,"lastViewed":null,"favorite":"N","levelId":12,"refreshStatus":"N","recommendedSeq":1,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1320206400000,"sysUpdatedDate":1320206400000,"provisionedDate":null},{"createdBy":null,"createdDate":1320206400000,"updatedBy":null,"updatedDate":1472159796377,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"id":1,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":192,"lastViewed":null,"favorite":"N","levelId":12,"refreshStatus":"N","recommendedSeq":2,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1320206400000,"sysUpdatedDate":1320206400000,"provisionedDate":1479205401410},{"createdBy":null,"createdDate":1472714187520,"updatedBy":null,"updatedDate":1472097600000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"Traffic Generation","type":"Tableau","owner":"ipebordt","reportDesc":null,"id":487,"reportLink":"https://baaastableau.corp.emc.com/t/DIGITAL_OPERATIONS/views/MarketingInvestmentsandResults/TrafficGeneration","functionalArea":"DIGITAL_OPERATIONS","functionalAreaLvl1":"METS","functionalAreaLvl2":"Marketing Investments and Results","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"170366","additionalInfo":"30560","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":5,"lastViewed":null,"favorite":"N","levelId":12,"refreshStatus":"N","recommendedSeq":2,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1463371200000,"sysUpdatedDate":1472097600000,"provisionedDate":1478601030833},{"createdBy":null,"createdDate":1478526201057,"updatedBy":null,"updatedDate":1478526287060,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":null,"name":"TB107_Introduction","type":"Tableau","owner":"anbazh","reportDesc":"test sm","id":503,"reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/TB107_RemoteSROwnershipChangebyReasonCode_0/TB107_Introduction","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB107_Remote SR Ownership Change by Reason Code","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"121702","additionalInfo":"21715","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":3,"lastViewed":null,"favorite":"N","levelId":12,"refreshStatus":"N","recommendedSeq":3,"linkTitle":" ","linkHoverInfo":" ","displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1428465600000,"sysUpdatedDate":1472097600000,"provisionedDate":1478526210727}],"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"createdBy":null,"createdDate":1455549729000,"updatedBy":null,"updatedDate":1455549730000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","id":146,"reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":26,"lastViewed":1477831658610,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1455549729000,"sysUpdatedDate":1455549730000,"provisionedDate":null},{"createdBy":null,"createdDate":1470369600000,"updatedBy":null,"updatedDate":1472011200000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"GBS Collections Analytics","type":"Tableau","owner":"mclelj","reportDesc":null,"id":286,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/GBS_Collectionsdemo8-5/GBSCollectionsDashboard","functionalArea":"GBS_CC","functionalAreaLvl1":"GBS Management","functionalAreaLvl2":"GBS_Collections demo 8-5","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"176550","additionalInfo":"31718","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":19,"lastViewed":1474276816790,"favorite":"Y","levelId":188,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N","sysCreatedDate":1470369600000,"sysUpdatedDate":1472011200000,"provisionedDate":1479899283657},{"createdBy":null,"createdDate":1467290450000,"updatedBy":null,"updatedDate":1477831629250,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Google","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Google Description","id":145,"reportLink":"https://www.google.com","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0000ff","systemDescription":"EXTERNAL_SYSTEM","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":15,"lastViewed":1477831640923,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"Y","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1467290450000,"sysUpdatedDate":1467290450000,"provisionedDate":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
 
     $httpBackend.whenGET(/report\/id\/Manasa\/*/).respond(function (/*method, url, data*/) {
@@ -601,20 +671,20 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/communication\/*/).respond(function (/*method, url, data*/) {
-        return [200, '[{"communicationId":0,"groupId":2,"link":"https://bipdurdev01.corp.emc.com/","title":"Welcome to Insights","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner1.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/groups/sap-business-objects-forum","title":"BOBJ User forum","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner2.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/community/active/tableau_users_forum","title":"Tableau User Forum","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner3.png","groupIdList":null}]'];
-        //return [200, '[{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/groups/sap-business-objects-forum","title":"BOBJ User forum","details":"Click for more info","image":"https://insights.corp.emc.com/banners/banner2.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/community/active/tableau_users_forum","title":"Tableau User Forum","details":"Click for more info","image":"https://insights.corp.emc.com/banners/banner3.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://bipdurdev01.corp.emc.com/","title":"Welcome to Insights","details":"Click for more info","image":"https://insights.corp.emc.com/banners/banner1.png","groupIdList":null}]'];
+//        return [200, '[{"communicationId":0,"groupId":2,"link":"https://bipdurdev01.corp.emc.com/","title":"Welcome to Insights","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner1.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/groups/sap-business-objects-forum","title":"BOBJ User forum","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner2.png","groupIdList":null},{"communicationId":0,"groupId":2,"link":"https://inside.emc.com/community/active/tableau_users_forum","title":"Tableau User Forum","details":"Click for more info","image":"file:///D:/Project/BI_Portal/banners/banner3.png","groupIdList":null}]'];
+        return [200, '[{"communicationId":0,"groupId":2,"link":"https://bipdurdev01.corp.emc.com/","title":"Welcome to Insights","details":"","image":"file:///D:/Project/BI_Portal/banners/banner1.png","groupIdList":null}]'];
     });
 
     $httpBackend.whenGET(/getNews\/*/).respond(function (/*method, url, data*/) {
-        return [200, '[{"id":2,"createdDate":"2015-11-16 18:31:48.280564","description":"EMC is agile now","title":"EMC Goes Agile","url":"https://inside.emc.com/welcome"},{"id":1,"createdDate":"2015-11-16 16:28:24.036593","description":"New version of tableau","title":"Tableau new version","url":"https://inside.emc.com/community/active/career_center_and_skills_management"}]'];
+        return [200, '[{"id":14,"description":"Insights Portal Scheduled Maintenance for Oct16 release - Friday Oct 21st 2016 12:00 AM - 12:00 PM EST","title":"Insights Portal Scheduled Maintenance for Oct 16 release - Friday Oct 21st 2016 12:00 AM - 12:00 PM EST","url":"https://insights.corp.emc.com/doc/Insights Portal - Oct 2016 Release Notice.pdf","createdBy":null,"createdDate":"Sep 02, 2016 11:48:57 AM","updatedBy":null,"updatedDate":null,"rowCount":null},{"id":13,"description":"Walk through of New Features and Enhancements","title":"What is New - Insights ( August  release)","url":"https://insights.corp.emc.com/doc/Insights%20Portal%20-%20August%202016%20Release.pdf","createdBy":null,"createdDate":"Sep 02, 2016 06:33:23 AM","updatedBy":null,"updatedDate":null,"rowCount":null},{"id":11,"description":"Update on Tableau Desktop Maintenance","title":"Update on Tableau Desktop Maintenance","url":"https://inside.emc.com/docs/DOC-223190","createdBy":null,"createdDate":"Aug 31, 2016 13:47:57 PM","updatedBy":null,"updatedDate":null,"rowCount":null},{"id":6,"description":"BOBJ 4.2 SP2 Upgrade","title":"BOBJ 4.2 SP2 Upgrade","url":"https://inside.emc.com/groups/sap-business-objects-forum","createdBy":null,"createdDate":"Jan 25, 2016 11:03:27 AM","updatedBy":null,"updatedDate":null,"rowCount":null},{"id":1,"description":"Tableau Upgrade to 9.2.x - Schedule/Next Steps","title":"Tableau Upgrade to 9.2.x","url":"https://inside.emc.com/community/active/itatemc/blog/2016/02/24/tableau-upgrade-to-92x-schedulenext-steps","createdBy":null,"createdDate":"Nov 16, 2015 10:58:24 AM","updatedBy":null,"updatedDate":null,"rowCount":null}]'];
     });
 
     $httpBackend.whenGET(/favoriteReports\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"userName":"moorts5","name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":null,"id":130188,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"addToGallery":null,"viewCount":null,"lastViewed":1462800197397,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Training Unit Balance - APJ","type":"VISILUMS","owner":"accrajaa","reportDesc":null,"id":130217,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"addToGallery":null,"viewCount":null,"lastViewed":1462796835217,"favorite":"Y","levelId":51,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null},{"userName":"moorts5","name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":null,"id":130225,"reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"addToGallery":null,"viewCount":null,"lastViewed":1462800290487,"favorite":"Y","levelId":50,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null}'];
+        return [200, '{"userName":null,"reportId":null,"deaprtment":null,"reportName":null,"reportData":null,"mostViewedReports":null,"recentViewedReports":null,"mostpopularReports":null,"galleryReports":null,"favoriteReports":[{"createdBy":null,"createdDate":1455549729000,"updatedBy":null,"updatedDate":1455549730000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","id":146,"reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":26,"lastViewed":1477831658610,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"N","sysCreatedDate":1455549729000,"sysUpdatedDate":1455549730000,"provisionedDate":null},{"createdBy":null,"createdDate":1470369600000,"updatedBy":null,"updatedDate":1472011200000,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"GBS Collections Analytics","type":"Tableau","owner":"mclelj","reportDesc":null,"id":286,"reportLink":"https://baaastableau.corp.emc.com/t/GBS_CC/views/GBS_Collectionsdemo8-5/GBSCollectionsDashboard","functionalArea":"GBS_CC","functionalAreaLvl1":"GBS Management","functionalAreaLvl2":"GBS_Collections demo 8-5","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"176550","additionalInfo":"31718","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":19,"lastViewed":1474276816790,"favorite":"Y","levelId":188,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"B","isHeaderFlag":1,"tabbedViews":"Y","isMobileEnabled":"N","sysCreatedDate":1470369600000,"sysUpdatedDate":1472011200000,"provisionedDate":1479899283657},{"createdBy":null,"createdDate":1467290450000,"updatedBy":null,"updatedDate":1477831629250,"rowCount":null,"deletedBy":null,"deletedDate":null,"userName":"moorts5","name":"Google","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Google Description","id":145,"reportLink":"https://www.google.com","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0000ff","systemDescription":"EXTERNAL_SYSTEM","createDate":null,"updateDate":null,"addToGallery":null,"viewCount":15,"lastViewed":1477831640923,"favorite":"Y","levelId":25,"refreshStatus":"N","recommendedSeq":null,"linkTitle":null,"linkHoverInfo":null,"displayType":"Y","isHeaderFlag":1,"tabbedViews":"N","isMobileEnabled":"Y","sysCreatedDate":1467290450000,"sysUpdatedDate":1467290450000,"provisionedDate":null}],"allReportsForDpt":null,"userRoles":null,"message":null,"grpLevelMap":null,"dynamicReports":null,"bigroups":null,"grpLevels":null,"grpNLevelMap":null,"operationalDashboardPage":null,"sourceReportId":null,"sourceSystem":null,"rowCount":null}'];
     });
 
     $httpBackend.whenGET(/userSearch\/*/).respond(function (/*method, url, data*/) {
-        return [200, '[{"sourceReportId":"1","reportName":"SAT Performance","reportType":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","createdDate":"Nov 02, 2011 00:00:00 AM","updatedDate":"Nov 02, 2011 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":64,"id":26039,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"10","reportName":"Seattle 911 Responses","reportType":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Science/Seattle911Responses","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Science","linkTitle":" ","linkHoverInfo":" ","createdDate":"Nov 02, 2011 00:00:00 AM","updatedDate":"Nov 02, 2011 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"2","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":2,"id":26040,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100238","reportName":"myPlay Dashboard","reportType":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 20, 2015 00:00:00 AM","updatedDate":"Jan 20, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":66,"id":26048,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100239","reportName":"Cross Sell","reportType":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/SO_Analytics/views/myPrismPlays/CrossSell","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 20, 2015 00:00:00 AM","updatedDate":"Jan 20, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":56,"id":26049,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100324","reportName":"FSS Overall Hours Logged Breakdown-by Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/FSSOverallHoursLoggedBreakdown-byTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":146,"id":26050,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100325","reportName":"FSS Overall Hours Logged by Theater","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/FSSOverallHoursLoggedbyTheater","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":32,"id":26051,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100326","reportName":"Hours Logged Breakdown by Global Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/HoursLoggedBreakdownbyGlobalTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":49,"id":26052,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100327","reportName":"Hours Logged Breakdown - by Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/HoursLoggedBreakdown-byTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":61,"id":26053,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100328","reportName":"Case Time/Compliance/Utilization by Global Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/CaseTimeComplianceUtilizationbyGlobalTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":54,"id":26054,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100329","reportName":"Case Time/Compliance/Utilization by Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/CaseTimeComplianceUtilizationbyTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":64,"id":26055,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100330","reportName":"Weekly Overtime Dashboard by Global Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/WeeklyOvertimeDashboardbyGlobalTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":24,"id":26056,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100331","reportName":"Weekly Overtime Dashboard-By Team","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/WeeklyOvertimeDashboard-ByTeam","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":16,"id":26057,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100332","reportName":"Account Management Dashboard","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/AccountManagementDashboard","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":55,"id":26058,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100333","reportName":"Repair Exception Dashboard","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/RepairExceptionDashboard","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":7,"id":26059,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100334","reportName":"Headcount Dashboard","reportType":"Tableau","owner":"banakv","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB074_FSSEASGlobalTeamDashboard/HeadcountDashboard","functionalArea":"GS_BI","functionalAreaLvl1":"CS Field Ops Managers","functionalAreaLvl2":"TB074_FSS EAS Global Team Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jun 01, 2016 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17799","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":34,"id":26060,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100482","reportName":"2015 Forecast Guidance","reportType":"Tableau","owner":"donohg2","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/SO_Analytics/views/myQuota-Global/2015ForecastGuidance","functionalArea":"SO_Analytics","functionalAreaLvl1":"myQuota","functionalAreaLvl2":"myQuota - Global","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jan 21, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17833","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":32,"id":26062,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100483","reportName":"Account Search","reportType":"Tableau","owner":"donohg2","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/SO_Analytics/views/myQuota-Global/AccountSearch","functionalArea":"SO_Analytics","functionalAreaLvl1":"myQuota","functionalAreaLvl2":"myQuota - Global","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jan 21, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17833","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":1,"id":26063,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100517","reportName":"Cloud & SAP Model Validation","reportType":"Tableau","owner":"maherc1","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/Marketing/views/Cloud-SAP/CloudSAPModelValidation","functionalArea":"Marketing","functionalAreaLvl1":"Marketing Science Lab","functionalAreaLvl2":"Cloud - SAP","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jan 21, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17842","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":12,"id":26064,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100579","reportName":"s100 MM Story","reportType":"Tableau","owner":"maherc1","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/Marketing/views/s100_validation/s100MMStory","functionalArea":"Marketing","functionalAreaLvl1":"Marketing Science Lab","functionalAreaLvl2":"s100_validation","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jan 21, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17854","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":11,"id":26068,"refreshStatus":"N","tabbedViews":null,"recommended":null},{"sourceReportId":"100580","reportName":"DPS bookings, by Tier","reportType":"Tableau","owner":"Coblem","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/DPAD_CI_Reporting/views/DealsbyTiers/DPSbookingsbyTier","functionalArea":"DPAD_CI_Reporting","functionalAreaLvl1":"Laboratory: EOQ Reports","functionalAreaLvl2":"Deals by Tiers","linkTitle":" ","linkHoverInfo":" ","createdDate":"Jan 21, 2015 00:00:00 AM","updatedDate":"Jan 21, 2015 00:00:00 AM","sourceSystem":"BAaaS Tableau-SBX","additionalInfo":"17855","systemDescription":"BAaaS Taleau Instance-SBX","viewCount":0,"id":26069,"refreshStatus":"N","tabbedViews":null,"recommended":null}]'];
+        return [200, '[{"sourceReportId":"AaUb.VZHY9ZOqX_glPEbFwY","reportName":"World Sales Report","reportType":"CrystalReport","owner":"Administrator","reportDesc":"Top 5 Countries Sales with pie chart. Drill down on Country of interest to view Countrys Top 5 Regional Sales with pie chart. Drill down on Region of interest to view Regions City Sales with pie chart. Drill down on City of interest to view Citys Com","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaUb.VZHY9ZOqX_glPEbFwY","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Demonstration","linkTitle":"World Sales Report","linkHoverInfo":"World Sales Report","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Miscellaneous/Report Samples/Demonstration","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1316759319000,"sysUpdatedDate":1316759319000},{"sourceReportId":"Af0Gk9c5IsZDg6B9H_2Ak5U","reportName":"Sales  Curriculum Accreditation","reportType":"Webi","owner":"Administrator","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Af0Gk9c5IsZDg6B9H_2Ak5U","functionalArea":"Miscellaneous","functionalAreaLvl1":"DEMO","functionalAreaLvl2":null,"linkTitle":"Sales  Curriculum Accreditation","linkHoverInfo":"Sales  Curriculum Accreditation","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Miscellaneous/DEMO","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1366551235000,"sysUpdatedDate":1366551238000},{"sourceReportId":"AS2qASz6wI5AkCdsv0ZkgK8","reportName":"Curriculum Accreditation History","reportType":"Webi","owner":"ruchl","reportDesc":"This report was developed to manage and track the historical quarterly required Sales training for a specific set of Sales executives and their employees.  This report will display the % of each completed Curriculum learning path by Theater, Division and","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AS2qASz6wI5AkCdsv0ZkgK8","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"Curriculum Accreditation History","linkHoverInfo":"Curriculum Accreditation History","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Education Services and Dev/Curriculum/Ed Services Rpt","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1391634378000,"sysUpdatedDate":1458127261000},{"sourceReportId":"ASwq5lfHztRNo1HRZ4R9xHs","reportName":"Curriculum Accreditation","reportType":"Webi","owner":"ruchl","reportDesc":"This report was developed to manage and track the quarterly required Sales training for a specific set of Sales executives and their employees.  This report will display the % of each completed Curriculum learning path by Theater, Division and employee. ","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=ASwq5lfHztRNo1HRZ4R9xHs","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"Curriculum Accreditation","linkHoverInfo":"Curriculum Accreditation","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Education Services and Dev/Curriculum/Ed Services Rpt","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1458070814000,"sysUpdatedDate":1458126728000},{"sourceReportId":"AT_0VVbcRZVMtvrhbrutWZk","reportName":"Partner_Accreditation_Weekly_Report","reportType":"Webi","owner":"ROSSIE1","reportDesc":"This report include pivot reports for Sales and SE Accreditation and detail reports for Sales, SE and Affiliate.  2 years of data included","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AT_0VVbcRZVMtvrhbrutWZk","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Accreditations","linkTitle":"Partner_Accreditation_Weekly_Report","linkHoverInfo":"Partner_Accreditation_Weekly_Report","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Education Services and Dev/Certification/Accreditations","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1409161820000,"sysUpdatedDate":1420820056000},{"sourceReportId":"AUipev2Bc2VOvlfYftyP40c","reportName":"Accreditation_Weekly_Report_gold","reportType":"Webi","owner":"ROSSIE1","reportDesc":"This report include pivot reports for Sales and SE Accreditation and detail reports for Sales, SE and Affiliate.  2 years of data included","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AUipev2Bc2VOvlfYftyP40c","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Accreditations","linkTitle":"Accreditation_Weekly_Report_gold","linkHoverInfo":"Accreditation_Weekly_Report_gold","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Education Services and Dev/Certification/Accreditations","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1391181935000,"sysUpdatedDate":1420820056000},{"sourceReportId":"AWwrw9IoPBpPjCn5IL2GAms","reportName":"Curriculum New Hires Sales","reportType":"Webi","owner":"ruchl","reportDesc":"Open Class Report by Sunitha Anand","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AWwrw9IoPBpPjCn5IL2GAms","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Curriculum","functionalAreaLvl2":"Ed Services Rpt","linkTitle":"Curriculum New Hires Sales","linkHoverInfo":"Curriculum New Hires Sales","createdDate":null,"updatedDate":null,"sourceSystem":"BAAAS BOBJ PRD","additionalInfo":"Education Services and Dev/Curriculum/Ed Services Rpt","systemDescription":"BAAAS BOBJ PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1418218383000,"sysUpdatedDate":1420820056000},{"sourceReportId":"104665","reportName":"SALES DETAILS - COPS","reportType":"Tableau","owner":"marulj","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/IIP/views/ASDProductLinePLs/SALESDETAILS-COPS","functionalArea":"IIP","functionalAreaLvl1":"IIP Finance Dashboards","functionalAreaLvl2":"ASD Product Line P&Ls","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"18568","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1423112400000,"sysUpdatedDate":1455166800000},{"sourceReportId":"104823","reportName":"SALES DETAILS - COPS","reportType":"Tableau","owner":"marulj","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/IIP/views/RSAProductLinePLs/SALESDETAILS-COPS","functionalArea":"IIP","functionalAreaLvl1":"IIP Finance Dashboards","functionalAreaLvl2":"RSA Product Line P&Ls","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"18583","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1423112400000,"sysUpdatedDate":1455166800000},{"sourceReportId":"105390","reportName":"SALES DETAILS - COPS","reportType":"Tableau","owner":"marulj","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/IIP/views/ISILONProductLinePLs/SALESDETAILS-COPS","functionalArea":"IIP","functionalAreaLvl1":"IIP Finance Dashboards","functionalAreaLvl2":"ISILON Product Line P&Ls","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"18683","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1423371600000,"sysUpdatedDate":1455166800000},{"sourceReportId":"111641","reportName":"Sales Rep Version of Flash","reportType":"Tableau","owner":"vardhp","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GS_BI/views/APJ_CSD_Commissions_Report_TBL025/SalesRepVersionofFlash","functionalArea":"GS_BI","functionalAreaLvl1":"Professional Services","functionalAreaLvl2":"APJ_CSD_Commissions_Report.TBL025","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"19972","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1425873600000,"sysUpdatedDate":1455512400000},{"sourceReportId":"115986","reportName":"Sales TA","reportType":"Tableau","owner":"herrim","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/Marketing/views/EHCQ115/SalesTA","functionalArea":"Marketing","functionalAreaLvl1":"default","functionalAreaLvl2":"EHC Q1 15","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"20916","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1427256000000,"sysUpdatedDate":1427256000000},{"sourceReportId":"141682","reportName":"Sales","reportType":"Tableau","owner":"ipebordt","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/DIGITAL_OPERATIONS/views/ProductPerformanceReportingTest/Sales","functionalArea":"DIGITAL_OPERATIONS","functionalAreaLvl1":"Store - Test","functionalAreaLvl2":"Product Performance Reporting (Test)","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"25545","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1435291200000,"sysUpdatedDate":1470024000000},{"sourceReportId":"143914","reportName":"ISR Metrics","reportType":"Tableau","owner":"weic5","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/Inside_Sales/views/APJISMetricsDashboard/ISRMetrics","functionalArea":"Inside_Sales","functionalAreaLvl1":"APJ Inside Sales","functionalAreaLvl2":"APJ IS Metrics Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"25809","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1435896000000,"sysUpdatedDate":1472011200000},{"sourceReportId":"143918","reportName":"Demand Gen","reportType":"Tableau","owner":"weic5","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/Inside_Sales/views/APJISDemand-GenDashboard/DemandGen","functionalArea":"Inside_Sales","functionalAreaLvl1":"APJ Inside Sales","functionalAreaLvl2":"APJ IS Demand-Gen Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"25812","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1435896000000,"sysUpdatedDate":1472011200000},{"sourceReportId":"14515","reportName":"Sales Lane","reportType":"Tableau","owner":"abukat","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GCM/views/ShippingLanes_v2/SalesLane","functionalArea":"GCM","functionalAreaLvl1":"Global Channel Operations","functionalAreaLvl2":"Shipping Lanes_v2","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"2361","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1381723200000,"sysUpdatedDate":1452142800000},{"sourceReportId":"145361","reportName":"Sheet 1","reportType":"Tableau","owner":"Coblem","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/DPAD_CI_Reporting/views/SoftwarevsHardwaresales/Sheet1","functionalArea":"DPAD_CI_Reporting","functionalAreaLvl1":"Dashboards for Sales","functionalAreaLvl2":"Software vs Hardware sales","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"26029","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1436328000000,"sysUpdatedDate":1436328000000},{"sourceReportId":"146365","reportName":"Customer Detail","reportType":"Tableau","owner":"dexhem","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GPO_BI/views/WWSalesOrderLeadTimebyOEMCustomer_0/CustomerDetail","functionalArea":"GPO_BI","functionalAreaLvl1":"Deliver","functionalAreaLvl2":"WW Sales Order Lead Time by OEM Customer","linkTitle":" ","linkHoverInfo":" ","createdDate":1475126940847,"updatedDate":1478526326340,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"26237","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":7,"id":499,"refreshStatus":"N","tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","sysCreatedDate":1436500800000,"sysUpdatedDate":1472097600000},{"sourceReportId":"146404","reportName":"Sales","reportType":"Tableau","owner":"ipebordt","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/DIGITAL_OPERATIONS/views/ProductPerformanceReporting/Sales","functionalArea":"DIGITAL_OPERATIONS","functionalAreaLvl1":"Store","functionalAreaLvl2":"Product Performance Reporting","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"26243","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1436500800000,"sysUpdatedDate":1472011200000},{"sourceReportId":"146561","reportName":"SA Internal Stats","reportType":"Tableau","owner":"abukat","reportDesc":null,"reportLink":"https://baaastableau.corp.emc.com/t/GCM/views/SalesAssistanceDashboard/SAInternalStats","functionalArea":"GCM","functionalAreaLvl1":"Global Channel Operations","functionalAreaLvl2":"Sales Assistance Dashboard","linkTitle":" ","linkHoverInfo":" ","createdDate":null,"updatedDate":null,"sourceSystem":"BAaaS Tableau-PRD","additionalInfo":"26265","systemDescription":"BAaaS Taleau Instance-PRD","viewCount":0,"id":null,"refreshStatus":null,"tabbedViews":null,"recommended":null,"createdDateInDate":null,"updatedDateInDate":null,"createdBy":null,"updatedBy":null,"rowCount":null,"displayType":null,"isHeaderFlag":null,"isMobileEnabled":null,"sysCreatedDate":1436760000000,"sysUpdatedDate":1447736400000}]'];
     });
     
     $httpBackend.whenGET(/addSearch\/*/).respond(function (/*method, url, data*/) {
@@ -622,8 +692,7 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/searchReports\/*/).respond(function (/*method, url, data*/) {
-        return [200, '[{"id":126,"name":"PDF Testing","type":"PDF","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01/share/TCE_PDF.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL2","additionalInfo":"#ffee00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465926802000,"updateDate":1465926802000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":127,"name":"HTTP Link PDF","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/Insights%20User%20Documentation.pdf","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL3","additionalInfo":"#ffeeee","systemDescription":"EXTERNAL_SYSTEM","createDate":1465927200000,"updateDate":1465927200000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":128,"name":"TXT File","type":"txt","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"//bipduruat01.corp.emc.com/share/file.txt","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL4","additionalInfo":"#ffee32","systemDescription":"EXTERNAL_SYSTEM","createDate":1465930236000,"updateDate":1465930236000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":129,"name":"EMEA - Forecast Dashboard","type":"HTTP","owner":"John Murray","reportDesc":"EMEA SalesForce Forecast Dashboard","reportLink":"https://emc.my.salesforce.com/01Z70000000n6wh","functionalArea":"Sales","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"EMEA - Forecast Dashboard","linkHoverInfo":"Dashboard","sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0000ff","systemDescription":"EXTERNAL_SYSTEM","createDate":1465985965000,"updateDate":1466435958000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130,"name":"HTML File","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":null,"reportLink":"https://bipduruat01.corp.emc.com/doc/External.html","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL6","additionalInfo":"#FFEE00","systemDescription":"EXTERNAL_SYSTEM","createDate":1465993976000,"updateDate":1465993976000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":131,"name":"Unity Link","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Service Now HTTP Link","reportLink":"https://emc.service-now.com","functionalArea":"EMC IT","functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL7","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996329000,"updateDate":1465996329000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":132,"name":"ART System","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"URL to the ART System","reportLink":"http://art.cit.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL8","additionalInfo":"#2b8c9d","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996358000,"updateDate":1465996358000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":133,"name":"ScaleIO","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"ScaleIO Inside EMC Link","reportLink":"https://inside.emc.com/community/active/scaleio","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL9","additionalInfo":"#67aded","systemDescription":"EXTERNAL_SYSTEM","createDate":1465996418000,"updateDate":1466437464000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":134,"name":"Tableau User Forum","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Inside EMC Link for Tableau User Forum","reportLink":"https://inside.emc.com/community/active/tableau_users_forum","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL10","additionalInfo":"#ffa699","systemDescription":"EXTERNAL_SYSTEM","createDate":1465998052000,"updateDate":1465998052000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":142,"name":"Alliance Partner Exam and Cert Report","type":"Webi","owner":"SampaR","reportDesc":"This  report is requested by Turner-Corey. Will be scheduled to run twice a month. This is all exam and certification details for the Aliance partners for the lsit provided by Corey","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa3.8C24qLlFnQyQYigofIA","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"External","linkTitle":"Alliance Partner Exam and Cert Report","linkHoverInfo":"Alliance Partner Exam and Cert Report","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa3.8C24qLlFnQyQYigofIA","additionalInfo":"Education Services and Dev/Certification/External","systemDescription":"BAAAS BOBJ PRD","createDate":1438191340000,"updateDate":1463077852000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}]'];
-//        return [200, '[{"id":26048,"name":"myPlay Dashboard","type":"Tableau","owner":"saricf","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/#/site/SO_Analytics/views/myPrismPlays/myPlayDashboard","functionalArea":"SO_Analytics","functionalAreaLvl1":"myPrism","functionalAreaLvl2":"myPrism Plays","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"100238","additionalInfo":"17777","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1421730000000,"updateDate":1421730000000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130188,"name":"onlinelabiV1_test","type":"Webi","owner":"SampaR","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa6vN2i3KAdJp.juYe0TRf0","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Certification","functionalAreaLvl2":"Operations","linkTitle":"onlinelabiV1","linkHoverInfo":"onlinelabiV1","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa6vN2i3KAdJp.juYe0TRf0","additionalInfo":"Education Services and Dev/Certification/Operations","systemDescription":"BAAAS BOBJ TST","createDate":1360035135000,"updateDate":1360044998000,"favorite":"Y","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130205,"name":"Income Statement","type":"CrystalReport","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa7IdaUA_ONLvZQLO5wfGw8","functionalArea":"Miscellaneous","functionalAreaLvl1":"Report Samples","functionalAreaLvl2":"Financial","linkTitle":"Income Statement","linkHoverInfo":"Income Statement","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"Aa7IdaUA_ONLvZQLO5wfGw8","additionalInfo":"Miscellaneous/Report Samples/Financial","systemDescription":"BAAAS BOBJ TST","createDate":1320086467000,"updateDate":1320086467000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130207,"name":"Summarized Documents","type":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaDCB93DC29OgSF8GVsnyGw","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"Summarized Documents","linkHoverInfo":"Summarized Documents","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaDCB93DC29OgSF8GVsnyGw","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","createDate":1443692958000,"updateDate":1451544398000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130217,"name":"Training Unit Balance - APJ","type":"Webi","owner":"accrajaa","reportDesc":"test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaA8WDAQCJNNm3bHbnEewmw","functionalArea":"Education Services and Dev","functionalAreaLvl1":"Administration","functionalAreaLvl2":"Scheduled Jobs","linkTitle":"Training Unit Balance - APJ","linkHoverInfo":"Training Unit Balance - APJ","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaA8WDAQCJNNm3bHbnEewmw","additionalInfo":"Education Services and Dev/Administration/Scheduled Jobs/Unsecured","systemDescription":"BAAAS BOBJ TST","createDate":1420827505000,"updateDate":1462804948000,"favorite":"Y","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130221,"name":"EWMA Rate, Dur, Avail by Product","type":"Webi","owner":"Administrator","reportDesc":"Slide 18 test","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AahlPTOs679PicyffaFp4BM","functionalArea":"TCE","functionalAreaLvl1":"TCE Publications","functionalAreaLvl2":"RP Reports","linkTitle":"EWMA Rate, Dur, Avail by Product","linkHoverInfo":"EWMA Rate, Dur, Avail by Product","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AahlPTOs679PicyffaFp4BM","additionalInfo":"TCE/TCE Publications/RP Reports","systemDescription":"BAAAS BOBJ TST","createDate":1443625281000,"updateDate":1443625288000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"Y","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130224,"name":"SLA Metrics","type":"Webi","owner":"Administrator","reportDesc":"","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaX8T355XQRKoBboH07dGgY","functionalArea":"GBS Command Center","functionalAreaLvl1":"Financial Services","functionalAreaLvl2":"CMC","linkTitle":"SLA Metrics","linkHoverInfo":"SLA Metrics","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaX8T355XQRKoBboH07dGgY","additionalInfo":"GBS Command Center/Financial Services/CMC","systemDescription":"BAAAS BOBJ TST","createDate":1443692957000,"updateDate":1459356727000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130225,"name":"Objects - Events and Details - by User and Event Type","type":"CrystalReport","owner":"Administrator","reportDesc":"This report retrieves event data and details for any object in the system.  Parameters include event start date range, object folder path, user, event type and object type.  The data is grouped by User and event type, then start time and event ID.","reportLink":"http://entbobjtst.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AaGzX1WWes9Aks5wqvS3pUM","functionalArea":"Miscellaneous","functionalAreaLvl1":"Test Audit Reports","functionalAreaLvl2":"Objects - Events","linkTitle":"Objects - Events and Details - by User and Event Type","linkHoverInfo":"Objects - Events and Details - by User and Event Type","sourceSystem":"BAAAS BOBJ TST","sourceReportId":"AaGzX1WWes9Aks5wqvS3pUM","additionalInfo":"Miscellaneous/Test Audit Reports/Objects - Events","systemDescription":"BAAAS BOBJ TST","createDate":1351709783000,"updateDate":1351709792000,"favorite":"Y","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null},{"id":130227,"name":"SLO Definitions","type":"Tableau","owner":"ma1","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/t/GS_BI/views/TB048_RemoteSLODashboard/SLODefinitions","functionalArea":"GS_BI","functionalAreaLvl1":"CS Remote Ops Managers","functionalAreaLvl2":"TB048_Remote SLO Dashboard","linkTitle":"SLO Definition","linkHoverInfo":"SLO Definition","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"131154","additionalInfo":"23603","systemDescription":"Enterprise Tableau-SBX","createDate":1431576000000,"updateDate":1456117200000,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}]']
+        return [200, '[{"createdBy":null,"createdDate":1472236520347,"updatedBy":null,"updatedDate":1481123297987,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":481,"name":"Division Review","type":"Tableau","owner":"maniva1","reportDesc":"Here you mr Description","reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/OilWellManagement","functionalArea":"SO_Analytics","functionalAreaLvl1":"myFI","functionalAreaLvl2":"myFI","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-PRD","sourceReportId":"153819","additionalInfo":"27778","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"N","groupName":null,"sysCreatedDate":1440561600000,"sysUpdatedDate":1472097600000,"provisionedDate":1472236525707,"viewCount":45},{"createdBy":null,"createdDate":1472236550660,"updatedBy":null,"updatedDate":1479741883467,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":482,"name":"expenseExec","type":"Tableau","owner":"kruzem","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/BusinessDashboard/AreaSalesPerformance","functionalArea":"SIP","functionalAreaLvl1":"Travel","functionalAreaLvl2":"te.expense.overview","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9123","additionalInfo":"2855","systemDescription":"Enterprise Taleau Instance-PRD","createDate":null,"updateDate":null,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"T","isHeaderFlag":0,"isMobileEnabled":"Y","groupName":null,"sysCreatedDate":1438056000000,"sysUpdatedDate":1472097600000,"provisionedDate":1478278092957,"viewCount":130},{"createdBy":null,"createdDate":1473689398393,"updatedBy":null,"updatedDate":1476975298677,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":490,"name":"SalesQuest QA","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Sales Quest QA","reportLink":"https://salesquestqa.corp.emc.com/","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":"","linkHoverInfo":"","sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL143","additionalInfo":"#0000FF","systemDescription":"EXTERNAL_SYSTEM","createDate":null,"updateDate":null,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"Y","isHeaderFlag":1,"isMobileEnabled":"Y","groupName":null,"sysCreatedDate":1473689363000,"sysUpdatedDate":1474865758000,"provisionedDate":1473689409063,"viewCount":59},{"createdBy":null,"createdDate":1320206400000,"updatedBy":null,"updatedDate":1472159796377,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":1,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":null,"updateDate":null,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":"Y","groupName":null,"sysCreatedDate":1320206400000,"sysUpdatedDate":1320206400000,"provisionedDate":1472159696203,"viewCount":193},{"createdBy":null,"createdDate":1472236550660,"updatedBy":null,"updatedDate":1479741883467,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":482,"name":"expenseExec","type":"Tableau","owner":"kruzem","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/BusinessDashboard/AreaSalesPerformance","functionalArea":"SIP","functionalAreaLvl1":"Travel","functionalAreaLvl2":"te.expense.overview","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"9123","additionalInfo":"2855","systemDescription":"Enterprise Taleau Instance-PRD","createDate":null,"updateDate":null,"favorite":"N","levelId":null,"reportAccessStatus":null,"refreshStatus":"N","tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"T","isHeaderFlag":0,"isMobileEnabled":"Y","groupName":null,"sysCreatedDate":1438056000000,"sysUpdatedDate":1472097600000,"provisionedDate":1478278092957,"viewCount":130}]'];
     });
 
     $httpBackend.whenGET(/reportFeedbacks\/*/).respond(function (/*method, url, data*/) {
@@ -639,17 +708,42 @@ angular.module('myBiApp')
     });
 
     $httpBackend.whenGET(/report\/id\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"id":null,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"BAaaS Tableau-SBX","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":null,"reportAccessStatus":"True","refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}'];
-//        return [200, '{"id":null,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://tabwebsbx01.corp.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"EXTERNAL","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-SBX","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":null,"reportAccessStatus":"True","refreshStatus":null,"tabbedViews":null,"recommended":null,"groupId":null,"recommendedSeq":null}'];    
+//        return [200, '{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":1,"name":"SAT Performance","type":"Tableau","owner":"Tableau Software","reportDesc":null,"reportLink":"https://entbitdashboard-dev.emc.com/views/Variety/SATPerformance","functionalArea":"Default","functionalAreaLvl1":"Tableau Samples","functionalAreaLvl2":"Variety","linkTitle":" ","linkHoverInfo":" ","sourceSystem":"Enterprise Tableau-PRD","sourceReportId":"1","additionalInfo":"1","systemDescription":"BAaaS Taleau Instance-PRD","createDate":1320206400000,"updateDate":1320206400000,"favorite":"N","levelId":24,"reportAccessStatus":"False","refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":null}'];
+//        return [200, '{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":145,"name":"Google","type":"HTTP","owner":"Sridharan Narayanan","reportDesc":"Google Description","reportLink":"http://www.google.com","functionalArea":null,"functionalAreaLvl1":null,"functionalAreaLvl2":null,"linkTitle":null,"linkHoverInfo":null,"sourceSystem":"EXTERNAL","sourceReportId":"EXTERNAL5","additionalInfo":"#0000ff","systemDescription":"EXTERNAL_SYSTEM","createDate":1467290450000,"updateDate":1467290450000,"favorite":"N","levelId":25,"reportAccessStatus":"True","refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"Y","isHeaderFlag":1,"isMobileEnabled":null}'];
+        return [200, '{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"id":146,"name":"Backcapture","type":"Webi","owner":"pleaum","reportDesc":"","reportLink":"https://entbobj.isus.emc.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=Aa1oa1KYVSNHg9ecfd3z30E","functionalArea":"CMC Reporting","functionalAreaLvl1":"Custom","functionalAreaLvl2":null,"linkTitle":"Backcapture","linkHoverInfo":"Backcapture","sourceSystem":"BAAAS BOBJ PRD","sourceReportId":"Aa1oa1KYVSNHg9ecfd3z30E","additionalInfo":"CMC Reporting/Custom","systemDescription":"BAAAS BOBJ PRD","createDate":1455549729000,"updateDate":1455549730000,"favorite":"N","levelId":25,"reportAccessStatus":"True","refreshStatus":"N","tabbedViews":"N","recommended":null,"groupId":null,"recommendedSeq":null,"displayType":"B","isHeaderFlag":1,"isMobileEnabled":null}'];
     });
     
     $httpBackend.whenGET(/home\/getUserPersonalization\/*/).respond(function (/*method, url, data*/) {
-        return [200, '{"userId": 990865, "recommended": 3, "favorite": 1, "mostViewed": 2, "userTheme":0}'];
+        return [200, '{"userId":3034,"recommended":3,"favorite":1,"mostViewed":2,"userTheme":0,"isListViewed":2,"isRecommendedCollapsed":0,"isFavoriteCollapsed":0,"isMostViewedCollapsed":0,"isMenuCollapsed":0}'];
     });
     
     $httpBackend.whenGET(/home\/getBreadCrumbsDetails\/*/).respond(function (/*method, url, data*/) {
-//        return [200, '[{"levelId":14,"levelNumber":1,"levelDesc":"Sales","parentLevelId":0}]'];
         return [200, '[{"levelId":14,"levelNumber":1,"levelDesc":"Sales","parentLevelId":0},{"levelId":15,"levelNumber":2,"levelDesc":"Bookings","parentLevelId":14}]'];
+    });
+    
+    $httpBackend.whenGET(/home\/getAutoSuggestionList\/*/).respond(function (/*method, url, data*/) {
+        return [200, '["Americas Insight Truncate large text auto suggestions based on the allocated width. Still pending I have fixed (SA DVP PDF) - IP Report thru 08 24 15","Americas Insight Truncate large text auto suggestions based on the allocated width. Still pending I have fixed (SA DVP PDF) 1.1 : Justin 3/16/16","Americas Insight Truncate large text auto suggestions based on the allocated width. Still pending I have fixed (SA DVP PDF)_LATAM","Business Insights","Context: Key Player/Industry Insights/Findings","EMEA Insight Dashboard Analysis[1]","EMEA Insight Detailed_Bookings_Forecast","EMEA MidMarket Insight Detailed_Bookings_Forecast (PS)","Historical Insights.","Insight","SA EMEA Insight Dashboard Analysis","SA EMEA Insight Dashboard Analysis (Region)","SAMPLE - BusinessInsightiPhone","SAMPLE - BusinessInsightiPhone SAP Version","TCE Account Insight","TEST - AppID Correlation with IT Insight"]'];
+    }); 
+    
+    $httpBackend.whenGET(/home\/getBIReportMetadata\/*/).respond(function (/*method, url, data*/) {
+        return [200, '[{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Cost Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing Comments]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Backlog Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"LightSpeed - ID Nodes.XLS","workSheetName":"Excel - PlanNodes","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"LightSpeed - ID Nodes.XLS","workSheetName":"Excel - PlanNodes","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[NodeID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"LightSpeed - ID Nodes.XLS","workSheetName":"Excel - PlanNodes","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Booked Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Booked Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Billing Block]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Billing Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Deal Currency]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Profit Center]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS User Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Install at Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing Comments]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Calendar Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[CPM Comments Last Update Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Actual Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Backlog Amount Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Booked Cost Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Complete To Date Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Booked Cost Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Cost Forecast Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Cost Forecast Amount Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Forecast Revenue Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Backlog Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Backlog Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Cost Forecast Amount Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Forecast Revenue Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Forecast Revenue Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Project Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Unbilled Revenue Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Unbilled Revenue Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Bill to Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing Comments]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[CPM Comments Last Update Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Invoice Amount ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Project Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Actual Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Complete To Date Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Deal Currency]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Planned Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Last Cost Posted]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Cost Forecast Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Planned Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Role Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[CPM Comments Last Update Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Actual Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Finish Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Quote Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[MP Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Creation Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[MP Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Profit Center]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS User Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Install at Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[MP Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[P.O Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[P.O. Line Unit Quantity]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Complete To Date Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Creation Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Creation Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost ITD Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost QTD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost QTD Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Adjustment Amount QTD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount ITD Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount QTD Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount QTD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount QTD Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Backlog Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Forecast Revenue Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Total Project Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Unbilled Revenue Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Unbilled Revenue Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - First Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - Last Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - Phone]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - PreSales Contact Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Contact - Salutation]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Install at Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Budget & Staffing Comments]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[CPM Comments Last Update Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Actual Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Finish Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Pre-Packaged Forecast Quantity]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Finish Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Schedule and Quality Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Actual Cost ITD Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Cost Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Cost Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Funding Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Funding Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Hours To Go]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Amount ITD Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Finish Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Planned Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Deal Currency]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Delivery Organization]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Planned Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Profit Center]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Role End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS User Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Install at Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Contract Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Division]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org GEO]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Region]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Theater]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Quarter Forecast Revenue Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Profit Center]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Planned Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Sales Order Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Sales Order Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Cost Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Estimate to Complete(ETC) Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Funding Amount Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Funding Amount Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Funding Amount Rev Rate]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Hours To Go]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan Hours]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Pre-Packaged Forecast Quantity]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Survey Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Complete To Date Units]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Role Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Adjustment Amount ITD Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Adjustment Amount ITD Local]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Revenue Adjustment Amount QTD Global]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Full Finance Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS User Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[ASQ Survey Action Code]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"ASQ Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[MP Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Creation Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Owning Org ID]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"PO Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Project Manager Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Business Segment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Element Type]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current PS Org Country_reg]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Invoice Data","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Profit Center]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS Project Manager]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[WBS Element Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Invoice Forecast Amount Doc]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[GDW Database Last Refresh Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Report Info","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Proj Delivery Owner Email]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS System Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS TECO Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current WBS User Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Install at Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Master Project Start Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[MP Customer Name]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Plan & Execute Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Creation Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Purchase Order Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Quote and SO","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Next Invoice Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Project Number]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Billing Plan","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Accountant]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Current Project Financial Plan End Date]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null},{"createdBy":null,"createdDate":null,"updatedBy":null,"updatedDate":null,"rowCount":null,"deletedBy":null,"deletedDate":null,"sourceSystem":"PROPEL BOBJ PRD","systemDesc":"PROPEL BOBJ PRD","sourceReportId":"Aa.49YHKKkNBuh0kJvrfCbI","reportName":"Professional Services - PM Dashboard - Project Data - Production","reportDesc":null,"reportColumnName":"[Overall Status Comment]","fieldType":"Database Field","tableNameSql":null,"sourceColumnName":null,"calculationFormula":null,"connectionUniverse":"Professional Services.unx","workSheetName":"Current Quarter","reportType":null,"dataType":null,"workbookName":null,"workbookId":null}]'];
+    });
+    
+    $httpBackend.whenGET(/activateDefaultPersona\/*/).respond(function (/*method, url, data*/) {
+        return [200, '{"status":"Success","message":"The persona is activated as default successfully.","id":null}'];
+    });
+    
+    $httpBackend.whenGET(/getNotificationByUser\/*/).respond(function (/*method, url, data*/) {
+//        return [200, '{"userNewAlertList":[],"userNotificationList":[],"newNotificationCount":0}'];
+//        return [200, '{"userNewAlertList":[{"notificationId":10,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An11","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","moreInfoUrl":"http://jsoneditoronline.org/","notificationType":"A","readDate":null,"biCreatedDate":1478868509117,"assignId":171},{"notificationId":3,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An12","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"A","readDate":null,"biCreatedDate":1478885045000,"assignId":39}],"userNotificationList":[{"notificationId":13,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An13","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","moreInfoUrl":"http://jsoneditoronline.org/","notificationType":"M","readDate":null,"biCreatedDate":1479105175360,"assignId":201},{"notificationId":12,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An14","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"M","readDate":null,"biCreatedDate":1479105160343,"assignId":191},{"notificationId":11,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An15","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"M","readDate":null,"biCreatedDate":1479105137123,"assignId":181},{"notificationId":10,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An16","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"A","readDate":null,"biCreatedDate":1478868509117,"assignId":171},{"notificationId":9,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An17","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"M","readDate":null,"biCreatedDate":1478864147700,"assignId":161},{"notificationId":8,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An18","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","moreInfoUrl":"http://jsoneditoronline.org/","notificationType":"M","readDate":null,"biCreatedDate":1478898316143,"assignId":151},{"notificationId":7,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An19","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"M","readDate":null,"biCreatedDate":1478897898913,"assignId":141},{"notificationId":6,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An10","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"M","readDate":null,"biCreatedDate":1478897872863,"assignId":131},{"notificationId":4,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An11","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","moreInfoUrl":"http://jsoneditoronline.org/","notificationType":"M","readDate":null,"biCreatedDate":1478885556693,"assignId":121},{"notificationId":3,"header":"GBS_Analytics test 7 GBS_Analytics test 7GBS_An12","messageBody":"Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text","notificationType":"A","readDate":null,"biCreatedDate":1478885045000,"assignId":39}],"newNotificationCount":10}'];
+        return [200, '{"userNewAlertList":[{"notificationId":4,"header":"Dismiss Alert Test","messageBody":"Alert Body","notificationType":"A","readDate":null,"biCreatedDate":1481874254160,"assignId":127,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"}],"userNotificationList":[{"notificationId":5,"header":"Admin Mobile Notification","messageBody":"Admin Mobile Notification Message Body","notificationType":"M","readDate":null,"biCreatedDate":1481881530940,"assignId":120,"moreInfoUrl":"http://google.com","owner":"Sarunkumar Moorthy"},{"notificationId":4,"header":"Dismiss Alert Test","messageBody":"Alert Body","notificationType":"A","readDate":null,"biCreatedDate":1481874254160,"assignId":127,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"},{"notificationId":2,"header":"Test Notifn","messageBody":"SM message","notificationType":"M","readDate":null,"biCreatedDate":1481874079190,"assignId":15,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"}],"newNotificationCount":3}'];
+//        return [200, '{"userNewAlertList":[], "userNotificationList":[{"notificationId":13,"header":"Admin Test","messageBody":"Lorem Ipsum is simply dummy text..","moreInfoUrl":"http://jsoneditoronline.org/","notificationType":"T","readDate":1479105175360,"biCreatedDate":1479105175360,"assignId":201}],"newNotificationCount":0}'];
+//        return [200, '{"userNewAlertList":[], "userNotificationList":[{"notificationId":1,"header":"eMMG","messageBody":"test","notificationType":"M","readDate":null,"biCreatedDate":1480444421157,"assignId":8,"moreInfoUrl":null}],"newNotificationCount":1}'];
+//        return [200, '{"userNewAlertList":[{"notificationId":14,"header":"111","messageBody":"1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111","notificationType":"A","readDate":null,"biCreatedDate":1480519766977,"assignId":555,"moreInfoUrl":"","owner":"Sridharan Narayanan"},{"notificationId":12,"header":"Time Title 1","messageBody":"Time Message","notificationType":"A","readDate":null,"biCreatedDate":1480518594207,"assignId":170,"moreInfoUrl":null,"owner":"Sridharan Narayanan"},{"notificationId":4,"header":"eMMG","messageBody":"test","notificationType":"A","readDate":null,"biCreatedDate":1480457383413,"assignId":181,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"},{"notificationId":3,"header":"eMMG","messageBody":"test","notificationType":"A","readDate":null,"biCreatedDate":1480457368227,"assignId":27,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"}],"userNotificationList":[{"notificationId":38,"header":"ghfghfg","messageBody":"fgf","notificationType":"A","readDate":null,"biCreatedDate":1480690560427,"assignId":819,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"},{"notificationId":35,"header":"Date Test","messageBody":"Date Message Body","notificationType":"M","readDate":null,"biCreatedDate":1480683324777,"assignId":874,"moreInfoUrl":null,"owner":"Sarunkumar Moorthy"},{"notificationId":32,"header":"New 1","messageBody":"New 2 ff","notificationType":"M","readDate":null,"biCreatedDate":1480606064443,"assignId":544,"moreInfoUrl":null,"owner":"Sridharan Narayanan"},{"notificationId":14,"header":"111","messageBody":"1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111","notificationType":"A","readDate":null,"biCreatedDate":1480519766977,"assignId":555,"moreInfoUrl":"","owner":"Sridharan Narayanan"},{"notificationId":12,"header":"Time Title 1","messageBody":"Time Message","notificationType":"A","readDate":null,"biCreatedDate":1480518594207,"assignId":170,"moreInfoUrl":null,"owner":"Sridharan Narayanan"},{"notificationId":4,"header":"eMMG","messageBody":"test","notificationType":"A","readDate":1479105175360,"biCreatedDate":1480457383413,"assignId":181,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"},{"notificationId":3,"header":"eMMG","messageBody":"test","notificationType":"A","readDate":1479105175360,"biCreatedDate":1480457368227,"assignId":27,"moreInfoUrl":null,"owner":"Sk Mahammad Saim"}],"newNotificationCount":7}'];
+    });
+    
+    $httpBackend.whenGET(/dismissNotification\/*/).respond(function (/*method, url, data*/) {
+        return [200, '{"status":"Success","message":"Notification - 18 dismissed successfully.","id":null}'];
     });
 }]);
 'use strict';
@@ -663,6 +757,7 @@ angular.module('myBiApp')
  */
 angular.module('myBiApp')
 .controller('MainCtrl', ["$scope", "$rootScope", "$localStorage", "newsService", "reportSummaryService", "$q", "carouselService", "popularSearchService", "$http", "commonService", "reportsFactory", "userDetailsService", "$window", "$timeout", "CONFIG", function ($scope, $rootScope, $localStorage, newsService, reportSummaryService, $q, carouselService, popularSearchService, $http, commonService, reportsFactory, userDetailsService, $window, $timeout, CONFIG) {
+    $scope.$emit('setNavBar', true);
     $scope.myInterval = 6000;
     $scope.noWrapSlides = false;
     $scope.carouselData = [];
@@ -670,42 +765,128 @@ angular.module('myBiApp')
     $scope.personaInfo = {};
     $scope.ieFlag = true;
     $scope.winFocus = false;
+    $scope.listViewStatus = 'grid';
+    $scope.isRecommendedCollapsed = true;
+    $scope.isFavoriteCollapsed = true;
+    $scope.isMostViewedCollapsed = true;
+    $localStorage.treeLevelId = false;
+    var newHeight, scrollBar;
+    
+    if($window.innerWidth < 768) {
+        newHeight = 66;
+        scrollBar = true;
+    } else if ($window.innerWidth < 992) {
+        newHeight = 75;
+        scrollBar = true;
+    } else {
+        newHeight = 200;
+        scrollBar = false;
+    }
     
     $scope.config = {
-        autoHideScrollbar: false,
+        autoHideScrollbar: scrollBar,
         theme: 'light',
         advanced: {
             updateOnContentResize: true
         },
-        setHeight: 200,
+        setHeight: newHeight,
         scrollInertia: 0
     };
     
-    $scope.$on('bredCrumValue', function(event, value){
-        $scope.pageBreadCrum = value
+    $scope.hideNavBar = function() {
+        ($scope.noNavBar) ? $scope.noNavBar = false: $scope.noNavBar = true;
+    };
+    
+    $scope.$on('breadCrumbValue', function(event, value){
+        $scope.pageBreadCrumb = value
+    });
+    
+    $scope.$on('hideReportTabs', function(event, value){
+        $scope.hideTabsFlag = value
     });
     
     $scope.$on('myLevelIndication', function(event, value){
         $scope.myLevel = $localStorage.myLevel;
     });
     
-    $scope.$on('myThemeSettings', function(event, theme, personalization){
+    $scope.$on('myThemeSettings', function(event, theme, personalization, isMenuCollapsed){
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
+        $localStorage.isMenuCollapsed = isMenuCollapsed
         $scope.userTheme = $localStorage.userTheme;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
     });
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
+    $scope.$on('setSearchDisplayName', function(event, value){
+        $scope.searchDisplayName = value;
+    });
+    
+    $scope.$on('addToFavorite', function(event, obj) {
+        var panelName = obj.arrayItem.title;
+        var favStatus = obj.favorite;
+        var  reportIndex = obj.reportIndex;
+        
+        switch(panelName) {
+            case 'Favorite Reports': 
+                obj.arrayItem.data.splice(reportIndex, 1);
+                changeToFavorite(_.findLastIndex($scope.panelMostViewedReports.data, {'id' : obj.report.id}), $scope.panelMostViewedReports.data, 'N');
+                changeToFavorite(_.findLastIndex($scope.panelRRReports.data, {'id' : obj.report.id}), $scope.panelRRReports.data, 'N');
+                break;
+                
+            case 'Most Viewed Reports':
+                if(favStatus === 'N') {
+//                    ($scope.panelFavoriteReports.data.length < 5) ? $scope.panelFavoriteReports.data.push(obj.report): '';
+                    $scope.panelFavoriteReports.data.push(obj.report);
+                    changeToFavorite(_.findLastIndex($scope.panelRRReports.data, {'id' : obj.report.id}), $scope.panelRRReports.data, 'Y');
+                } else {
+                    (_.findLastIndex($scope.panelFavoriteReports.data, {'id' : obj.report.id}) >  -1) ? 
+                        $scope.panelFavoriteReports.data.splice(_.findLastIndex($scope.panelFavoriteReports.data, {'id' : obj.report.id}), 1): '';
+                    changeToFavorite(_.findLastIndex($scope.panelRRReports.data, {'id' : obj.report.id}), $scope.panelRRReports.data, 'N');
+                }    
+                break;
+                
+            case 'Recommended Reports':
+                if(favStatus === 'N') {
+//                    ($scope.panelFavoriteReports.data.length < 5) ? $scope.panelFavoriteReports.data.push(obj.report): '';
+                    $scope.panelFavoriteReports.data.push(obj.report);
+                    changeToFavorite(_.findLastIndex($scope.panelMostViewedReports.data, {'id' : obj.report.id}), $scope.panelMostViewedReports.data, 'Y');
+                } else {
+                    (_.findLastIndex($scope.panelFavoriteReports.data, {'id' : obj.report.id}) >  -1) ? 
+                        $scope.panelFavoriteReports.data.splice(_.findLastIndex($scope.panelFavoriteReports.data, {'id' : obj.report.id}), 1): '';          
+                    changeToFavorite(_.findLastIndex($scope.panelMostViewedReports.data, {'id' : obj.report.id}), $scope.panelMostViewedReports.data, 'N');
+                } 
+                break;
+        }
+    });
+    
+    function changeToFavorite(itemIndex, itemArray, itemFlag) {
+        if(itemIndex && itemArray[itemIndex]) {
+            itemArray[itemIndex].favorite = itemFlag;
+        }
+//        if(_.findLastIndex($scope.panelMostViewedReports.data, {'id' : obj.report.id})) {
+//            $scope.panelMostViewedReports.data[_.findLastIndex($scope.panelMostViewedReports.data, {'id' : obj.report.id})].favorite = 'N';
+//        }
+//        if(_.findLastIndex($scope.panelRRReports.data, {'id' : obj.report.id})) {
+//            $scope.panelRRReports.data[_.findLastIndex($scope.panelRRReports.data, {'id' : obj.report.id})].favorite = 'N';
+//        }
+    }
     
     $scope.panelMostViewedReports = {
         'title': 'Most Viewed Reports',
         'open': true,
-        'limit': 6,
+        'limit': 5,
         'class_names': 'report-block report-tile'
     };
 
     $scope.panelRRReports = {
         'title': 'Recommended Reports',
         'open': true,
-        'limit': 6,
+        'limit': 5,
         'class_names': 'report-block report-tile',
         'viewMoreUiLink': 'reports.list',
         'rr': true
@@ -714,7 +895,7 @@ angular.module('myBiApp')
     $scope.panelFavoriteReports = {
         'title': 'Favorite Reports',
         'open': true,
-        'limit': 6,
+        'limit': 5,
         'class_names': 'report-block report-tile',
         'viewMoreUiLink': 'favorites'
     };
@@ -727,30 +908,45 @@ angular.module('myBiApp')
         $scope.reportPriorityList.splice(currPosition, 1);
         $scope.reportPriorityList.splice(newPos, 0, currItem);
         $scope.refreshPanelList($scope.reportPriorityList);
-        setUserCustomization($scope.reportPriorityList);
+        setUserCustomization($scope.reportPriorityList, 'tileSettings');
     };
 
     $scope.setLoading(true);
+    
     $scope.setListView = function (status) {
+        $scope.listViewStatus  = status;
+        $localStorage.listViewStatus = status;
+        $scope.$broadcast('listViewValue', status);
+        
         for (var i in $scope.reportPanelList) {
             $scope.reportPanelList[i]['listView'] = status;
         }
+        
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
+        setUserCustomization(value, 'listView');
     }
 
     $scope.refreshPanelList = function () {
         $scope.reportPanelList = [];
         var totalPriorities = $scope.reportPriorityList.length;
+        
         for (var i = 0; i < totalPriorities; i++) {
             switch ($scope.reportPriorityList[i]) {
                 case 'recentViewedReports':
+                    $scope.panelRRReports.listView = $scope.listViewStatus;
+                    $scope.panelRRReports.open = $scope.isRecommendedCollapsed;
                     $scope.panelRRReports.indexData = {'curr': i, 'total': totalPriorities};
                     $scope.reportPanelList.push($scope.panelRRReports);
                     break;
                 case 'favoriteReports':
+                    $scope.panelFavoriteReports.listView = $scope.listViewStatus;
+                    $scope.panelFavoriteReports.open = $scope.isFavoriteCollapsed;
                     $scope.panelFavoriteReports.indexData = {'curr': i, 'total': totalPriorities};
                     $scope.reportPanelList.push($scope.panelFavoriteReports);
                     break;
                 case 'mostViewedReports':
+                    $scope.panelMostViewedReports.listView = $scope.listViewStatus;
+                    $scope.panelMostViewedReports.open = $scope.isMostViewedCollapsed;
                     $scope.panelMostViewedReports.indexData = {'curr': i, 'total': totalPriorities};
                     $scope.reportPanelList.push($scope.panelMostViewedReports);
                     break;
@@ -759,19 +955,21 @@ angular.module('myBiApp')
     };
 
     $q.all([reportSummaryService.getReportSummary(), newsService, carouselService, popularSearchService, $scope.biGroup.all(), userDetailsService.userPromise]).then(function (response) {
-        $scope.personaInfo = response[5][0].personaInfo;
+        $timeout(function() {
+            $scope.personaInfo = ($rootScope.personaInfo)? $rootScope.personaInfo : response[5][0].personaInfo;
+//            $scope.personaInfo = response[5][0].personaInfo;
+        }, 2000);
         $scope.setLoading(false);
         $scope.newsData = response[1];
-        $scope.panelMostViewedReports.data = (response[0].mostViewedReports.length > $scope.panelMostViewedReports.limit) ? (response[0].mostViewedReports.splice(0, $scope.panelMostViewedReports.limit)) : response[0].mostViewedReports;
-        $scope.panelFavoriteReports.data = (response[0].favoriteReports.length > $scope.panelFavoriteReports.limit) ? (response[0].favoriteReports.splice(0, $scope.panelFavoriteReports.limit)) : response[0].favoriteReports;
-        $scope.panelRRReports.data = (response[0].recentViewedReports.length > $scope.panelRRReports.limit) ? (response[0].recentViewedReports.splice(0, $scope.panelRRReports.limit)) : response[0].recentViewedReports;
-        $scope.panelMostViewedReports.listView = false;
-        $scope.panelFavoriteReports.listView = false;
-        $scope.panelRRReports.listView = false;
+        $scope.panelMostViewedReports.data = response[0].mostViewedReports;
+        $scope.panelFavoriteReports.data = response[0].favoriteReports;
+        $scope.panelRRReports.data = response[0].recentViewedReports;
+        $scope.panelMostViewedReports.listView = 'grid';
+        $scope.panelFavoriteReports.listView = 'grid';
+        $scope.panelRRReports.listView = 'grid';
         $scope.refreshPanelList();
         $scope.carouselData = response[2];
         $scope.words = response[3];
-    
         var userdetails = response[5][0];
         
         if (userdetails.userinfo.badge === 'Bronze') {
@@ -832,22 +1030,43 @@ angular.module('myBiApp')
         }
     };
     
-    function setUserCustomization(reportPriorityList) {
-        userDetailsService.userPromise.then(function(userObj) {
-            var putObj = {
-                'userId' : userObj[0].uid,
-                'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
-                'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
-                'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
-                'userTheme' : findThemeKey(CONFIG.userTheme, $localStorage.userTheme)
-            }
-            $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
-                .then(function (resp, status, headers) {
+    function setUserCustomization(reportObject, type) {
+        switch(type) {
+            case 'tileSettings':
+                userDetailsService.userPromise.then(function(userObj) {
+                    var putObj = {
+                        'userId' : userObj[0].uid,
+                        'recommended' :reportObject.indexOf('recentViewedReports')+1,
+                        'favorite' : reportObject.indexOf('favoriteReports')+1,
+                        'mostViewed' : reportObject.indexOf('mostViewedReports')+1,
+                        'userTheme' : findThemeKey(CONFIG.userTheme, $localStorage.userTheme)
+                    };
                     
-                }, function (resp, status, headers, config) {
-                
+                    $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                        .then(function (resp, status, headers) {
+
+                        }, function (resp, status, headers, config) {
+
+                        });
                 });
-        });
+                break;
+            case 'listView':
+                userDetailsService.userPromise.then(function(userObj) {
+                    var putObj = {
+                        'userId' : userObj[0].uid,
+                        'isListViewed' :reportObject,
+                    };
+                    
+                    $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                        .then(function (resp, status, headers) {
+
+                        }, function (resp, status, headers, config) {
+
+                        });
+                });
+                break;
+        }   
+        
     }
     
     function findThemeKey(obj, value) {
@@ -864,24 +1083,42 @@ angular.module('myBiApp')
     function setPersonalization() {
         $http.get('BITool/home/getUserPersonalization').then(function (response) {
             if(response.data) {
+                if (response.data.isListViewed === null || !response.data.isListViewed) {
+                    $localStorage.listViewStatus = 'grid';
+                } else {
+                    (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                }  
+                
+                (response.data.isRecommendedCollapsed === 1) ? $scope.isRecommendedCollapsed = false : $scope.isRecommendedCollapsed = true;
+                (response.data.isFavoriteCollapsed === 1) ? $scope.isFavoriteCollapsed = false : $scope.isFavoriteCollapsed = true;
+                (response.data.isMostViewedCollapsed === 1) ? $scope.isMostViewedCollapsed = false : $scope.isMostViewedCollapsed = true;
+                (response.data.isMenuCollapsed === 1) ? $scope.isMenuCollapsed = true : $scope.isMenuCollapsed = false;
                 var personalization = [];
-                personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                personalization[response.data.recommended - 1] = 'recentViewedReports';
+                
+                if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+                } else {
+                    personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                }
                 
                 $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                $scope.listViewStatus = $localStorage.listViewStatus;
+                $localStorage.isMenuCollapsed = $scope.isMenuCollapsed;
                 $scope.userTheme = $localStorage.userTheme;
                 $localStorage.personalization = personalization;
-                $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
                 $scope.reportPriorityList = personalization;
                 $scope.reportPanelList = [];
                 $scope.refreshPanelList($scope.reportPriorityList);
+                $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
             } else {
                 $scope.reportPriorityList = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                 $scope.reportPanelList = [];
-                $localStorage.userTheme = 'default';
-                $scope.userTheme = $localStorage.userTheme;
-                $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList);
+                $scope.userTheme = $localStorage.userTheme = 'default';                    
+                $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                $scope.$emit('myThemeSettings', $scope.userTheme, $scope.reportPriorityList, $scope.isMenuCollapsed);
             }
         });
     }
@@ -896,19 +1133,18 @@ angular.module('myBiApp')
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('ReportCtrl', ["$scope", "$http", "$stateParams", "$state", "$sce", "reportsMenu", "userDetailsService", "commonService", "searchservice", function ($scope, $http, $stateParams, $state, $sce, reportsMenu, userDetailsService, commonService, searchservice/*, $rootScope*/) {
+.controller('ReportCtrl', ["$scope", "$rootScope", "$localStorage", "$http", "$stateParams", "$state", "$sce", "$filter", "$timeout", "reportsMenu", "userDetailsService", "commonService", "CONFIG", "$window", "searchservice", function ($scope, $rootScope, $localStorage, $http, $stateParams, $state, $sce, $filter, $timeout, reportsMenu, userDetailsService, commonService, CONFIG, $window, searchservice/*, $rootScope*/) {
     /*jshint latedef: false */
-    $scope.setLoading(false);
+    $scope.setLoading(true);
     $scope.isTableu = false;
-    $scope.tableuLink = '';
     $scope.feedbackArray = [];
+    $scope.mainState.$current.data.displayName = '';
     $scope.reportAccessData = {};
     $scope.isCollapsed = false;
-    getBreadCrumLevel($stateParams.levelId);
-    $scope.getTableuLink = function () {
-        return $sce.trustAsResourceUrl($scope.tableuLink);
-    };
-
+    $scope.pageBreadCrumb = '';
+    $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
+    ($state.current.name !== 'reports.details.report.report' && $state.current.name !== 'reports.details.report.about') ? getBreadCrumbLevel($stateParams.reportId) : '';
+    
     if ($stateParams.levelId && $stateParams.reportId) {
         if ($state.current.name === 'reports.details.report.report') {
             userDetailsService.userPromise.then(function (response) {
@@ -917,47 +1153,278 @@ angular.module('myBiApp')
                     //Update user view count
                     var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl(response[0].emcLoginName, resp.data.sourceReportId, resp.data.sourceSystem, 'Persona');
                     $http.get(reportUpdateViewed);
-
+                    $scope.setLoading(false);
+                    
                     if (resp.data.name) {
-                        $scope.reportName = resp.data.name;
                         $scope.mainState.$current.data.displayName = resp.data.name;
-                        $scope.isTableu = true;
-                        //$scope.tableuLink = value.tableuLink ? value.tableuLink:''; 
-                        var placeholderDiv = document.getElementById('tableu_report3');
-                        //placeholderDiv.setAttribute('fixT',Math.random());
-                        var url = resp.data.reportLink ? resp.data.reportLink : '';
-                        var options = {
-                            hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? false : true,
-                            width: '100%',
-                            height: '800px'
-                        };
-                        new tableau.Viz(placeholderDiv, url, options);
+                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                        $scope.isTableu = (resp.data.type === 'Tableau')? true : false;
+                        $scope.reportName = resp.data.name;
+                        addToRootScope(resp.data);
+                        getBreadCrumbLevel($stateParams.reportId);
+                        
+                        if($scope.isTableu) {
+                            var placeholderDiv = document.getElementById('tableu_report3');
+                            var url = resp.data.reportLink ? resp.data.reportLink : '';
+                            var headerFlag = (resp.data.isHeaderFlag === 0) ? '?Header Flag=0&' : '?';
+                            var reportToolBar = (resp.data.displayType === 'H') ? headerFlag+':toolbar=no' : 
+                                    ((resp.data.displayType === 'B')? headerFlag+':toolbar=bottom' : headerFlag+':toolbar=top'); 
+                            var options = {
+                                hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? false : true,
+                                width: '100%',
+                                height: '800px'
+                            };
+                            
+                            new tableau.Viz(placeholderDiv, url+reportToolBar, options);
+                        } else {
+                            var url = resp.data.reportLink ? resp.data.reportLink : '';
+                            
+                            $scope.getOtherReportLink = function () {
+                                return $sce.trustAsResourceUrl(url);
+                            };
+                        }
                     }
                 });
             });
         } else if ($state.current.name === 'reports.details.report.about') {
+            $scope.reportData = {};
+            
+            if($rootScope.reportName) {
+                $scope.mainState.$current.data.displayName = $rootScope.reportName;
+                ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                getBreadCrumbLevel($stateParams.reportId);
+            }
+            
             userDetailsService.userPromise.then(function (response) {
                 var urlReports;
-
                 urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.reportId);
-
+                
                 $http.get(urlReports).then(function (resp) {
+                    if($rootScope.reportName && $rootScope.reportName === resp.data.name) {
+                        //
+                    } else {
+                        $scope.mainState.$current.data.displayName = resp.data.name;
+                        (resp.data.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                        addToRootScope(resp.data); 
+                        getBreadCrumbLevel($stateParams.reportId);
+                    }
+
                     $scope.reportData = resp.data;
                 });
             });
+            
+            $scope.setLoading(false);
         } else if ($state.current.name === 'reports.details.report.access') {
+            $scope.reportAccessData = {};
+            ($rootScope.reportName) ? $scope.mainState.$current.data.displayName = $rootScope.reportName : '';
+            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
             var url = commonService.prepareReportAccessUrl($stateParams.reportId);
+
             $http.get(url).then(function (resp) {
-                $scope.reportAccessData = resp.data;
+                $scope.reportAccessData = resp.data    
             });
-
+                    
+            $scope.setLoading(false);
         } else if ($state.current.name === 'reports.details.report.feedback') {
-
+            $scope.feedbackArray= [];
+            ($rootScope.reportName) ? $scope.mainState.$current.data.displayName = $rootScope.reportName : '';
+            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
             $scope.feedbackArray = [];
+            
             searchservice.loadFeedbacks($stateParams.reportId).then(function (resp) {
                 $scope.feedbackArray = resp;
             });
+
+            $scope.setLoading(false);
+        } else if ($state.current.name === 'reports.details.report.reportmeta') {
+            //for pagination http://stackoverflow.com/questions/10816073/how-to-do-paging-in-angularjs
+            $scope.isTable = true;
+            ($rootScope.reportName) ? $scope.mainState.$current.data.displayName = $rootScope.reportName : '';
+            $scope.reportMetaData = [];
+            $scope.metaDataCopy = [];
+            $scope.reportFilterMetaData = [];        
+            $scope.currentPage = 1;
+            $scope.numPerPage = 20;
+            $scope.maxSize = 5;
+            $scope.totalItem ='';
+            $scope.showIcon = false;
+            $scope.setLoading(true);
+            
+            $scope.metaData = function () {
+                if($rootScope.reportName && $rootScope.sourceSystem && $rootScope.sourceReportId) { 
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false;
+                    
+                    if($scope.isTableu) {
+                        if($rootScope.viewTabs === 'N') {
+                            $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                            var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                        } else {
+                            $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
+                            var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId, $rootScope.sourceReportId);
+                        }
+                    } else {
+                        $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                        var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                    }                 
+                    
+                    $http.get(url).then(function (resp) {
+                        if(resp.data) {
+                            if(resp.data.length > 0) {
+                                if($scope.isTableu) {
+                                    if($rootScope.viewTabs === 'N') {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                    } else {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
+                                    }
+                                } else {
+                                    $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                }
+                            } else {
+                                $scope.emptyMessage = 'The report does not have metadata to display.';
+                                $scope.setLoading(false);
+                                return;
+                            }
+                        }
+
+                        $scope.reportMetaData = resp.data;
+                        $scope.metaDataCopy = angular.copy($scope.reportMetaData);
+                        $scope.totalItem = $scope.reportMetaData.length;
+                        $scope.$watch("currentPage + numPerPage ", function() {
+                            $scope.setLoading(true);
+                            var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                            end = begin + $scope.numPerPage;
+                            $scope.reportFilterMetaData = $scope.reportMetaData.slice(begin, end);
+                            $scope.metaDataMessage = showMessage($scope.currentPage, $scope.totalItem, begin, end);
+                            $scope.setLoading(false);
+                        });
+                        $scope.setLoading(false);
+                    },function(){
+                        $scope.emptyMessage = 'The report does not have metadata to display.';
+                        $scope.setLoading(false);
+                    });
+                } else {
+                    userDetailsService.userPromise.then(function (response) { 
+                        var urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.reportId);
+
+                        $http.get(urlReports).then(function (resp) {
+                            $rootScope.reportName = $scope.mainState.$current.data.displayName = resp.data.name;  
+                            $rootScope.sourceSystem = resp.data.sourceSystem;
+                            $rootScope.sourceReportId = resp.data.sourceReportId;
+                            $rootScope.repType = resp.data.type;
+                            $rootScope.workbookId = resp.data.additionalInfo;
+                            $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false;
+                            ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                            if($scope.isTableu) {
+                                if($rootScope.viewTabs === 'N') {
+                                    $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                    var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                                } else {
+                                    $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
+                                    var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId);
+                                }
+                            } else {
+                                $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                            }
+
+                            $http.get(url).then(function (resp) {
+                                if(resp.data) {
+                                    if(resp.data.length > 0) {
+                                        if($scope.isTableu) {
+                                            if($rootScope.viewTabs === 'N') {
+                                                $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                            } else {
+                                                $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
+                                            }
+                                        } else {
+                                            $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                        }
+                                    } else {
+                                        $scope.emptyMessage = 'The report does not have metadata to display.';
+                                        $scope.setLoading(false);
+                                        return;
+                                    }
+                                }
+
+                                $scope.reportMetaData = resp.data;
+                                $scope.metaDataCopy = angular.copy($scope.reportMetaData);
+                                $scope.totalItem = $scope.reportMetaData.length;
+                   
+                                $scope.$watch("currentPage + numPerPage", function() {
+                                    $scope.setLoading(true);
+                                    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                                    end = begin + $scope.numPerPage;
+                                    $scope.reportFilterMetaData = $scope.reportMetaData.slice(begin, end);
+                                    $scope.metaDataMessage = showMessage($scope.currentPage, $scope.totalItem, begin, end);
+                                    $scope.setLoading(false);
+                                });
+                                $scope.setLoading(false);
+                            },function(){
+                                $scope.emptyMessage = 'The report does not have metadata to display.';
+                            });    
+                        });
+                    });
+                }
+            }
+            
+            $scope.metaData();
+            
+            $scope.resetFilterText = function() {
+                $scope.showIcon = false;
+                $scope.search.reportColumnName = '';
+            }
+            
+            $scope.filterMetaData = function() {
+                (!$scope.search.reportColumnName) ? $scope.showIcon = false : $scope.showIcon = true;
+                
+                $scope.$watch('search.reportColumnName', function(val) { 
+                    $scope.currentPage = 1;
+                    $scope.reportMetaData = $filter('filter')($scope.metaDataCopy, val);
+                    $scope.totalItem = $scope.reportMetaData.length;
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                    end = begin + $scope.numPerPage;
+                    $scope.reportFilterMetaData = $scope.reportMetaData.slice(begin, end);
+                    $scope.metaDataMessage = showMessage($scope.currentPage, $scope.totalItem, begin, end);
+                });
+            };  
         }
+    }
+    
+    function showMessage(currentPage, totalItem, begin, end) {
+        //($scope.currentPage === 1) ? $scope.metaDataMessage = 'Showing 20 out of '+ $scope.totalItem + ' records.' : $scope.metaDataMessage = 'Showing ' + begin +' - '+ end + ' out of ' + $scope.totalItem +' records. ';
+        var message ='';
+        
+        if(totalItem === 0) {
+            message = '';
+        } else {
+            if(currentPage   === 1) {
+                if(totalItem > 20) {
+                    message = '1 - 20 of ' + totalItem;
+                } else {
+                    message = totalItem + ' of ' + totalItem;
+                }
+            } else {
+                if(totalItem > end) {
+                    message = begin + ' - ' + end + ' of ' + totalItem;
+                } else {
+                    message = begin + ' - ' + totalItem + ' of ' + totalItem;
+                }  
+            }
+        }
+
+        return message;
+    }
+    
+    function addToRootScope(data) {
+        $scope.mainState.$current.data.displayName = data.name;
+        $rootScope.reportName = data.name;
+        $rootScope.sourceReportId = data.sourceReportId; 
+        $rootScope.sourceSystem = data.sourceSystem;
+        $rootScope.levelId = data.levelId;
+        $rootScope.repType = data.type;
+        $rootScope.viewTabs = data.tabbedViews;
+        $rootScope.workbookId = data.additionalInfo;
     }
     
     $scope.feedback = '';
@@ -978,25 +1445,101 @@ angular.module('myBiApp')
         }
     };
     
-    function getBreadCrumLevel(levelid) {
-        $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
-            if(response.data) {
-                $scope.pageBreadCrum = '';
-                var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
-                var data = response.data;
-
-                for(var i = 0; i<data.length; i++) {
-                    var url = '#/reports/'+data[i].levelId;
-                    pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
+    function getBreadCrumbLevel(reportId) {
+        if($rootScope.reportName && $rootScope.levelId) {
+            if($window.innerWidth < 768) {
+                if($rootScope.reportName.length > 45) {
+                    $scope.pageBreadCrumb = $rootScope.reportName.substr(0, 44)+'...';
+                } else {
+                    $scope.pageBreadCrumb = $rootScope.reportName;
                 }
-
-                $scope.pageBreadCrum = pageBreadCrum;
-                $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
-
-            } else {
-                console.log('else');
+                
+                $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
+                return;
             }
-        });
+            
+            var lId = ($localStorage.treeLevelId) ? $stateParams.levelId : $rootScope.levelId;
+            
+            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+lId).then(function (response) {
+                if(response.data) {
+                    $scope.pageBreadCrumb = '';
+                    var pageBreadCrumb = '<a href="#/">Home</a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href="#/reports">Available Reports</a>';
+                    var data = response.data;
+
+                    for(var i = 0; i<data.length; i++) {
+                        var url = '#/reports/'+data[i].levelId;
+                        pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<a href="'+url+'">'+data[i].levelDesc+'</a>';
+                    }
+                    
+                    if($window.innerWidth > 768 && $window.innerWidth < 992) {
+                        if($rootScope.reportName.length > 25) {
+                            $rootScope.reportName = $rootScope.reportName.substr(0, 24)+'...';
+                            pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+$rootScope.reportName+'</span>'; 
+                        } else {
+                            pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+$rootScope.reportName+'</span>'; 
+                        }
+                    } else { 
+                        pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+$rootScope.reportName+'</span>'; 
+                    }
+                    
+                    $scope.pageBreadCrumb = pageBreadCrumb;
+                    $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
+
+                } else {
+                }
+            });
+        } else {
+            userDetailsService.userPromise.then(function (response) {
+                var urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, reportId);
+                $http.get(urlReports).then(function (resp) {
+                    addToRootScope(resp.data);
+                    var reportName = resp.data.name;
+                    var reportLevelId = resp.data.levelId;
+                    
+                    if($window.innerWidth < 768) {
+                        if(reportName.length > 45) {
+                            $scope.pageBreadCrumb = reportName.substr(0, 44)+'...';
+                        } else {
+                            $scope.pageBreadCrumb = reportName;
+                        }
+                        
+                        $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
+                        return;
+                    }
+                    
+                    var lId = ($localStorage.treeLevelId) ? $stateParams.levelId : reportLevelId;
+                    
+                    $http.get('BITool/home/getBreadCrumbsDetails?levelId='+lId).then(function (response) {
+                        if(response.data) {
+                            $scope.pageBreadCrumb = '';
+                            var pageBreadCrumb = '<a href="#/">Home</a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href="#/reports">Available Reports</a>';
+                            var data = response.data;
+
+                            for(var i = 0; i<data.length; i++) {
+                                var url = '#/reports/'+data[i].levelId;
+                                pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<a href="'+url+'">'+data[i].levelDesc+'</a>';
+                            }
+                            
+                            if($window.innerWidth > 768 && $window.innerWidth < 992) {
+                                if(reportName.length > 25) {
+                                    reportName = reportName.substr(0, 24)+'...';
+                                    pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+reportName+'</span>'; 
+                                } else {
+                                    pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+reportName+'</span>'; 
+                                }
+                            } else { 
+                                pageBreadCrumb +='&nbsp;&nbsp;>&nbsp;&nbsp;<span class="reportName">'+reportName+'</span>'; 
+                            }
+                            
+                            $scope.pageBreadCrumb = pageBreadCrumb;
+                            $scope.$emit('breadCrumbValue', $scope.pageBreadCrumb);
+
+                        } else {
+                        }
+                    });
+                });
+            });
+        }
     }
 }]);
 'use strict';
@@ -1011,31 +1554,33 @@ angular.module('myBiApp')
 angular.module('myBiApp')
 .controller('ReportsCtrl', ["$scope", "$localStorage", "$state", "$q", "$http", "$sce", "commonService", "reportsFactory", "userDetailsService", "CONFIG", function ($scope, $localStorage, $state, $q, $http, $sce, commonService, reportsFactory, userDetailsService, CONFIG) {
     $scope.setLoading(true);
+    $scope.$emit('setNavBar', true);
     $scope.access = {};
-    $scope.access.limitTo = 6;
+    $scope.access.limitTo = 5;
     $scope.access.subGroupItemsId = 0;
+    
+    $scope.$on('listViewValue', function(event, status) {
+        $localStorage.listViewStatus = status;
+        $scope.listViewStatus = status = $localStorage.listViewStatus;
+    });
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
     setUserPreference();
     
-    $scope.setListView = function (status) {
-        if ($scope.groupsData) {
-            $scope.groupsData.service['listView'] = status;
-            //$scope.groupsData['listView']=status;
-
-        }
-        if (!$scope.dataObj) {
-            return;
-        }
-        else {
-            for (var i in $scope.dataObj) {
-                $scope.dataObj[i].service.listView = status;
-            }
-        }
-    }
-
     $scope.access.allReports = function () {
+        $localStorage.treeLevelId = false;
+        $scope.sortOption = 'ascName';
+        $scope.filterOption = 'filter';
+        $scope.defaultFilter = 'All';
+        
         userDetailsService.userPromise.then(function (userObject) {
             if (userObject[0].personaInfo.status === 'Error') {
                 $scope.setLoading(false);
+                $scope.personaInfo = userObject[0].personaInfo;
                 $scope.groupsData = {
                     'title': '',
                     'open': 'true',
@@ -1049,11 +1594,12 @@ angular.module('myBiApp')
                 };
             } else {  
                 setUserLevel(userObject[0]);
-                getBreadCrumLevel(false);
-                
+                //getBreadCrumbLevel(false);
+                $scope.$emit('bredCrumbValue', '');
                 $scope.biGroup.all().then(function () {
                     var groupid = $scope.biGroup.biGroupId;
                     var groupService = new reportsFactory.reportsFactoryFunction('group', groupid);
+                    
                     groupService.loadReports().then(function () {
                         $scope.setLoading(false);
                         var title = ($scope.biGroup && $scope.biGroup.biGroups &&
@@ -1066,45 +1612,71 @@ angular.module('myBiApp')
                             'loadmoredisable': groupService.loadmoredisable,
                             'service': groupService,
                             'data': groupService.reports,
+                            'rowCount':getCount(groupService.reports),
+                            'listView':$scope.listViewStatus,
+                            'displayName' : $scope.mainState.$current.data.displayName,
                             'rr': true
                         };
-
-                        $scope.setListView(false);
-
+//                        $scope.setListView(false);
                     }, function () {
                         $scope.setLoading(false);
                     });
-
                 });
             }
-        });
+        }); 
     };
 
     $scope.access.subGroupItems = function (levelid) {
+        $localStorage.treeLevelId = true;
+        $scope.sortOption = 'ascName';
+        $scope.filterOption = 'filter';
+        $scope.defaultFilter = 'All';
+        $scope.$emit('setNavBar', true);
         $scope.biGroup.all().then(function () {
-            getBreadCrumLevel(levelid);
+            //getBreadCrumbLevel(levelid);
+            $scope.$emit('bredCrumbValue', '');
             $scope.setLoading(false);
             $scope.dataObj = [];
             
             function getLevelObj(obj) {
                 var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
+                
                 if (filter) {
                     $scope.mainState.$current.data.displayName = filter.levelDesc;
                     var groupid = $scope.biGroup.biGroupId;
                     if (filter.children.length !== 0) {
+                        var parent = [{'collapsed':filter.collapsed, 'levelDesc':filter.levelDesc, 'levelId':filter.levelId,'levelNumber':filter.levelNumber,'parentLevelId':filter.parentLevelId}];
+                        $scope.dataObj1 = _.map(parent, function (eachLevel) {
+                            var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, eachLevel.levelId, true);
+                            groupService.loadReports();
+                            return {
+                                'title': eachLevel.levelDesc,
+                                'open': true,
+                                'limit': $scope.access.limitTo,
+                                'class_names': 'report-tile',
+                                'service': groupService,
+                                'levelLink': eachLevel.levelId,
+                                'data': groupService.reports,
+                                'listView':$scope.listViewStatus
+                            };
+                        });
+                        
                         $scope.dataObj = _.map(filter.children, function (eachLevel) {
                             var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, eachLevel.levelId, true);
                             groupService.loadReports();
                             return {
                                 'title': eachLevel.levelDesc,
                                 'open': true,
-                                'limit': 6,
+                                'limit': $scope.access.limitTo,
                                 'class_names': 'report-tile',
                                 'service': groupService,
                                 'levelLink': eachLevel.levelId,
-                                'data': groupService.reports
+                                'data': groupService.reports,
+                                'listView':$scope.listViewStatus
                             };
                         });
+                        
+                        $scope.dataObj.unshift($scope.dataObj1[0])
                     } else {
                         var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, levelid);
                         groupService.loadReports();
@@ -1114,11 +1686,51 @@ angular.module('myBiApp')
                             'limit': undefined,
                             'class_names': 'report-tile',
                             'service': groupService,
-                            'data': groupService.reports
+                            'data': groupService.reports,
+                            'listView':$scope.listViewStatus
                         };
-
-                        $scope.setListView(false);
+//                        $scope.setListView(false);
                     }
+                } else {
+                    _.map(obj, function (eachObj) {
+                        if (eachObj.children.length !== 0) {
+                            getLevelObj(eachObj.children);
+                        }
+                        return eachObj;
+                    });
+                }
+            }
+            getLevelObj($scope.biGroup.biGroups);
+        });
+
+        $scope.access.subGroupItemsId = levelid;
+    };
+    
+    $scope.access.subGroupItemsViewAll = function (levelid) {
+        $scope.$emit('setNavBar', true);
+        $scope.biGroup.all().then(function () {
+            //getBreadCrumbLevel(levelid);
+            $scope.$emit('bredCrumbValue', '');
+            $scope.setLoading(false);
+            $scope.dataObj = [];
+            
+            function getLevelObj(obj) {
+                var filter = _.findWhere(obj, {'levelId': parseInt(levelid)});
+                
+                if (filter) {
+                    $scope.mainState.$current.data.displayName = filter.levelDesc;
+                    var groupid = $scope.biGroup.biGroupId;
+                    var groupService = new reportsFactory.reportsFactoryFunction('level', groupid, levelid);
+                    groupService.loadReports();
+                    $scope.dataObj[0] = {
+                        'title': filter.levelDesc,
+                        'open': true,
+                        'limit': undefined,
+                        'class_names': 'report-tile',
+                        'service': groupService,
+                        'data': groupService.reports,
+                        'listView':$scope.listViewStatus
+                    };
                 } else {
                     _.map(obj, function (eachObj) {
                         if (eachObj.children.length !== 0) {
@@ -1156,6 +1768,14 @@ angular.module('myBiApp')
         }
     };
     
+    function getCount(reports) {
+        if(reports && reports.length > 0) {
+           return reports[0].rowCount;
+        } else {
+            return 0;
+        }
+    };
+    
     function setUserLevel(usrObj) {
         if(!$localStorage.myLevel) {
             if (usrObj.userinfo.badge === 'Bronze') {
@@ -1183,57 +1803,92 @@ angular.module('myBiApp')
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
-
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
-        }
-    } 
-    
-    function getBreadCrumLevel(levelid) {
-        if(levelid) {
-            $http.get('BITool/home/getBreadCrumbsDetails?levelId='+levelid).then(function (response) {
-                if(response.data) {
-                    $scope.pageBreadCrum = '';
-                    var pageBreadCrum = '<a href="#/">Home</a>  -> <a href="#/reports">Available Reports</a>';
-                    var data = response.data;
-
-                    for(var i = 0; i<data.length; i++) {
-                        var url = '#/reports/'+data[i].levelId;
-                        pageBreadCrum +=' -><a href="'+url+'">'+data[i].levelDesc+'</a>';
-                    }
-
-                    $scope.pageBreadCrum = pageBreadCrum;
-                    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
-
-                } else {
-                    console.log('else');
-                }
-            });
-        } else {
-            $scope.pageBreadCrum ='';
-            var pageBreadCrum = '<a href="#/">Home</a>  -> Available Reports';
-            $scope.pageBreadCrum = pageBreadCrum;
-            $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
+    
+    $scope.setListView = function (status) {
+        if ($scope.groupsData) {
+            $scope.groupsData.listView = status;
+            updateListView(status);
+        }
+        
+        if (!$scope.dataObj) {
+            return;
+        } else {
+            for (var i in $scope.dataObj) {
+                $scope.dataObj[i].listView = status;
+                updateListView(status);
+            }
+        }
+    }
+    
+    $scope.sortReports = function() {        
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'sort');
+    }
+    
+    $scope.filterReports = function() {
+//        if($scope.filterOption === 'filter') {
+//            $scope.defaultFilter = 'Filter';
+//        } else {
+//            $scope.defaultFilter = 'Default';
+//        }
+        
+        $scope.defaultFilter = 'All';
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'filter');
+    }
+    
+    function updateListView(status) {
+        $scope.$broadcast('listViewValue', status);
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
+        var putObj = {
+            'isListViewed' :value,
+        };
+
+        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+            .then(function (resp, status, headers) {
+
+            }, function (resp, status, headers, config) {
+
+            });
+    }
+
 }])
 .filter('filterReports', function () {
     return function (items, levelId) {
@@ -1253,13 +1908,18 @@ angular.module('myBiApp')
  * Parent/top Controller for all controllers.
  */
 angular.module('myBiApp')
-.controller('ParentCtrl', ["$scope", "$rootScope", "$localStorage", "$http", "$q", "ngProgressFactory", "$state", "reportsMenu", "commonService", "userDetailsService", "userAlertService", "CONFIG", function ($scope, $rootScope, $localStorage, $http, $q, ngProgressFactory, $state, reportsMenu, commonService, userDetailsService, userAlertService, CONFIG) {
+.controller('ParentCtrl', ["$scope", "$rootScope", "$window", "$localStorage", "$http", "$q", "ngProgressFactory", "$state", "reportsMenu", "commonService", "userDetailsService", "userAlertService", "CONFIG", "$uibModal", "$timeout", function ($scope, $rootScope, $window, $localStorage, $http, $q, ngProgressFactory, $state, reportsMenu, commonService, userDetailsService, userAlertService, CONFIG, $uibModal, $timeout) {
     /**
      * @ngdoc property
      * @name biGroup
      * @description Will have object of service reportsMenu which basically have the menu or group levels of users.
      * 
      */
+//    redirectToPage();
+    checkUserExist();
+    getNotification();
+    $scope.isMobileDevice = ($window.innerWidth < 768) ? true: false;
+    $scope.noNavBar = true; 
     $scope.biGroup = reportsMenu;
     $scope.chevron = false;
     $scope.searchParent = '#search-parent';//id of div which append typeahead popup 
@@ -1270,62 +1930,162 @@ angular.module('myBiApp')
     $scope.mainState = $state;
     $scope.setLoading(true);
     $scope.scrollVariable = false
+    $scope.zIndex = '999';
+    $localStorage.treeLevelId = false;
+    $scope.operationalDashboard = false;
+    $scope.toggleNotfy = false;
+    var newHeight, scrollBar;
     
-    $scope.$on('bredCrumValue', function(event, value){
-        $scope.pageBreadCrum = value
+    if($window.innerWidth < 768) {
+        newHeight = 75;
+        scrollBar = true;
+    } else if ($window.innerWidth < 992) {
+        newHeight = 100;
+        scrollBar = true;
+    } else {
+        newHeight = 250;
+        scrollBar = false;
+    }
+    
+    $scope.notfyConfig = {
+        autoHideScrollbar: scrollBar,
+        theme: 'dark',
+        advanced: {
+            updateOnContentResize: true
+        },
+        setHeight: newHeight,
+        scrollInertia: 0
+    };
+    
+    $scope.notfyConfigEmpty = {
+        autoHideScrollbar: scrollBar,
+        theme: 'light',
+        advanced: {
+            updateOnContentResize: true
+        },
+        setHeight: 0,
+        scrollInertia: 0
+    };
+    
+    $scope.$on('breadCrumbValue', function(event, value){
+        $scope.pageBreadCrumb = value
     });
+    
+    $scope.$on('hideReportTabs', function(event, value){
+        $scope.hideTabsFlag = value
+    });
+    
+    $scope.$on('setNavBar', function(event, value){
+        $scope.noNavBar = true;
+        $scope.toggleNotfy = false;
+        $scope.zIndex = '999';
+    });
+    
+    $scope.$on('hideNotfy', function(event, value){
+        $scope.toggleNotfy = value;
+    });
+    
+    $scope.toggleLeftMenu = function () {
+        $scope.isMenuCollapsed = ($scope.isMenuCollapsed) ? false : true;
+        $scope.$broadcast('menuCollapsedStatus', $scope.isMenuCollapsed);
+        var value = ($scope.isMenuCollapsed) ? 1 : 0;
+        
+        userDetailsService.userPromise.then(function(userObj) {
+            var putObj = {
+                'userId' : userObj[0].uid,
+                'isMenuCollapsed' :value,
+            };
+
+            $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                .then(function (resp, status, headers) {
+
+                }, function (resp, status, headers, config) {
+
+                });
+        });
+    };
+    
+    $scope.showDismissIcon = function(status, id) {
+        if(status) {
+            $scope.dismissId = id;
+        } else {
+            $scope.dismissId = status;
+        }
+    };
+    
+    $scope.hideNavBar = function() {
+        $scope.toggleNotfy = false;
+        if($scope.noNavBar) {
+            $scope.noNavBar = false;
+            $scope.zIndex = '998';
+        } else {
+            $scope.noNavBar = true;
+            $timeout(function(){$scope.zIndex = '999'}, 1000);
+            
+        }
+    };
+    
+    $scope.openNotfyMobile = function() {
+        if($scope.toggleNotfy){
+            $scope.toggleNotfy = false;
+        }  else {
+            $scope.toggleNotfy = true;
+        }
+    }
     
     $scope.$on('myLevelIndication', function(event, value) {
         $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
-    $scope.$on('myThemeSettings', function(event, theme, personalization){
+    $scope.$on('myThemeSettings', function(event, theme, personalization, isMenuCollapsed){
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
+        $localStorage.isMenuCollapsed = isMenuCollapsed
         $scope.userTheme = $localStorage.userTheme;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
     });
     
+    $scope.$on('setSearchDisplayName', function(event, value){
+        $scope.searchDisplayName = value;
+    });
+    
+    /**
+     * Update my level indication
+     */
     userDetailsService.userPromise.then(function (userObject) {
         $scope.userObject = userObject[0];
         
-        if($localStorage.myLevel) {
-            $scope.myLevel = $localStorage.myLevel;
-        } else {
-            setUserLevel($scope.userObject);
-        }
+        $timeout(function() {
+            if($localStorage.myLevel) {
+                $scope.myLevel = $localStorage.myLevel;
+            } else {
+                setUserLevel($scope.userObject);
+            }
+
+            $scope.personaList =  userObject[0].userinfo.userPersonaList;
+            $scope.defaultPersona = userObject[0].userinfo.group[0].groupId;
+            $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
+        },2000);
         
-        $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
-        /**
-         * Update my level indication
-         */
-        var userRoleDetailsUrl = commonService.prepareUserRoleDetailsUrl($scope.userObject.emcLoginName);
-        
-        $q.all([$http.get(userRoleDetailsUrl), reportsMenu.all()])
+        $q.all([reportsMenu.all()])
             .then(function (/*response*/) {
+                $scope.operationalDashboard = reportsMenu.operationalLink;;
                 $scope.setLoading(false);
             });
     });
 
     $scope.getSearchSuggest = function (val) {
         var defer = $q.defer();
-
-        userDetailsService.userPromise.then(function (userObject) {
-            var url;
-
-            if ($scope.searchin === 'persona') {
-                url = commonService.prepareSearchUrlPersona(userObject[0].emcLoginName, 1, CONFIG.limit, val);
-            } else {
-                url = commonService.prepareSearchUrl(userObject[0].emcLoginName, 1, CONFIG.limit, val);
-            }
-
-            $http.get(url).then(function (response) {
-                defer.resolve(_.uniq(response.data.map(function (item) {
-                    return ($scope.searchin === 'persona') ? item.name : item.reportName;
-                })));
-            });
+        var filter = ($scope.searchFilter && $scope.searchFilter.id) ? $scope.searchFilter.id : 'searchText';
+        var url = 'BITool/home/getAutoSuggestionList/1/20?searchType=' + $scope.searchin + '&' + filter + '=' + val;
+            
+        $http.get(url).then(function (response) {
+            defer.resolve(_.uniq(response.data.map(function (item) {
+                return item;
+            })));
         });
-
+        
         return defer.promise;
     };
     
@@ -1372,7 +2132,6 @@ angular.module('myBiApp')
         }
     });
 
-    //?:embed=yes&:toolbar=no
     $scope.updateShowlist = function (boolValue) {
         $scope.showList = boolValue;
     };
@@ -1389,6 +2148,152 @@ angular.module('myBiApp')
         $scope.searchText = '';
     });
     
+    $scope.readAllNotification = function() {
+        $http.put('BITool/home/markAllNotificationAsRead')
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    $scope.readStatusMessage = resp.data.message;
+                    
+                    angular.forEach($scope.notficationObj.userNotificationList, function(notification){
+                        notification.readDate = new Date().getTime();
+                    });
+                    
+                    angular.forEach($scope.notficationObj.userNewAlertList, function(notification){
+                        notification.readDate = new Date().getTime();
+                    });
+                    
+                    $scope.notficationObj.newNotificationCount = 0;
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.readStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.readStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
+    
+    $scope.dismissAllNotification = function() {
+        var modalDeleteNotification = $uibModal.open({
+            templateUrl:'views/deleteNotificationModal.html',
+            controller:'DeleteNotificationModalCtrl',
+            windowClass: 'switch-modal',
+            resolve: {
+                items: function() {
+                    return {
+                        data: $scope.notficationObj
+                    };
+                }
+            }
+        });
+        
+            
+        modalDeleteNotification.result.then(function(Obj){
+            $http.put('BITool/home/dismissAllNotification')
+                .then(function (resp) {
+                    if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                        $scope.dismissStatusMessage = resp.data.message;            
+                        $localStorage.notficationObj  = $scope.notficationObj = {"userNewAlertList":[],"userNotificationList":[],"newNotificationCount":0};
+                        paginateNotification();
+                    } else {
+                        $scope.dismissStatusMessage = '';
+                        if (resp.data && resp.data.message) {
+                            $scope.messageAlertError = resp.data.message
+                        }
+                    }
+                }, function () {
+                    $scope.dismissStatusMessage = '';
+                    $scope.messageAlertError = "Error!!.";
+                }); 
+        });
+    };
+    
+    $scope.itemsPerPage = 3;
+    $scope.currentPage = 0;
+    $scope.notificationItems = [];
+    
+    $scope.setReadNotification = function(id,readFlag) {
+        $http.put('BITool/home/markNotificationAsRead?assignId='+id+'&isRead='+readFlag)
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    var index = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === id});   
+                    $scope.readStatusMessage = resp.data.message;
+                    
+                    if(!$scope.notficationObj.userNotificationList[index].readDate) {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+                        $scope.notficationObj.userNotificationList[index].readDate = new Date().getTime();
+                    } else {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount +1;
+                        $scope.notficationObj.userNotificationList[index].readDate = '';
+                    }
+                    
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.readStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.readStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
+    
+    $scope.dismissNotification = function(id) {
+        $http.put('BITool/home/dismissNotification?assignId='+id)
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    var index = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === id});
+                    $scope.dismissStatusMessage = resp.data.message;            
+                    
+                    if(!$scope.notficationObj.userNotificationList[index].readDate) {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+                        ($scope.notficationObj.userNewAlertList).splice(index, 1);
+                    }
+                    
+                    ($scope.notficationObj.userNotificationList).splice(index, 1);
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.dismissStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.dismissStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
+    
+    $scope.prevPage = function() {
+        if ($scope.currentPage > 0) {
+            $scope.currentPage--;
+            paginateNotification();
+        }
+    };
+
+    $scope.prevPageDisabled = function() {
+        return $scope.currentPage === 0 ? "disabled link-disable" : "";
+    };
+    
+    $scope.nextPage = function() {
+        if ($scope.currentPage < getPageCount()) {
+            $scope.currentPage++;
+            paginateNotification();
+        }
+    };
+
+    $scope.nextPageDisabled = function() {
+        return $scope.currentPage === getPageCount() ? "disabled link-disable" : "";
+    };
+    
     function setUserLevel(usrObj) {
         if (usrObj.userinfo.badge === 'Bronze') {
             $scope.myLevel = 'bronze-level';
@@ -1399,10 +2304,148 @@ angular.module('myBiApp')
         } else if (usrObj.userinfo.badge === 'Platinum') {
             $scope.myLevel = 'platinum-level';
         }
+
         $localStorage.myLevel = $scope.myLevel
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
-
+    
+    function checkUserExist() {
+        $http.get('BITool/userExistInBITool').then(function(response) {
+            $rootScope.personaInfo = response.data;
+            if(response.data && response.data.isApplicationRunning === false) {
+                $window.location.href ='/maintenance/index.html';
+            }
+        });
+    }
+    
+    function getPageCount() {
+        if($scope.notficationObj && $scope.notficationObj.userNotificationList) {
+            return Math.ceil($scope.notficationObj.userNotificationList.length/$scope.itemsPerPage)-1;
+        }
+    }
+    
+    function getNotification() {
+        $http.get('BITool/home/getNotificationByUser').then(function(response) {
+            $scope.notficationObj = $localStorage.notficationObj = response.data;
+            
+            if($scope.notficationObj.userNewAlertList.length > 0) {
+                $scope.createAlertPopup($scope.notficationObj);
+            }
+            
+            paginateNotification();
+        });
+    }
+    
+    function paginateNotification() {
+        $scope.notificationItems = [];
+        var min = ($scope.currentPage * $scope.itemsPerPage);
+        var max  = ($scope.notficationObj.userNotificationList.length < min+3) ? $scope.notficationObj.userNotificationList.length : min+3;
+        
+        for (var i= min; i<max; i++) {
+            ($scope.notficationObj.userNotificationList[i])? $scope.notificationItems.push($scope.notficationObj.userNotificationList[i]):'';
+        }
+        
+        if($scope.notficationObj.userNotificationList.length === min) {
+            $scope.currentPage--;
+            paginateNotification();
+        }
+    }
+    
+    $scope.createAlertPopup = function () {
+        if($window.innerWidth < 768) {
+            return;
+        }
+            
+        angular.forEach($scope.notficationObj.userNewAlertList, function(notfication) {
+            var modalInstance = $uibModal.open({
+                templateUrl:'views/notificationModal.html',
+                controller:'NotificationModalCtrl',
+                windowClass: 'notfy-modal',
+                resolve: {
+                    items: function() {
+                        return{
+                            data: notfication
+                        };
+                    }
+                }
+            });
+            
+            modalInstance.result.then(function(Obj){
+                var index1 = _.findIndex($scope.notficationObj.userNewAlertList, function(item) { return item.assignId === Obj.assignId});
+                var index2 = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === Obj.assignId});
+                console.log(index1);
+                console.log(index2);
+                $http.put('BITool/home/dismissNotification?assignId='+Obj.assignId)
+                    .then(function (resp) {
+                        if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                            getNotification();
+//                            $timeout(function() {
+//                                $scope.dismissAlertMessage = resp.data.message;     
+//                                ($scope.notficationObj.userNewAlertList).splice(index1, 1);   
+//                                ($scope.notficationObj.userNotificationList).splice(index2, 1);
+//                                $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+//                                $localStorage.notficationObj  = $scope.notficationObj;
+//                                $scope.$apply();
+//                            }, 1000);
+                        } else {
+                            $scope.dismissAlertMessage = '';
+                            if (resp.data && resp.data.message) {
+                                $scope.messageAlertError = resp.data.message
+                            }
+                        }
+                    }, function () {
+                        $scope.dismissAlertMessage = '';
+                        $scope.messageAlertError = "Error!!.";
+                    });
+            });
+        });
+    }
+    
+//    function redirectToPage(){
+//        if($localStorage.urlObj) {
+//            console.log($localStorage.urlObj);
+//            $state.go($localStorage.urlObj.hash.split('/')[1]);
+//        }
+//    }
+    
+    $scope.openModelPersona = function () {
+        var modalInstance = $uibModal.open({
+           templateUrl:'views/switchPersona.html',
+           controller:'SwitchPeronaCtrl',
+           windowClass: 'switch-modal',
+           resolve: {
+                items: function () {
+                    return{
+                        personaList: $scope.userObject.userinfo.userPersonaList,
+                        defaultPersona: $scope.userObject.userinfo.group[0].groupId
+                    };
+                }
+            }
+        });
+    };
+    
+    $scope.setNewPersona = function() {
+        $scope.setLoading(true);
+        
+        var obj = {
+            'groupId' : $scope.defaultPersona,
+            'isActive' : 'Y'
+        };
+        
+        $http.put('BITool/activateDefaultPersona', obj)
+            .then(function (data, status, headers, config) {
+                $scope.statusMessage = data.message; 
+                $scope.setLoading(false);
+                $state.go('home');
+                $window.location.reload();
+            }, function (data, status, headers, config) {
+                $scope.statusMessage = data.message;
+                $scope.setLoading(false);
+                $state.go('home');
+                $window.location.reload();
+            });
+    };
+    
 }]).directive('errSrc', function () {
     return {
         link: function (scope, element, attrs) {
@@ -1414,6 +2457,39 @@ angular.module('myBiApp')
         }
     };
 });
+
+angular.module('myBiApp').controller('SwitchPeronaCtrl', ["$scope", "$state", "$uibModalInstance", "items", "$http", "$window", "$rootScope", "$timeout", function ($scope, $state, $uibModalInstance, items, $http, $window, $rootScope, $timeout) {
+    $scope.personaList = items.personaList;
+    $scope.defaultPersona = items.defaultPersona;
+    $scope.currentPersona = items.defaultPersona;
+    
+    $scope.setDefaultPersona = function () {
+        $scope.setLoading(true);
+        var obj = {
+            'groupId' : $scope.defaultPersona,
+            'isActive' : 'Y'
+        };
+        
+        $http.put('BITool/activateDefaultPersona', obj)
+            .then(function (data, status, headers, config) {
+                $uibModalInstance.dismiss('close');
+                $scope.statusMessage = data.message;
+                $scope.setLoading(false);
+                $state.go('home');
+                $window.location.reload();
+            }, function (data, status, headers, config) {
+                $uibModalInstance.dismiss('close');
+                $scope.statusMessage = data.message;
+                $scope.setLoading(false);
+                $state.go('home');
+                $window.location.reload();
+            });
+    }
+
+    $scope.close = function() {
+        $uibModalInstance.dismiss('close');
+    };
+}]);
 'use strict';
 
 /**
@@ -1506,11 +2582,15 @@ angular.module('myBiApp')
         $scope.operationDashboardLink = reportsMenu.operationalLink;
     });
     
-    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> Operational Dashboard';
-    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
-    
+    $scope.$emit('bredCrumbValue', '');
+    $scope.$emit('setNavBar', true);
     setUserPreference();
     setUserLevel();
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
@@ -1536,31 +2616,48 @@ angular.module('myBiApp')
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
-
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
 }]);
@@ -1577,8 +2674,32 @@ angular.module('myBiApp')
 angular.module('myBiApp')
 .controller('favoritesCtrl', ["$scope", "$localStorage", "reportsFactory", "userDetailsService", "$http", "CONFIG", function ($scope, $localStorage, reportsFactory, userDetailsService, $http, CONFIG) {
     var favoriteService = new reportsFactory.reportsFactoryFunction('favorite');
-    $scope.pageBreadCrum = '<a href="#/">Home</a>  -> My Favorites';
-    $scope.$emit('bredCrumValue', $scope.pageBreadCrum);
+    $scope.$emit('bredCrumbValue', '');
+    $scope.$emit('setNavBar', true);
+    $scope.sortOption = 'ascName';
+    $scope.filterOption = 'filter';
+    $scope.defaultFilter = 'All';
+    
+    $scope.$on('listViewValue', function(event, status) {
+        $localStorage.listViewStatus = status;
+        $scope.listViewStatus = $localStorage.listViewStatus;
+    });
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
+    setUserPreference();
+    
+    $scope.sortReports = function() {
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'sort');
+    }
+    
+    $scope.filterReports = function() {
+        $scope.defaultFilter = 'All';  
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'filter');
+    }
     
     if(!$localStorage.myLevel) {
         userDetailsService.userPromise.then(function (userObject) {
@@ -1600,21 +2721,36 @@ angular.module('myBiApp')
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
     
-    setUserPreference();
-    
     $scope.setListView = function (status) {
         if ($scope.myfavorites) {
-            $scope.myfavorites.service['listView'] = status;
+            $scope.myfavorites.listView = status;
             //$scope.groupsData['listView']=status;
+            updateListView(status);
         }
         
         if (!$scope.dataObj) {
             return;
         } else {
             for (var i in $scope.dataObj) {
-                $scope.dataObj[i].service.listView = status;
+                $scope.dataObj[i].listView = status;
+                updateListView(status);
             }
         }
+    }
+    
+    function updateListView(status) {
+        $scope.$broadcast('listViewValue', status);
+        var value = (status === 'grid') ? 0 :((status === 'list') ? 1 :  2);
+        var putObj = {
+            'isListViewed' :value,
+        };
+
+        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+            .then(function (resp, status, headers) {
+
+            }, function (resp, status, headers, config) {
+
+            });
     }
 
     $scope.myfavorites = {
@@ -1624,40 +2760,70 @@ angular.module('myBiApp')
         'class_names': 'col-lg-2 col-md-4 col-sm-4 col-xs-6 report-tile',
         'loadmoredisable': favoriteService.loadmoredisable,
         'service': favoriteService,
-        'data': favoriteService.reports
+        'data': favoriteService.reports,
+        'listView' : $scope.listViewStatus
     };
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
-
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
     
-    $scope.setListView(false);
+    function sortList(list, filter) {
+        if(filter === 'asc_name') {
+            return _.sortBy(list, 'name');
+        } else if(filter === 'des_name'){
+            return _.sortBy(list, 'name').reverse();
+        } else if(filter === 'asc_date'){
+            return _.sortBy(list, 'createDate');
+        } else {
+            return _.sortBy(list, 'createDate').reverse();
+        }
+    }
+    
+//    $scope.setListView(false);
 }]);
 'use strict';
 
@@ -1839,7 +3005,6 @@ angular.module('myBiApp')
         }.bind(this));
     };
 }]);
-
 'use strict';
 
 /**
@@ -1970,6 +3135,7 @@ angular.module('myBiApp')
             eachItem.text = eachItem.searchString;
             eachItem.weight = eachItem.searchCount;
             eachItem.handlers = {click: function () {
+                angular.element('.color-white').triggerHandler('click');    
                 if($rootScope.searchin === 'persona' || !$rootScope.searchin) {
                     $state.go('search', {'searchText': eachItem.searchString, 'persona': 'Y'});
                 } else {
@@ -1995,7 +3161,7 @@ angular.module('myBiApp')
 .constant('WEBSERVICEURL', {
     'getUserDetails'        : 'BITool/getUserDetails',//
     'userInfo'              : 'BITool/userinfo/:username',//
-    'userPersona'           : 'BITool/userExistInBITool/?userName=:username',//
+    'userPersona'           : 'BITool/userExistInBITool',//
     'dashboard'             : 'BITool/dashboard/:username',//
     'updateFavorite'        : 'BITool/report/updateFavorite/:username/',//
     'favoriteRepots'        : 'BITool/favoriteReports/:username/:offset/:limit',//
@@ -2019,6 +3185,8 @@ angular.module('myBiApp')
     'userSearchallReportsFilter'  : 'BITool/userSearch/allReports/:username/:offset/:limit?:filter=:texttobesearched',
     'feedbackPost'          : 'BITool/addFeedback',
     'feedbackList'          : 'BITool/reportFeedbacks/:reportId',
+    'metadataWork'          : 'BITool/home/getBIReportMetadata/:offset/:limit?sourceSystem=:sourceSystem&workbookId=:workbookId&sourceReportId=:sourceReportId&isAllRecords=true',
+    'metadata'              : 'BITool/home/getBIReportMetadata/:offset/:limit?sourceReportId=:sourceReportId&sourceSystem=:sourceSystem&isAllRecords=true',
     'reportAccess'          : 'BITool/reportAccess/:reportId',
     'reportAccessSearch'    : 'BITool/reportAccess/:sourceReportId/:sourceSystemName',
     /*'userProfilePic'      : 'https://ssgosgdev.isus.emc.com/dev/image-api/v1.0/images/:entityId?apikey=l7xx475c903f220c4aa2a0c1259a89afe4a8'//*/
@@ -2181,6 +3349,20 @@ angular.module('myBiApp')
     };
 
     /**
+    *prepare the get Metadata Url
+    */
+    this.prepareMetaDataUrl = function(offset, limit, sourceReportId, sourceSystem) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.metadata, {'offset':offset, 'limit':limit, 'sourceReportId':sourceReportId, 'sourceSystem':sourceSystem});
+    };
+    
+    /**
+    *prepare the get Metadata Url
+    */
+    this.prepareMetaDataUrlWork = function(offset, limit, sourceSystem, workbookId, sourceReportId) {
+        return  this.replaceStringWithValues(WEBSERVICEURL.metadataWork, {'offset':offset, 'limit':limit, 'sourceSystem':sourceSystem, 'workbookId':workbookId, 'sourceReportId':sourceReportId});
+    };
+    
+    /**
     *prepare the get Report Access Url
     */
     this.prepareReportAccessUrl = function(reportId) {
@@ -2218,8 +3400,8 @@ angular.module('myBiApp')
     /**
     *prepare the Get User Persona Info Url
     */
-    this.prepareGetUserPersonaInfoUrl = function(username) {
-        return  this.replaceStringWithValues(WEBSERVICEURL.userPersona, {'username':username});
+    this.prepareGetUserPersonaInfoUrl = function() {
+        return WEBSERVICEURL.userPersona;
     };
     
     /** 
@@ -2243,7 +3425,7 @@ angular.module('myBiApp')
  * Service in the myBiApp.
  */
 angular.module('myBiApp')
-.service('userDetailsService', ["WEBSERVICEURL", "$http", "$q", "commonService", function userDetailsService(WEBSERVICEURL, $http, $q, commonService) {
+.service('userDetailsService', ["WEBSERVICEURL", "$http", "$q", "commonService", "$rootScope", function userDetailsService(WEBSERVICEURL, $http, $q, commonService, $rootScope) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var userObject, userPromise = $q.defer();
     $http.get(WEBSERVICEURL.getUserDetails).then(function (resp) {
@@ -2252,18 +3434,20 @@ angular.module('myBiApp')
             userObject[0].userinfo = response.data;
             userPromise.resolve(userObject);
         });
-
-        $http.get(commonService.prepareGetUserPersonaInfoUrl(userObject[0].emcLoginName)).then(function (response) {
-            userObject[0].personaInfo = response.data;
-            userPromise.resolve(userObject);
-        });       
+        if(!$rootScope.personaInfo) {
+            $http.get(commonService.prepareGetUserPersonaInfoUrl()).then(function (response) {
+                userObject[0].personaInfo = response.data;
+                userPromise.resolve(userObject);
+            }); 
+        } else {
+            userObject[0].personaInfo = $rootScope.personaInfo;
+        }
     });
     return {
         'userObject': userObject,
         'userPromise': userPromise.promise,
     };
 }]);
-
 'use strict';
 
 /**
@@ -2274,8 +3458,143 @@ angular.module('myBiApp')
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('ProfileCtrl', ["$scope", "$localStorage", "userDetailsService", "commonService", "CONFIG", "$http", function ($scope, $localStorage, userDetailsService, commonService, CONFIG, $http) {
+.controller('ProfileCtrl', ["$scope", "$localStorage", "userDetailsService", "commonService", "CONFIG", "$http", "$timeout", "reportsMenu", function ($scope, $localStorage, userDetailsService, commonService, CONFIG, $http, $timeout, reportsMenu) {
     $scope.setLoading(true);
+    $scope.$emit('setNavBar', true);
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
+    if(!$scope.userObject) {
+        userDetailsService.userPromise.then(function (response) {
+            $scope.setLoading(false);
+            $scope.userObject = response[0];
+            $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
+            setUserLevel($scope.userObject);
+            setUserPreference();
+        });
+    } else {
+        setUserLevel($scope.userObject);
+        setUserPreference();
+        $scope.setLoading(false);
+    }
+    
+    function setUserLevel(usrObj) {
+        if(!$localStorage.myLevel) {
+            if (usrObj.userinfo.badge === 'Bronze') {
+                $scope.myLevel = 'bronze-level';
+            } else if (usrObj.userinfo.badge === 'Silver') {
+                $scope.myLevel = 'silver-level';
+            } else if (usrObj.userinfo.badge === 'Gold') {
+                $scope.myLevel = 'gold-level';
+            } else if (usrObj.userinfo.badge === 'Platinum') {
+                $scope.myLevel = 'platinum-level';
+            }
+
+            $scope.userBadgeImage = "images/"+$scope.myLevel+"-badge.png";
+            $localStorage.myLevel = $scope.myLevel
+            $scope.$emit('myLevelIndication', $scope.myLevel);
+        } else {
+            $scope.myLevel = $localStorage.myLevel;
+            $scope.userBadgeImage = "images/"+$scope.myLevel+"-badge.png";
+            $scope.$emit('myLevelIndication', $scope.myLevel);
+        }
+    }
+    
+    function setUserPreference() {
+        var personalization = [];
+        
+        if(!$localStorage.userTheme || !$localStorage.personalization) {
+            $scope.setLoading(true);
+            $http.get('BITool/home/getUserPersonalization').then(function (response) {
+                if(response.data) {
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
+                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                    $localStorage.personalization = personalization;
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
+                } else {
+                    personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    $localStorage.personalization = personalization;
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
+                }
+            });
+            $scope.setLoading(false);
+        } else {
+            personalization = $localStorage.personalization;
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
+        }
+    }
+    
+    $scope.setUserTheme = function(theme) {
+        if($localStorage.userTheme === theme) {
+            return;
+        }
+        
+        $scope.setLoading(true);
+        var reportPriorityList = $localStorage.personalization
+        var putObj = {
+            'userTheme' : findThemeKey(CONFIG.userTheme, theme)
+        }
+        
+        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+            .then(function (resp, status, headers) {
+                $localStorage.userTheme = theme;
+                $scope.userTheme = $localStorage.userTheme;
+                $scope.$emit('myThemeSettings', $localStorage.userTheme, $localStorage.personalization, $localStorage.isMenuCollapsed);
+            }, function (resp, status, headers, config) {
+            });
+        $scope.setLoading(false);    
+    };
+    
+    function findThemeKey(obj, value) {
+        var key;
+        
+        _.each(_.keys(obj), function(k) {
+           if(obj[k] === value) {
+               key = k;
+           } 
+        });
+        return parseInt(key);
+    }
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name myBiApp.controller:ProfileCtrl
+ * @description
+ * # ProfileCtrl
+ * Controller of the myBiApp
+ */
+angular.module('myBiApp')
+.controller('HelpSupportCtrl', ["$scope", "$localStorage", "userDetailsService", "commonService", "CONFIG", "$http", function ($scope, $localStorage, userDetailsService, commonService, CONFIG, $http) {
+    $scope.setLoading(true);
+    $scope.$emit('setNavBar', true);
     
     if(!$scope.userObject) {
         userDetailsService.userPromise.then(function (response) {
@@ -2320,9 +3639,13 @@ angular.module('myBiApp')
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
 
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
                     $scope.userTheme = $localStorage.userTheme;
@@ -2343,33 +3666,29 @@ angular.module('myBiApp')
         }
     }
     
-//    $scope.setUserTheme = function(theme) {
-//        if($localStorage.userTheme === theme) {
-//            return;
-//        }
-//        console.log($scope.userObject);
-//        console.log($localStorage.personalization);
-//        $scope.setLoading(true);
-//        var reportPriorityList = $localStorage.personalization
-//        var putObj = {
-//            'userId' : $scope.userObject.uid,
-//            'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
-//            'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
-//            'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
-//            'userTheme' : findThemeKey(CONFIG.userTheme, theme)
-//        }
-//        console.log(putObj);
-//        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
-//            .then(function (resp, status, headers) {
-//                $localStorage.userTheme = theme;
-//                $scope.$emit('myThemeSettings', $localStorage.userTheme, reportPriorityList);
-//                console.log(resp);
-//            }, function (resp, status, headers, config) {
-//                console.log(resp);
-//            });
-//    
-//        $scope.setLoading(false);    
-//    };
+    $scope.setUserTheme = function(theme) {
+        if($localStorage.userTheme === theme) {
+            return;
+        }
+        $scope.setLoading(true);
+        var reportPriorityList = $localStorage.personalization
+        var putObj = {
+            'userId' : $scope.userObject.uid,
+            'recommended' :reportPriorityList.indexOf('recentViewedReports')+1,
+            'favorite' : reportPriorityList.indexOf('favoriteReports')+1,
+            'mostViewed' : reportPriorityList.indexOf('mostViewedReports')+1,
+            'userTheme' : findThemeKey(CONFIG.userTheme, theme)
+        }
+        $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+            .then(function (resp, status, headers) {
+                $localStorage.userTheme = theme;
+                $scope.userTheme = $localStorage.userTheme;
+                $scope.$emit('myThemeSettings', $localStorage.userTheme, reportPriorityList);
+            }, function (resp, status, headers, config) {
+            });
+    
+        $scope.setLoading(false);    
+    };
     
     function findThemeKey(obj, value) {
         var key;
@@ -2381,6 +3700,34 @@ angular.module('myBiApp')
         });
         return parseInt(key);
     }
+}]);
+'use strict';
+
+
+angular.module('myBiApp').controller('NotificationModalCtrl', ["$scope", "$uibModalInstance", "items", "$http", function ($scope, $uibModalInstance, items, $http) {
+    $scope.notificationAlert = items.data;
+    
+    $scope.dismissAlert = function () {
+        $uibModalInstance.close($scope.notificationAlert);
+    };
+    
+    $scope.close = function() {
+        $uibModalInstance.dismiss('close');
+    };
+}]);
+
+
+angular.module('myBiApp').controller('DeleteNotificationModalCtrl',["$scope", "items", "$uibModalInstance", function($scope,items,$uibModalInstance){
+    $scope.items = items;
+    $scope.message = '';
+    
+    $scope.delete = function(){
+        $uibModalInstance.close($scope.items);
+    };
+    
+    $scope.cancel = function(){
+      $uibModalInstance.dismiss('cancel');  
+    };
 }]);
 'use strict';
 /*
@@ -2397,14 +3744,43 @@ angular.module('myBiApp')
                 var e = c.treeModel,
                     h = c.nodeLabel || 'label',
                     d = c.nodeChildren || 'children',
-                    k = '<ul><li data-ng-repeat="node in ' + e + '" ui-sref-active="active"><i class="collapsed" data-ng-show="node.' + d + '.length && node.collapsed" data-ng-click="selectNodeHead(node, $event)"></i><i class="expanded" data-ng-show="node.' + d + '.length && !node.collapsed" data-ng-click="selectNodeHead(node, $event)"></i><a ui-sref="reports.details({levelId:node.levelId})" class="collapsed1" data-ng-show="node.' + d + '.length && node.collapsed" >{{node.' + h + '}}</a><a ui-sref="reports.details({levelId:node.levelId})" class="expanded1" data-ng-show="node.' + d + '.length && !node.collapsed">{{node.' + h + '}}</a><a ui-sref="reports.details({levelId:node.levelId})" data-ng-hide="node.' +
-                    d + '.length"><div><i class="normal"></i><span class="normal1" data-ng-hide="node.' +
-                    d + '.length" >{{node.' + h + '}}</span> </div></a>    <div class="collapse" uib-collapse="node.collapsed" data-tree-model="node.' + d + '" data-node-id=' + (c.nodeId || 'id') + ' data-node-label=' + h + ' data-node-children=' + d + '></div></li></ul>';
+                    k = '<ul>\n\
+                            <li data-ng-repeat="node in ' + e + '" ui-sref-active="active">\n\
+                                <div class="parent-div"><span class="first">\n\
+                                    <a ui-sref="reports.details({levelId:node.levelId})" ui-sref-active="active" class="collapsed1" data-ng-show="node.' + d + '.length>0 && node.collapsed" data-ng-click="selectNodeHead(node, $event)" >\n\
+                                        {{node.' + h + '}}\n\
+                                    </a>\n\
+                                    <a ui-sref="reports.details({levelId:node.levelId})" ui-sref-active="active" class="expanded1" data-ng-show="node.' + d + '.length>0 && !node.collapsed">\n\
+                                        {{node.' + h + '}}\n\
+                                    </a>\n\
+                                </span>\n\
+                                <span class="second">\n\
+                                    <i class="collapsed" data-ng-show="node.' + d + '.length>0 && node.collapsed" data-ng-click="selectNodeHead(node, $event)"></i>\n\
+                                    <i class="expanded" data-ng-show="node.' + d + '.length>0 && !node.collapsed" data-ng-click="selectNodeHead(node, $event)"></i>\n\
+                                </span>\n\
+                                </div>\n\
+                                <div class="child-div">\n\
+                                    <span class="first">\n\
+                                        <a ui-sref="reports.details({levelId:node.levelId})" ui-sref-active="active" data-ng-hide="node.' + d + '.length">\n\
+                                            <div>\n\
+                                                <span class="normal1" data-ng-hide="node.' + d + '.length" >\n\
+                                                    {{node.' + h + '}}\n\
+                                                </span>\n\
+                                            </div>\n\
+                                        </a>\n\
+                                    </span>\n\
+                                    <span class="second" data-ng-show="node.' + d + '.length>0">\n\
+                                        <i class="normal" data-ng-hide="node.' + d + '.length>0" value="node.' + d + '.length > 0"></i>\n\
+                                    </span>\n\
+                                </div>\n\
+                                <div class="collapse" uib-collapse="node.collapsed" data-tree-model="node.' + d + '" data-node-id=' + (c.nodeId || 'id') + ' data-node-label=' + h + ' data-node-children=' + d + '></div>\n\
+                            </li>\n\
+                        </ul>';
                 e && e.length && (c.angularTreeview ? (a.$watch(e, function (m, b) {
                     g.empty().html($compile(k)(a));
                 }, !1), a.selectNodeHead = a.selectNodeHead || function (a, b) {
-                    b.stopPropagation && b.stopPropagation();
-                    b.preventDefault && b.preventDefault();
+//                    b.stopPropagation && b.stopPropagation();
+//                    b.preventDefault && b.preventDefault();
                     b.cancelBubble = !0;
                     b.returnValue = !1;
                     a.collapsed = !a.collapsed
@@ -2435,7 +3811,7 @@ angular.module('myBiApp')
  * This service is used to alert any messages in project & modal/popup functionality
  */
 angular.module('myBiApp')
-.service('userAlertService', ["$rootScope", "$uibModal", function userAlertService($rootScope, $uibModal) {
+.service('userAlertService', ["$rootScope", "$uibModal", "$window", "$localStorage", function userAlertService($rootScope, $uibModal, $window, $localStorage) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     var ModalInstanceCtrl = function ($scope, $uibModalInstance, $uibModal, modalContent) {
@@ -2468,13 +3844,17 @@ angular.module('myBiApp')
         opts.resolve.modalContent = function () {
             return angular.copy(args); // pass name to resolve storage
         };
-
+        
         var modalInstance = $uibModal.open(opts);
         modalInstance.result.then(function () {
             args.ok.callback();
         }, function () {       //on cancel button press
             args.cancel.callback();
         });
+    }
+    
+    function RefreshSSO(args) {
+        $window.location.reload();
     }
 
     // This event need not be broadcasted from directuve which aren't in an isolated 
@@ -2484,9 +3864,15 @@ angular.module('myBiApp')
         showUserAlert(args);
         $rootScope.setLoading(false);
     });
+    
+    $rootScope.$on('RefreshSSO', function (event, args) {
+        RefreshSSO(args);
+        $rootScope.setLoading(false);
+    });
 
     return {
         'showUserAlert': showUserAlert,
+        'RefreshSSO': RefreshSSO
     };
 }]);
 'use strict';
@@ -2544,8 +3930,68 @@ angular.module('myBiApp')
         link: function postLink(scope/*, element, attrs*/) {
             scope.$watch('tilesData', function (value) {
                 scope['panel'] = value;
-
             });
+            scope.$on('sortFilterReportsBroadCast', function(event, sort, filter, option) {
+                sortReportWithOption(sort);
+                filterReportsWithOption(filter);
+            });
+            
+            function sortReportWithOption(sort) {
+                if(sort === 'ascName') {
+                    scope.panel.service.reports = sortList(scope.panel.service.reports, 'name', 'ascName', 1);
+//                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name');
+                } else if(sort === 'desName'){
+                    scope.panel.service.reports = sortList(scope.panel.service.reports, 'name', 'desName', -1);
+//                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'name').reverse();
+                } else if(sort === 'ascCDate'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createdDate');
+                } else if(sort === 'desCDate'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'createdDate').reverse();
+                } else if(sort === 'mostViewed'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'viewCount').reverse();
+                } else if(sort === 'recenltyAdded'){
+                    scope.panel.service.reports = _.sortBy(scope.panel.service.reports, 'provisionedDate').reverse();
+                }
+            }
+            
+            function sortList(list, sortBy, order, Num) {
+                list.sort(function(a, b){
+                    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                    if (nameA < nameB) //sort string ascending
+                        return -Num;
+                    if (nameA > nameB)
+                        return Num;
+                    return 0; //default return value (no sorting)
+                });
+                return list;
+            }
+            
+            function filterReportsWithOption(filter) {
+                if(filter === 'bobjReports'){
+                    scope.reportFlagType = 'Webi';
+                    scope.sortReportCounts = getReportCount('Webi', scope.panel.service.reports);
+                } else if(filter === 'tableauReports'){
+                    scope.reportFlagType = 'Tableau';
+                    scope.sortReportCounts = getReportCount('Tableau', scope.panel.service.reports);
+                } else if(filter === 'externalReports'){
+                    scope.reportFlagType = 'HTTP';
+                    scope.sortReportCounts = getReportCount('HTTP', scope.panel.service.reports);
+                } else {
+                    scope.panel.service.reports = scope.panel.service.reports;
+                    scope.reportFlagType = '';
+                    scope.sortReportCounts = '';
+                }
+            }
+            
+            function getReportCount(reportType, report) {
+                var sortReport = [];
+                _.each(report, function(row){
+                    if(row.type === reportType) {
+                        sortReport.push(row);
+                    }
+                });
+                return sortReport.length;
+            }
         }
     };
 })
@@ -2593,9 +4039,37 @@ angular.module('myBiApp')
         link: function (scope, element/*, attrs*/) {
             var template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}}), url(images/charts/not-found.png)\'}"></div>';
             var ele;
+            scope.iconClass = 'icon-default';
+            scope.externalReport = false;
             scope.externalUrl = false;
+            scope.toolbarPos = 'H';
+            scope.openNewTabUrl = '';
+            if (scope.report.type.toLowerCase() === 'tableau') {
+                if (scope.report.isHeaderFlag === 0) {
+                    scope.openNewTabUrl = scope.report.reportLink+'?Header Flag=0&';
+                } else {
+                    scope.openNewTabUrl = scope.report.reportLink+ '?';
+                }
+                if (scope.report.displayType === 'B') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=bottom";
+                } else if (scope.report.displayType === 'T') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=top";
+                } else if(scope.report.displayType && scope.report.displayType === 'H') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=no";
+                } else {
+                    scope.openNewTabUrl = scope.openNewTabUrl+":embed=y&:showVizHome=n&:apiID=handler0&:toolbar=no";
+                }
+                if(scope.report.tabbedViews === 'Y') {
+                    scope.openNewTabUrl = scope.openNewTabUrl+'&:tabs=y';
+                } else {
+                    scope.openNewTabUrl = scope.openNewTabUrl+'&:tabs=n';
+                }
+            } else { 
+                scope.openNewTabUrl = scope.report.reportLink;
+            }
             if (scope.report.sourceSystem === 'EXTERNAL') {
-                scope.externalUrl = true;
+                scope.externalReport = true;
+                (scope.report.displayType == 'N') ? scope.externalUrl = true : scope.externalUrl = false;
                 var bg = (scope.report.additionalInfo && scope.report.additionalInfo.indexOf('#') > -1) ? 'style = background-color:' + scope.report.additionalInfo : '';
                 var Desc = (scope.report.reportDesc) ? scope.report.reportDesc : '';
                 template = '<div class="panel-heading" ng-class="report.externalClass" ' + bg + '>' +
@@ -2606,10 +4080,11 @@ angular.module('myBiApp')
                 element.replaceWith(ele);
                 element = ele;
             } else {
+                (scope.report.displayType == 'T') ? scope.toolbarPos = 'T' : ((scope.report.displayType == 'B')? scope.toolbarPos = 'B' : scope.toolbarPos = 'H');
                 /* report type 'webi' & RefreshStatus is Y tile should be loaded with bobj report in iframe*/
                 if (scope.report.type && scope.report.type.toLowerCase() === 'webi' && scope.report.refreshStatus === 'Y') {
                     scope.report.iframeUrl = $sce.trustAsResourceUrl(scope.report.reportLinkImg);
-
+                    scope.iconClass = 'icon-webi';    
                     $timeout(function () {
                         //sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
                         var sandbox = '';
@@ -2633,6 +4108,7 @@ angular.module('myBiApp')
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'pdf' || scope.report.type.toLowerCase() === 'excel' || scope.report.type.toLowerCase() === 'webi')) {
                     if (scope.report.type.toLowerCase() === 'webi') {
+                        scope.iconClass = 'icon-webi';
                         scope.report.reportLinkImg = 'images/charts/bobj-icon.png';
                     }
                     template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
@@ -2642,6 +4118,7 @@ angular.module('myBiApp')
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'visilums')) {
                     if (scope.report.type.toLowerCase() === 'visilums') {
+                        scope.iconClass = 'icon-visilums';
                         scope.report.reportLinkImg = 'images/charts/Lumira.png';
                     }
                     template = '<div class="panel-heading" ng-class="report.iconClass" ng-style="{\'background-image\':\'url({{report.reportLinkImg}})\'}"></div>';
@@ -2650,6 +4127,7 @@ angular.module('myBiApp')
                     element = ele;
 
                 } else if (scope.report.type && (scope.report.type.toLowerCase() === 'tableau') /*&& scope.report.refreshStatus === 'Y'*/) {
+                    scope.iconClass = 'icon-tableau';
                     template = '<div class="panel-heading class-pdf"  ng-style="{\'background-image\':\'url(images/charts/loading-icon.gif)\', \'background-size\':\'auto\'}"></div>';
                     ele = $compile(template)(scope);
                     element.replaceWith(ele);
@@ -2673,8 +4151,6 @@ angular.module('myBiApp')
                     element.replaceWith(ele);
                 }
             }
-
-
         }
     };
 }])
@@ -2686,7 +4162,8 @@ angular.module('myBiApp')
  * # tilesController
  * Controller of the tiles. 
  */
-.controller('tilesController', ["$scope", "commonService", "$http", "CONFIG", "$sce", "$window", function ($scope, commonService, $http, CONFIG, $sce, $window) {
+.controller('tilesController', ["$scope", "commonService", "$http", "userDetailsService", "CONFIG", "$sce", "$window", function ($scope, commonService, $http, userDetailsService, CONFIG, $sce, $window) {
+    $scope.mobileDevice = ($window.innerWidth < 768) ? true: false;
     $scope.panel = $scope.tilesData;
     $scope.$watch('panel.data', function (value) {
         _.map(value, function (report) {
@@ -2712,6 +4189,9 @@ angular.module('myBiApp')
                         //report.reportLinkImg = CONFIG.tableauImagesPath+encodeURIComponent(report.functionalArea)+'/'+report.sourceReportId+'.png';
                     } else if (report.refreshStatus && report.refreshStatus === 'Y') {
                         report.reportLinkImg = report.reportLinkImg.replace('#/site', 't');
+                        if($scope.mobileDevice && report.isMobileEnabled === 'N') {
+                            report.reportLinkImg ='';
+                        }
                     }
                 }
             }
@@ -2735,8 +4215,38 @@ angular.module('myBiApp')
         }
     });
 
-    $scope.collapseOpen = function () {
+    $scope.collapseOpen = function (tileName) {
         $scope.panel.open = !$scope.panel.open;
+        
+        if(tileName) {            
+            userDetailsService.userPromise.then(function(userObj) {
+                var putObj = '';
+                
+                if(tileName === 'Recommended Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isRecommendedCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                } else if(tileName === 'Favorite Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isFavoriteCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                } else if(tileName === 'Most Viewed Reports') {
+                    putObj = {
+                        'userId' : userObj[0].uid,
+                        'isMostViewedCollapsed' : ($scope.panel.open === false) ? 1 : 0
+                    };
+                }
+                
+                $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                    .then(function (resp, status, headers) {
+
+                    }, function (resp, status, headers, config) {
+
+                    });
+            });
+        }
     };
     
     $scope.highlight = function(text, search) {
@@ -2752,6 +4262,18 @@ angular.module('myBiApp')
         }
     };
     
+    $scope.showIcons = false;
+    
+    $scope.showHideIcon = function(status, id) {
+        if (id) {
+            if(status === true) {
+                $scope.showIcons = status+id;
+            } else {
+                $scope.showIcons = false;
+            }
+        }
+    };
+    
     $scope.loadReport = function(report) {
         var url;
         
@@ -2762,18 +4284,33 @@ angular.module('myBiApp')
         } else {
             url = 'BITool/admin/externalrepo/downloadreport/'+report.sourceReportId;
         }
+        
         $window.open(url, '_blank');
     };
     
-    $scope.changeFavorite = function (report) {
+    $scope.changeFavorite = function (report, index, items) {
+//        $scope.favoriteTooltip = (report.favorite === 'Y')? 'Remove favorite': 'Mark as favorite';
+        
         var url = commonService.prepareUserUpdateFavoriteUrl($scope.userLoginName);
-
+        var obj = {
+            report : report,
+            reportIndex : index,
+            arrayItem : items,
+        };
+        
         if (report.favorite === 'N') {
+            obj.favorite = 'N';
+            $scope.$emit('addToFavorite', obj);
             $http.get(url + report.id + '/Y').then(function () {
-
                 report.favorite = 'Y';
             });
         } else {
+            obj.favorite = 'Y';
+            if(items.title === 'My Favorites') {
+                items.service.reports.splice(index,1);
+            } else {
+                $scope.$emit('addToFavorite', obj);
+            }    
             $http.get(url + report.id + '/N').then(function () {
                 report.favorite = 'N';
             });
@@ -2805,7 +4342,15 @@ angular.module("myBiApp").directive("searchReport", function () {
         controller: "searchReportController"
     }
 });
+'use strict';
 
+/**
+ * @ngdoc overview
+ * @name myBiApp
+ * @description
+ * # myBiApp
+ *
+ */
 angular.module("myBiApp").directive("scroll", ["$window", function($window) {
     return function(scope, element, attrs) {
         angular.element($window).bind("scroll", function() {
@@ -2817,6 +4362,347 @@ angular.module("myBiApp").directive("scroll", ["$window", function($window) {
             scope.$apply();
         });
     }
+}]);
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name myBiApp
+ * @description
+ * # myBiApp
+ *
+ */
+angular.module("myBiApp").directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show').click( function () {
+                    $this.attr('title', '');
+                });
+                var $this = $(this);
+                $this.data('title', $this.attr('title'));
+                // Using null here wouldn't work in IE, but empty string will work just fine.
+                $this.attr('title', '');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+                var $this = $(this);
+                $this.attr('title', $this.data('title'));
+            });
+            
+            $(element).on('click', function () {
+                var title = $(element).attr('data-original-title'),
+                    newTitle = '';
+                
+                if(title === 'Mark as favorite') {
+                    newTitle = 'Remove favorite';
+                } else if(title === 'Remove favorite') {
+                    newTitle = 'Mark as favorite';
+                }
+                
+                if(newTitle) {
+                    $(element).removeAttr('data-original-title');
+                    $(element).attr('title', newTitle)
+                        .attr('data-original-title', newTitle)
+                        .tooltip('fixTitle')
+                        .data('bs.tooltip')
+                        .$tip.find('.tooltip-inner')
+                        .text(newTitle)
+                        .tooltip('show')
+                        .attr('title', '');
+                }
+            });
+        }
+    };
+});
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name myBiApp
+ * @description
+ * # myBiApp
+ *
+ */
+angular.module("myBiApp").directive("resize", ["$window", function($window) {
+    return {
+        restrict: "A",
+        link: function (scope, element) {
+            scope.getHeight = function () {
+                return $(element).height();
+            };
+            scope.$watch(scope.getHeight, function (height) {
+                $(element).find('#main-div').removeAttr("style");
+                var navHeight = $(element).find('#nav-menu').height();
+                var divHeight = $(element).find('#page-wrapper').height();
+                if(parseInt(navHeight, 10) > parseInt(divHeight,  10)) {
+                    $(element).find('#main-div').height(navHeight);
+                } else {
+                }
+            });
+            
+            scope.getHeightNav = function () {
+                return $(element).find('#nav-menu').height();
+            };
+            scope.$watch(scope.getHeightNav, function (height) {
+                $(element).find('#main-div').removeAttr("style");
+                var navHeight = $(element).find('#nav-menu').height();
+                var divHeight = $(element).find('#page-wrapper').height();
+                if(parseInt(navHeight, 10) > parseInt(divHeight,  10)) {
+                    $(element).find('#main-div').height(navHeight);
+                } else {
+                }
+            });
+        }
+   }
+}]);
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name myBiApp
+ * @description
+ * # myBiApp
+ *
+ */
+
+angular.module("myBiApp")
+.directive("dendroGram", ["$window", function ($window) {
+    return {
+        restrict: "E",
+        templateUrl: 'views/dendroGram.html',
+        link: function(scope, elem, attrs){
+            var data =  scope[attrs.data];
+            var url = scope[attrs.url];
+            var toggle = elem.find("#toggle");    
+            var d3 = $window.d3;
+            var rawSvg = elem.find("#d3d svg")[0];
+            var initWidth = (scope.isTableu) ? 1250: 960; 
+            //http://eyeseast.github.io/visible-data/2013/08/28/responsive-charts-with-d3/
+            //https://chartio.com/resources/tutorials/how-to-resize-an-svg-when-the-window-is-resized-in-d3-js
+            var margin = {top: 20, right: 120, bottom: 20, left: 190},
+                width = initWidth  - margin.right - margin.left,
+                height = 800 - margin.top - margin.bottom;
+            var i = 0,
+                duration = 750,
+                root;
+            var tree = d3.layout.tree()
+                .size([height, width]);
+            var diagonal = d3.svg.diagonal()
+                .projection(function(d) { return [d.y, d.x]; });
+            var svg = d3.select(rawSvg);
+            var svg = d3.select("svg")    
+                .attr("width", width + margin.right + margin.left)
+                .attr("height", height + margin.top + margin.bottom)
+                .attr("class",  'dendrogram')
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            
+            function generateTree(){
+//                d3.json("/scripts/data/data.json", function(error, json) {
+                d3.json(url, function(error, json) {
+                    if (error) throw error;
+                    root = json;
+                    root.x0 = height / 2;
+                    root.y0 = 0;
+
+                    function collapse(d) {
+                        if (d.children) {
+                            d._children = d.children;
+                            d._children.forEach(collapse);
+                            d.children = null;
+                        }
+                    }
+                    
+                    root.children.forEach(collapse);
+                    update(root);
+                });
+            }
+            
+            generateTree();
+            
+            d3.select(self.frameElement).style("height", "800px");
+            
+            function update(source) {
+                // Compute the new tree layout. -- Sent by Viswa
+                var nodes = tree.nodes(root).reverse(),
+                    links = tree.links(nodes);
+            
+                // add the tool tip
+                var div = d3.select("body").append("div")
+                    .attr("class", "tooltip tooltip-box");
+
+                // Normalize for fixed-depth.
+                nodes.forEach(function(d) { d.y = d.depth * 180; });
+                
+                // Update the nodes…
+                var node = svg.selectAll("g.node")
+                    .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) { 
+                        return "translate(" + source.y0 + "," + source.x0 + ")"; 
+                    })
+                    .on("click", click)
+                    // add tool tip for ps -eo pid,ppid,pcpu,size,comm,ruser,s
+                    .on("mouseover", function(d) {
+                        div.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        div.html('<b>'+d.className+'</b>'+ ' <hr class="border-line" /> ' +d.name)
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 30) + "px");
+//                            .style("left", (d3.event.pageX) + "px")
+//                            .style("top", (d3.event.pageY - 70) + "px");  
+                    })
+                    .on("mouseout", function(d) {
+                        div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+
+                nodeEnter.append("circle")
+                    .attr("r", 1e-6)
+                    .style("fill", function(d) { 
+                        return d._children ? "lightsteelblue" : "#fff"; 
+                    });
+                    
+                var status = 'start';
+                
+                nodeEnter.append("text")
+                    .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", function(d) {
+                        status = d.children || d._children ? "end" : "start"; 
+                        return d.children || d._children ? "end" : "start"; 
+                    })
+                    .text(function(d) { return d.name; })
+                    .call(wrap, 25, status)
+                    .style("fill-opacity", 1e-6);
+
+                // Transition nodes to their new position.
+                var nodeUpdate = node.transition()
+                    .duration(duration)
+                    .attr("transform", function(d) { 
+                        return "translate(" + d.y + "," + d.x + ")"; 
+                    });
+
+                nodeUpdate.select("circle")
+                    .attr("r", 7)
+                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+                nodeUpdate.select("text")
+                    .style("fill-opacity", 1);
+
+                // Transition exiting nodes to the parent's new position.
+                var nodeExit = node.exit().transition()
+                    .duration(duration)
+                    .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+                    .remove();
+
+                nodeExit.select("circle")
+                    .attr("r", 1e-6);
+
+                nodeExit.select("text")
+                    .style("fill-opacity", 1e-6);
+
+                // Update the links…
+                var link = svg.selectAll("path.link")
+                    .data(links, function(d) { return d.target.id; });
+
+                // Enter any new links at the parent's previous position.
+                link.enter().insert("path", "g")
+                    .attr("class", "link")
+                    .attr("d", function(d) {
+                var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+                // Transition links to their new position.
+                link.transition()
+                    .duration(duration)
+                    .attr("d", diagonal);
+
+                // Transition exiting nodes to the parent's new position.
+                link.exit().transition()
+                    .duration(duration)
+                    .attr("d", function(d) {
+                        var o = {x: source.x, y: source.y};
+                        return diagonal({source: o, target: o});
+                    })
+                    .remove();
+
+                // Stash the old positions for transition.
+                nodes.forEach(function(d) {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+            }
+            
+            function wrap(text, width, status) {
+                text.each(function() {
+                    var nodeText = d3.select(this).text(),
+                        nodeTextlength = nodeText.length,
+                        nWords = (nodeTextlength > width) ? nodeText.substring(0,width-1)+'...' :nodeText,
+                        text = d3.select(this),
+                        x = text.attr("x"),
+                        y = text.attr("y"),
+                        dy = (status ===  'start') ? parseFloat(text.attr("dy")) : "-.35em",
+//                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy",dy);
+                        tspan.text(nWords);
+                });
+            }
+            
+            toggle.on("click", function() {
+                var toggleText = toggle.text();
+                if(toggleText === "Expand All") {
+                    toggle.text('Collapse All');
+                    toggleAll(root); 
+                    update(root);
+                } else {
+                    toggle.text('Expand All');
+                    root.children.forEach(collapseAll);
+                    collapseAll(root);
+                    update(root);
+                }
+            });
+            
+            // Toggle children on click.
+            function click(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else {
+                    d.children = d._children;
+                    d._children = null;
+                }
+                update(d);
+            }
+            
+            function collapseAll(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d._children.forEach(collapseAll);
+                    d.children = null;
+                }
+            }
+            
+            function toggleAll(d){   
+                var children = (d.children)?d.children:d._children;
+                if (d._children) {        
+                    d.children = d._children;
+                    d._children = null;       
+                }
+                if(children)
+                    children.forEach(toggleAll);
+            }
+        }
+    };
 }]);
 'use strict';
 
@@ -2876,9 +4762,7 @@ angular.module('myBiApp')
                             url = commonService.prepareSearchUrl(response[0].emcLoginName, this.reports.length + 1, CONFIG.limit, groupid);
                         }
                     }
-                    
-                    console.log(levelid);
-                    console.log(url);
+
                     filter = '';
                 }
                 
@@ -2894,13 +4778,14 @@ angular.module('myBiApp')
                     if (filter !== '') {
                         arrayReports = resp.data[filter] ? resp.data[filter] : [];
                     }
+                    
                     _.map(arrayReports, function (report) {
                         if (type === 'search') {
                             if (levelid === 'Y') {
                                 report.reportName = report.name;
                                 report.reportType = report.type;
-                                report.createdDate = report.createDate;
-                                report.updatedDate = report.updateDate;
+//                                report.createdDate = report.createDate;
+//                                report.updatedDate = report.updateDate;
                             }
                         } else if (levelid) {
                             report.levelId = levelid;
@@ -2932,22 +4817,26 @@ angular.module('myBiApp')
                                 }
                             }
                         }
+                        
                         return report;
                     });
 
                     if (arrayReports && arrayReports.length === CONFIG.limit) {
                         this.loadmoredisable = false;
                     }
+                    
                     if (stopInfinite) {
                         this.loadmoredisable = true;
                     }
+                    
                     if (this.reports.length === 0) {
                         this.reports = arrayReports;
-                    }
-                    else {
+                    } else {
                         Array.prototype.push.apply(this.reports, arrayReports);
                     }
+                    
                     defer.resolve({});
+                    
                 }.bind(this));
             }.bind(this));
             return defer.promise;
@@ -2973,7 +4862,6 @@ angular.module('myBiApp')
     //subcaption for subheader
     $scope.mainState.$current.data.subCaption = $stateParams.searchText;
     $scope.groupsData = {};
-    
 //    $scope.setListView = function (status) {
 //        if ($scope.groupsData) {
 //            $scope.groupsData.service['listView'] = status;
@@ -3023,31 +4911,48 @@ angular.module('myBiApp')
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
                 if(response.data) {
-                    personalization[response.data.favorite - 1] = 'favoriteReports'; 
-                    personalization[response.data.mostViewed - 1] = 'mostViewedReports';
-                    personalization[response.data.recommended - 1] = 'recentViewedReports';
-
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
     
@@ -3066,16 +4971,41 @@ angular.module('myBiApp')
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('searchReportController', ['$scope', 'popularSearchService', '$timeout', function ($scope, popularSearchService, $timeout) {
+.controller('searchReportController', ['$scope', 'popularSearchService', '$timeout', '$window', function ($scope, popularSearchService, $timeout, $window) {
+        
     $scope.model = {
         isMinimised: true,
         searchCloud: '',
         searchFilterOptions: [{name: 'Report Name', id: 'searchTextReportName'}, {name: 'Report Description', id: 'searchTextReportDesc'}, {name: 'Functional Area', id: 'searchTextFunctionalArea'}, {name: 'Owner', id: 'searchTextOwner'}]
     };
-    
+//    $scope.noNavBar = true;
     $scope.searchFilter = '';
     $scope.isCloudVisible = false;
-
+    $scope.showIcon = false;
+    
+    $scope.showIconFlag = function() {
+        ($scope.searchText) ? $scope.showIcon = true : $scope.showIcon = false; 
+    };
+    
+    $scope.openSearch = function() {
+        $scope.$emit('hideNotfy', false);
+        if($scope.model.isMinimised) {
+            $scope.model.isMinimised = false;
+        } else {
+            $scope.model.isMinimised = true;
+        }
+    };
+    
+    $scope.GetDataWithHtml = function () {
+        console.log('hi');
+    };
+    
+    $scope.clearText = function() {
+        $scope.showIcon = false;
+        $scope.searchText = "";
+        angular.element('.globle-search-input').focus();
+    };
+    
     popularSearchService.then(function (r) {
         $scope.model.searchCloud = r;
         $scope.isCloudVisible = true;
@@ -3087,16 +5017,13 @@ angular.module('myBiApp')
     $scope.$watch('model.isMinimised', function (o, n) {
         if (n) {
             $timeout(function () {
+                angular.element('.globle-search-input').focus();
                 $scope.isCloudVisible = true;
             }, 1);
         } else {
             $scope.isCloudVisible = false;
         }
     });
-
-    $scope.minimize = function () {
-        $scope.model.isMinimised = true;
-    }
 }]);
 'use strict';
 
@@ -3108,10 +5035,14 @@ angular.module('myBiApp')
  * Controller of the myBiApp
  */
 angular.module('myBiApp')
-.controller('SearchdetailsCtrl', ["$scope", "$rootScope", "$stateParams", "$state", "searchservice", "userDetailsService", "commonService", "$http", function ($scope, $rootScope, $stateParams, $state, searchservice, userDetailsService, commonService, $http) {
+.controller('SearchdetailsCtrl', ["$scope", "$rootScope", "$sce", "$stateParams", "$state", "$window", "$filter", "searchservice", "CONFIG", "userDetailsService", "$localStorage", "commonService", "$http", function ($scope, $rootScope, $sce, $stateParams, $state, $window, $filter, searchservice, CONFIG, userDetailsService, $localStorage, commonService, $http) {
     $scope.feedbackArray = [];
     $scope.reportAccessData = {};
     $scope.isCollapsed = false;
+    $scope.isTableu = false;
+    setUserPreference();
+    setUserLevel();
+    $scope.$emit('setNavBar', true);
     
     if ($stateParams.sourceReportId) {
 
@@ -3135,23 +5066,76 @@ angular.module('myBiApp')
                     //Update user view count
                     var reportUpdateViewed = commonService.prepareUpdateReportViewedUrl(response[0].emcLoginName, resp.data.sourceReportId, resp.data.sourceSystem, 'Search');
                     $http.get(reportUpdateViewed);
+                    $rootScope.sourceSystem = resp.data.sourceSystem;
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    emitSearchHeader(resp.data.name);
+                    $scope.isTableu = (resp.data.type === 'Tableau')? true : false;
+                    
+                    if($scope.isTableu) {
+                        var placeholderDiv = document.getElementById('tableu_report3');
+                        var url = resp.data.reportLink ? resp.data.reportLink : '';
+                        var headerFlag = (resp.data.isHeaderFlag === 0) ? '?Header Flag=0&' : '?';
+                        var reportToolBar = (resp.data.displayType === 'H') ? headerFlag+':toolbar=no' : 
+                                ((resp.data.displayType === 'B')? headerFlag+':toolbar=bottom' : headerFlag+':toolbar=top'); 
+                        var options = {
+                            hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? false : true,
+                            width: '100%',
+                            height: '800px'
+                        };
 
-                    $scope.mainState.$current.data.displayName = resp.data.name;
-                    $scope.isTableu = true;
-                    var placeholderDiv = document.getElementById('tableu_report3');
-                    //placeholderDiv.setAttribute('fixT',Math.random());
-                    var url = resp.data.reportLink ? resp.data.reportLink : '';
-                    var options = {
-                        hideTabs: (resp.data.tabbedViews && resp.data.tabbedViews === 'Y') ? true : false,
-                        width: '100%',
-                        height: '800px'
-                    };
-                    new tableau.Viz(placeholderDiv, url, options);
+                        new tableau.Viz(placeholderDiv, url+reportToolBar, options);
+                    } else {
+                        var url = resp.data.reportLink ? resp.data.reportLink : '';
+
+                        $scope.getOtherReportLink = function () {
+                            return $sce.trustAsResourceUrl(url);
+                        };
+                    }
                 });
             });
             //TODO Remove isTableu from template for showing iframe or grid or d3 reports.
 
         } else if ($state.current.name === 'search.details.about') {
+            userDetailsService.userPromise.then(function (response) {
+                var urlReports;
+                
+                if ($stateParams.persona === 'Y') {
+                    urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.searchId);
+                } else {
+                    urlReports = commonService.prepareUserReportUrlSearch(response[0].emcLoginName, $stateParams.sourceReportId, $stateParams.sourceName);
+                }
+                
+                $http.get(urlReports).then(function (resp) {
+                    $scope.reportData = resp.data;
+                    $rootScope.sourceSystem = resp.data.sourceSystem;
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    emitSearchHeader(resp.data.name)
+                });
+            });
+        } else if ($state.current.name === 'search.details.access') {
+            userDetailsService.userPromise.then(function (response) {
+                var urlReports;
+                if ($stateParams.persona === 'Y') {
+                    urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.searchId);
+                } else {
+                    urlReports = commonService.prepareUserReportUrlSearch(response[0].emcLoginName, $stateParams.sourceReportId, $stateParams.sourceName);
+                }
+                if(!$rootScope.searchReportName) {
+                    $http.get(urlReports).then(function (resp) {
+                        $rootScope.sourceSystem = resp.data.sourceSystem;
+                        ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                        emitSearchHeader(resp.data.name);
+                    });
+                } else {
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    emitSearchHeader($rootScope.searchReportName);
+                }
+                
+                searchservice.loadReportAccess($stateParams.sourceReportId, $stateParams.sourceName, $stateParams.searchId, $stateParams.persona).then(function (resp) {
+                    $scope.reportAccessData = resp;
+                });
+            });    
+        } else if ($state.current.name === 'search.details.feedback') {
             userDetailsService.userPromise.then(function (response) {
                 var urlReports;
                 if ($stateParams.persona === 'Y') {
@@ -3160,20 +5144,146 @@ angular.module('myBiApp')
                     urlReports = commonService.prepareUserReportUrlSearch(response[0].emcLoginName, $stateParams.sourceReportId, $stateParams.sourceName);
                 }
 
+                if(!$rootScope.searchReportName) {
+                    $http.get(urlReports).then(function (resp) {
+                        $rootScope.sourceSystem = resp.data.sourceSystem;
+                        ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                        emitSearchHeader(resp.data.name);
+                    });
+                } else {
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    emitSearchHeader($rootScope.searchReportName);
+                }
+                
+                $scope.feedbackArray = [];
+                searchservice.loadFeedbacks($stateParams.searchId).then(function (resp) {
+                    $scope.feedbackArray = resp;
+                });
+            });    
+        } else if ($state.current.name === 'search.details.reportmeta') {
+            $scope.isTable = true;
+            $scope.reportMetaData = [];
+            $scope.metaDataCopy = [];
+            $scope.reportFilterMetaData = [];        
+            $scope.currentPage = 1;
+            $scope.numPerPage = 20;
+            $scope.maxSize = 5;
+            $scope.totalItem ='';
+            $scope.showIcon = false;
+            $scope.setLoading(true);
+            
+            userDetailsService.userPromise.then(function (response) {
+                var urlReports;
+                if ($stateParams.persona === 'Y') {
+                    urlReports = commonService.prepareUserReportUrl(response[0].emcLoginName, $stateParams.searchId);
+                } else {
+                    urlReports = commonService.prepareUserReportUrlSearch(response[0].emcLoginName, $stateParams.sourceReportId, $stateParams.sourceName);
+                }
                 $http.get(urlReports).then(function (resp) {
-                    $scope.reportData = resp.data;
+                    emitSearchHeader(resp.data.name);
+                    $rootScope.reportName = $scope.mainState.$current.data.displayName = resp.data.name;  
+                    $rootScope.sourceSystem = resp.data.sourceSystem;
+                    ($rootScope.sourceSystem === 'EXTERNAL')? $scope.$emit('hideReportTabs', true) : $scope.$emit('hideReportTabs', false);
+                    $rootScope.sourceReportId = resp.data.sourceReportId;
+                    $rootScope.repType = resp.data.type;
+                    $rootScope.workbookId = resp.data.additionalInfo;
+                    $scope.isTableu = ($rootScope.repType === 'Tableau')? true : false;
+
+                    if($scope.isTableu) {
+                        if($rootScope.viewTabs === 'N') {
+                            $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                            var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                        } else {
+                            $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId+'&sourceReportId='+ $rootScope.sourceReportId;
+                            var url = commonService.prepareMetaDataUrlWork((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceSystem, $rootScope.workbookId);
+                        }
+                    } else {
+                        $scope.downloadLink = 'BITool/home/downloadBIReportMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                        var url = commonService.prepareMetaDataUrl((($scope.currentPage - 1) * $scope.numPerPage) +  1, $scope.numPerPage, $rootScope.sourceReportId, $rootScope.sourceSystem);
+                    }
+
+                    $http.get(url).then(function (resp) {
+                        if(resp.data) {
+                            if(resp.data.length > 0) {
+                                if($scope.isTableu) {
+                                    if($rootScope.viewTabs === 'N') {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                    } else {
+                                        $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceSystem='+ $rootScope.sourceSystem+'&workbookId='+$rootScope.workbookId;
+                                    }
+                                } else {
+                                    $scope.d3Url = 'BITool/home/getD3DendrogramForMetadata?sourceReportId='+ $rootScope.sourceReportId +'&sourceSystem='+ $rootScope.sourceSystem;
+                                }
+                            } else {
+                                $scope.emptyMessage = 'The report does not have metadata to display.';
+                                $scope.setLoading(false);
+                                return;
+                            }
+                        }
+
+                        $scope.reportMetaData = resp.data;
+                        $scope.metaDataCopy = angular.copy($scope.reportMetaData);
+                        $scope.totalItem = $scope.reportMetaData.length;
+
+                        $scope.$watch("currentPage + numPerPage", function() {
+                            $scope.setLoading(true);
+                            var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                            end = begin + $scope.numPerPage;
+                            $scope.reportFilterMetaData = $scope.reportMetaData.slice(begin, end);
+                            $scope.metaDataMessage = showMessage($scope.currentPage, $scope.totalItem, begin, end);
+                            $scope.setLoading(false);
+                        });
+                        $scope.setLoading(false);
+                    },function(){
+                        $scope.emptyMessage = 'The report does not have metadata to display.';
+                    });
                 });
             });
-        } else if ($state.current.name === 'search.details.access') {
-            searchservice.loadReportAccess($stateParams.sourceReportId, $stateParams.sourceName, $stateParams.searchId, $stateParams.persona).then(function (resp) {
-                $scope.reportAccessData = resp;
-            });
-        } else if ($state.current.name === 'search.details.feedback') {
-            $scope.feedbackArray = [];
-            searchservice.loadFeedbacks($stateParams.searchId).then(function (resp) {
-                $scope.feedbackArray = resp;
-            });
+            
+            $scope.resetFilterText = function() {
+                $scope.showIcon = false;
+                $scope.search.reportColumnName = '';
+            }
+            
+            $scope.filterMetaData = function() {
+                (!$scope.search.reportColumnName) ? $scope.showIcon = false : $scope.showIcon = true;
+                
+                $scope.$watch('search.reportColumnName', function(val) { 
+                    $scope.currentPage = 1;
+                    $scope.reportMetaData = $filter('filter')($scope.metaDataCopy, val);
+                    $scope.totalItem = $scope.reportMetaData.length;
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                    end = begin + $scope.numPerPage;
+                    $scope.reportFilterMetaData = $scope.reportMetaData.slice(begin, end);
+                    $scope.metaDataMessage = showMessage($scope.currentPage, $scope.totalItem, begin, end);
+                });
+            };
         }
+    }
+    
+    function showMessage(currentPage, totalItem, begin, end) {
+        //($scope.currentPage === 1) ? $scope.metaDataMessage = 'Showing 20 out of '+ $scope.totalItem + ' records.' : $scope.metaDataMessage = 'Showing ' + begin +' - '+ end + ' out of ' + $scope.totalItem +' records. ';
+        var message ='';
+        
+        if(totalItem === 0) {
+            message = '';
+        } else {
+            if(currentPage   === 1) {
+                if(totalItem > 20) {
+                    message = '1 - 20 of ' + totalItem;
+                } else {
+                    message = totalItem + ' of ' + totalItem;
+                }
+            } else {
+                if(totalItem > end) {
+                    message = begin + ' - ' + end + ' of ' + totalItem;
+                } else {
+                    message = begin + ' - ' + totalItem + ' of ' + totalItem;
+                }  
+            }
+        }
+
+        return message;
     }
 
     $scope.feedback = '';
@@ -3194,8 +5304,76 @@ angular.module('myBiApp')
             });
         }
     };
-}]);
+    
+    function emitSearchHeader(reportName) {
+        $scope.mainState.$current.data.displayName = reportName;
+        $rootScope.searchReportName = reportName;
+        
+        if($window.innerWidth < 768) {
+            if(reportName.length > 45) {
+                reportName = reportName.substr(0, 44)+'...';
+            }
+        }
+        
+        $scope.$emit('setSearchDisplayName', reportName);
+    }
+    
+    function setUserLevel() {
+        if(!$localStorage.myLevel) {
+            userDetailsService.userPromise.then(function (userObject) {
+                if (userObject[0].userinfo.badge === 'Bronze') {
+                    $scope.myLevel = 'bronze-level';
+                } else if (userObject[0].userinfo.badge === 'Silver') {
+                    $scope.myLevel = 'silver-level';
+                } else if (userObject[0].userinfo.badge === 'Gold') {
+                    $scope.myLevel = 'gold-level';
+                } else if (userObject[0].userinfo.badge === 'Platinum') {
+                    $scope.myLevel = 'platinum-level';
+                }
 
+                $localStorage.myLevel = $scope.myLevel
+                $scope.$emit('myLevelIndication', $scope.myLevel);
+            });    
+        } else {
+            $scope.myLevel = $localStorage.myLevel;
+            $scope.$emit('myLevelIndication', $scope.myLevel);
+        }
+    }
+    
+    function setUserPreference() {
+        var personalization = [];
+        if(!$localStorage.userTheme || !$localStorage.personalization) {
+            $scope.setLoading(true);
+            $http.get('BITool/home/getUserPersonalization').then(function (response) {
+                if(response.data) {
+                    if(response.data.favorite !== 0 && response.data.mostViewed !==0 && response.data.recommended !==0) {
+                        personalization[response.data.favorite - 1] = 'favoriteReports'; 
+                        personalization[response.data.mostViewed - 1] = 'mostViewedReports';
+                        personalization[response.data.recommended - 1] = 'recentViewedReports';
+                    } else {
+                        personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    }
+
+                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                    $scope.userTheme = $localStorage.userTheme;
+                    $localStorage.personalization = personalization;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                } else {
+                    $localStorage.userTheme = 'default';
+                    personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
+                    $scope.userTheme = $localStorage.userTheme;
+                    $localStorage.personalization = personalization;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                }
+            });
+            $scope.setLoading(false);
+        } else {
+            $scope.userTheme = $localStorage.userTheme;
+            personalization = $localStorage.personalization;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+        }
+    }
+}]);
 'use strict';
 
 /**

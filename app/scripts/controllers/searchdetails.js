@@ -45,7 +45,6 @@ angular.module('myBiApp')
                     $scope.isTableu = (resp.data.type === 'Tableau')? true : false;
                     
                     if($scope.isTableu) {
-                        console.log('here-Y');
                         var placeholderDiv = document.getElementById('tableu_report3');
                         var url = resp.data.reportLink ? resp.data.reportLink : '';
                         var headerFlag = (resp.data.isHeaderFlag === 0) ? '?Header Flag=0&' : '?';
@@ -59,7 +58,6 @@ angular.module('myBiApp')
 
                         new tableau.Viz(placeholderDiv, url+reportToolBar, options);
                     } else {
-                        console.log('here-N');
                         var url = resp.data.reportLink ? resp.data.reportLink : '';
 
                         $scope.getOtherReportLink = function () {

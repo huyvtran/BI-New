@@ -13,13 +13,14 @@ angular.module('adminPageApp').controller('GroupCtrl',function($scope, $http, $u
     
     function columnDefs(){
         return[
-            {name: 'Options', width:'8%', cellTemplate: 'views/adminDropdown.html',enableSorting: false},
+            {name: 'Action', width:'8%', cellTemplate: 'views/adminDropdown.html',enableSorting: false},
             {name: 'groupId',displayName: 'Persona ID', width:'7%', cellTooltip: true },
             {name: 'groupName', displayName: 'Persona Name', width:'15%', cellTooltip: true},
             {name: 'operationDashboardPage', displayName:'Op_Dashboard_Page', width:'20%',cellTooltip: true},
-            {name: 'helpLinkLabel', displayName: 'Help Link Label', width:'15%', cellTooltip: true},
+            {name: 'helpLinkLabel', displayName: 'Help Link Label', width:'10%', cellTooltip: true},
             {name: 'pageLink', displayName: 'Help Link', width:'20%', cellTooltip: true},
-            {name: 'buGroupName', displayName: 'Business Unit', width:'15%', cellTooltip: true}
+            {name: 'contactEmail', displayName: 'Contact Email', width:'10%', cellTooltip: true},
+            {name: 'buGroupName', displayName: 'Business Unit', width:'10%', cellTooltip: true}
         ];
     }
     
@@ -213,6 +214,7 @@ angular.module('adminPageApp').controller('GroupModalInstanceCtrl',function($sco
             "helpLinkLabel" : "",
             "pageLink" : "",
             "type" : 'new',
+            "contactEmail" : "",
             "buGroupId" : ""
         };
     } else {

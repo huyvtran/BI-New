@@ -2315,6 +2315,17 @@ body > div.ng-scope {
         background-color: #ebebeb;
         border-color: #adadad;
     }
+    .calendar-labal {
+        padding: 34px 0px 0 12px;
+    }
+    .calendar-input {
+        width: 60%;
+        float: left;
+        padding: 34px 0 0 0;
+    }
+    .calendar-time {
+        float:left;
+    }
 }
 
 select {
@@ -2454,6 +2465,11 @@ option:hover {
     }
     .inactive {
         margin-left: 10px;
+    }
+}
+.level-select {
+    select{
+        min-width: 110px;
     }
 }
 @media (max-width: 992px) {

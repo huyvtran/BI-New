@@ -38,7 +38,7 @@ angular.module('adminPageApp')
             {name: 'functionalArea', displayName: 'Functional Area', enableCellEdit: false, width: '100', cellTooltip: true},
             {name: 'owner', displayName: 'Owner', enableCellEdit: false, width: '100', cellTooltip: true},
             {name: 'additionalInfo', displayName: 'Additional Info', enableCellEdit: false, width: '100', cellTooltip: true},
-            {name: 'updatedDate', displayName: 'Updated Date', enableCellEdit: false, width: '200', cellTooltip: true}
+            {name: 'updatedDate', displayName: 'Updated Date', enableCellEdit: false, width: '200', cellTooltip: true, cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.updatedDate | date:"MM/dd/yy h:mm:ss a"}}</div>'}
         ];
     }
 
@@ -86,7 +86,7 @@ angular.module('adminPageApp')
     $scope.open = function (row) {
         var defer = $q.defer();
         row.isBUFlag = $scope.isBUFlag;
-        console.log(row);
+
         var modalInstance = $uibModal.open({
             templateUrl: 'views/modal.html',
             controller: 'ModalCtrl',

@@ -18,7 +18,7 @@
     infinite-scroll-disabled='panel.service.loadmoredisable' 
     infinite-scroll-immediate-check='true'>
     <div class="row">
-        <div ng-class="panel.class_names" ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))">
+        <div ng-class="panel.class_names" ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))" ng-mouseenter="showHideIcon(true,  report.id)" ng-mouseleave="showHideIcon(false, report.id)">
             <article class="search-article background-box">
                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-xs-5">
                     <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
@@ -40,31 +40,50 @@
                             </div>
                         </div>
                     </div>    
-                </div>  
+                </div>
                 <div class="col-xl-10 col-lg-10 col-md-10 col-sm-8 col-xs-7">
                     <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
-                        <h3>
-                            <a ui-sref="search.details.report({'searchId':report.id, 'sourceReportId':report.sourceReportId, 'sourceName':report.sourceSystem})" 
-                               title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
-                               ng-bind-html="highlight(report.reportName, keyword)"
-                               ng-hide="externalUrl"></a>
-                            <a href="javascript:void(0)" 
-                               ng-click="loadReport(report);" 
-                               target="_blank" 
-                               title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
-                               ng-bind-html="highlight(report.reportName, keyword)" 
-                               ng-show="externalUrl"></a>
-                        </h3>
-                        <div class="small text-muted">
-                            Created by <cite title="{{report.owner}}" ng-bind-html="highlight(report.owner, keyword)"></cite> in 
-                            <span ng-bind-html="highlight(report.functionalArea, keyword)"></span>
+                        <div class="report-title-detailed-view">
+                            <h3>
+                                <a ui-sref="search.details.report({'searchId':report.id, 'sourceReportId':report.sourceReportId, 'sourceName':report.sourceSystem})" 
+                                   title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                                   ng-bind-html="highlight(report.reportName, keyword)"
+                                   ng-hide="externalUrl"></a>
+                                <a href="javascript:void(0)" 
+                                   ng-click="loadReport(report);" 
+                                   target="_blank" 
+                                   title="{{(report.reportDesc) ? report.reportDesc : report.reportName }}"
+                                   ng-bind-html="highlight(report.reportName, keyword)" 
+                                   ng-show="externalUrl"></a>
+                            </h3>
+                            <div class="favorite-button" 
+                            ng-click="changeFavorite(report, $index, panel)" 
+                            ng-class="{'favorite-selected': report.favorite === 'Y' }" 
+                            data-toggle="tooltip" data-placement="right" tooltip
+                            title="{{(report.favorite === 'Y')? 'Remove favorite': 'Mark as favorite'}}"
+                            ng-show="showIcons === true+report.id || report.favorite === 'Y'"
+                            ></div>
+                            <div class="open-exteranl hidden-xs" data-toggle="tooltip" data-placement="left" tooltip title="Open in new window/tab" ng-show="showIcons===true+report.id"> 
+                                <a href="{{openNewTabUrl}}" target="_blank"><img src=""></a>
+                            </div>
                         </div>
-                        <p ng-if="report.reportDesc" class="margin-top-md">
-                            <span>Report Description: </span><span ng-bind-html="highlight(report.reportDesc, keyword)"></span>
+                        <div class="small text-muted m-t-n-xs">
+                            Created by <cite title="{{report.owner}}" ng-bind-html="highlight(report.owner, keyword)"></cite>
+                            <span ng-show="report.functionalArea"> in <span ng-bind-html="highlight(report.functionalArea, keyword)"></span></span>
+                        </div>
+                        <p class="margin-top-md">
+                            <span ng-show="report.reportDesc" ng-bind-html="highlight(report.reportDesc, keyword)"></span>
+                            <span class="text-muted" ng-show="!report.reportDesc && report.id">The report does not have any description at this time. Please request your BUAdmin to update in Insights Portal.</span>
                         </p>
-                        <div class="small text-muted details-in-mobile">
-                            <span>Created: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</span>
-                            <span>Last modified: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</span>
+                        <div class="small text-muted details-in-mobile margin-top-md" ng-show="report.createdDate && report.updatedDate">
+                            <span>Insights Added: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</span>
+                            <span>Insights Updated: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</span>
+                        </div>
+                        <div class="small text-muted margin-top-md details-in-mobile" ng-show="report.sysCreatedDate && report.sysUpdatedDate">
+                            <span>System Created: {{convertStringDate(report.sysCreatedDate) | date:'MMM d yyyy'}}</span>
+                            <span>System Modified: {{convertStringDate(report.sysUpdatedDate) | date:'MMM d yyyy'}}</span>
+                        </div>
+                        <div class="small text-muted margin-top-md details-in-mobile">
                             <span>Views:{{report.viewCount}}</span>
                         </div>
                     </div>    

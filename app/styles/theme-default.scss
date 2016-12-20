@@ -1,6 +1,38 @@
 /*
  *   Theme specific css changes
  */
+
+@media (min-width: 300px)and (max-width: 767px){
+    .black-notfy {
+        background: #999;
+    }
+    .default-notfy {
+        background: #DDD;
+    }
+    .default-theme-header, .black-theme-header {
+        .notfy-wrapper {
+            color: #999;
+            padding: 0 !important;
+            margin: 0;
+            outline: none;
+            width: 100% !important;
+            .notfy-body {
+                width: 91% !important;
+                .notfy-close-icon {
+                    border: 1px solid transparent;
+                    background-color: transparent;
+                    display: inline-block;
+                    vertical-align: middle;
+                    outline: 0;
+                    cursor: pointer;
+                    background: url(/images/cancel-grey.png) 0% 0%/75% no-repeat;
+                    height: 17px;
+                    width: 19px;
+                }
+            }
+        }
+    }    
+}    
 .default-theme-header {
     .tooltip.top .tooltip-arrow {
         border-top-color: #000;
@@ -17,6 +49,165 @@
     .tooltip-inner {
         background-color: #000;
         color: #FFF;
+    }
+    .notfy-count {
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        font-size: 11px;
+        color: #fff;
+        line-height: 16px;
+        text-align: center;
+        background: #ea0808;
+        padding: 3px 3px 2px 3px;
+        position: absolute;
+        right: 10%;
+        top: 12%;
+    }
+    .notfy-wrapper {
+        color: #999;
+        padding: 0 0 3px 0 !important;
+        left: auto !important;
+        width: 393px;
+        margin: 0;
+        right: 0%;
+        background: #DDD;
+        outline: none;
+        .notfy-title {
+            background: #FFF;
+            color: #333;
+            padding: 0;
+            margin: 5px 9px 2px 10px;
+            height: 25px;
+            h4 {
+                padding: 7px 0px 5px 5px;
+                margin-top: 0;
+                color: #333;
+                font-size: 13px;
+                display: inline-table;
+            }
+            .mark-delete-all {
+                float: right;
+                font-size: 13px;
+                padding: 5px 5px 0px 0px;
+                a {
+                    padding-right: 4px;
+                }
+            }
+        }    
+        .notfy-container {
+            margin: 5px 10px;
+            background: #FFF;
+            font-size: 13px;
+            width: 95%;
+            float: left;
+        }
+        div.notfy-container:last-child {
+            margin-bottom: 5px;
+        }
+        .notfy-typeIcon {
+            float: left;
+            font-size: 14px;
+            display: table;
+            width: 8%;
+            padding: 8px 0px 0px 8px;
+            .message-sign {
+                background: url(/images/email-db.png);
+                width: 22px;
+                height: 15px;
+                display: inline-table;
+                background-size: 80%;
+                float: left;
+                background-repeat: no-repeat;
+            }
+            .alert-sign {
+                background: url(/images/alert-db.png);
+                width: 22px;
+                height: 15px;
+                display: inline-table;
+                background-size: 80%;
+                float: left;
+                background-repeat: no-repeat;
+            }
+        }
+        .notfy-body {
+            width: 92%;
+            display: table;
+            padding: 4px 0px 0px 2px;
+            .notfy-header  {
+                width: 100%;
+                display: table;
+                p.notfy-date-owner {
+                    display: table;
+                    clear: both;
+                    font-size: 12px;
+                }
+            }
+            .notfy-single-title {
+                font-weight: bold;
+            }
+            .notfy-message {
+                p {
+                    word-break: break-word;
+                }
+            }
+            .notfy-icons {
+                float: right;
+                padding: 0px;
+                width: 15px;
+                height: 17px;
+                color: #cccccc;
+                margin-right: 3px;
+                .mark-as-read {
+                    background: #0000FF;
+                    outline: none;
+                    width: 10px;
+                    height: 10px;
+                    padding: 0;
+                    border: none;
+                    border-radius: 50%;
+                }
+                .mark-as-unread {
+                    background: #808080;
+                    outline: none;
+                    width: 10px;
+                    height: 10px;
+                    padding: 0;
+                    border: none;
+                    border-radius: 50%;
+                }
+            }
+            .notfy-close-icon {
+                border: 1px solid transparent;
+                background-color: transparent;
+                display: inline-block;
+                vertical-align: middle;
+                outline: 0;
+                cursor: pointer;
+                background: url(/images/cancel-grey.png) 0% 0%/75% no-repeat;
+                height: 17px;
+                width: 19px;
+            }
+        }
+        .pagination {
+            background: #FFF;
+            color: #333;
+            padding: 0;
+            margin: 3px 9px 0px 10px;
+            height: 25px;
+            width: 95%;
+            border-radius: 0;
+            li a{
+                border: none;
+                color: #2c6790;
+            }
+            li:last-child {
+                float:right;
+            }
+            a, a:hover, a:focus {
+                background: none;
+            }
+        }
     }
 }
 .black-theme-header {
@@ -36,12 +227,169 @@
         background-color: #FFF;
         color: #000;
     }
+    .notfy-count {
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        font-size: 11px;
+        color: #fff;
+        line-height: 16px;
+        text-align: center;
+        background: #ea0808;
+        padding: 3px 3px 2px 3px;
+        position: absolute;
+        right: 10%;
+        top: 12%;
+    }
+    .notfy-wrapper {
+        color: #FFF;
+        padding: 0 0 3px 0 !important;
+        left: auto !important;
+        width: 393px;
+        margin: 0;
+        right: 0%;
+        background: #999;
+        outline: none;
+        .notfy-title {
+            background: #333;
+            color: #FFF;
+            padding: 0;
+            margin: 5px 9px 2px 10px;
+            height: 25px;
+            h4 {
+                padding: 7px 0px 5px 5px;
+                margin-top: 0;
+                color: #FFF;
+                font-size: 13px;
+                display: inline-table;
+            }
+            .mark-delete-all {
+                float: right;
+                font-size: 13px;
+                padding: 5px 5px 0px 0px;
+                a {
+                    padding-right: 4px;
+                }
+            }
+        }    
+        .notfy-container {
+            margin: 5px 10px;
+            background: #333;
+            font-size: 13px;
+            width: 95%;
+            float: left;
+        }
+        div.notfy-container:last-child {
+            margin-bottom: 5px;
+        }
+        .notfy-typeIcon {
+            float: left;
+            font-size: 14px;
+            display: table;
+            width: 8%;
+            padding: 8px 0px 0px 8px;
+            .message-sign {
+                background: url(/images/email.png);
+                width: 22px;
+                height: 15px;
+                display: inline-table;
+                background-size: 80%;
+                float: left;
+                background-repeat: no-repeat;
+            }
+            .alert-sign {
+                background: url(/images/alert.png);
+                width: 22px;
+                height: 15px;
+                display: inline-table;
+                background-size: 80%;
+                float: left;
+                background-repeat: no-repeat;
+            }
+        }
+        .notfy-body {
+            width: 92%;
+            display: table;
+            padding: 4px 0px 0px 2px;
+            .notfy-header  {
+                width: 100%;
+                display: table;
+                p.notfy-date-owner {
+                    display: table;
+                    clear: both;
+                    font-size: 12px;
+                }
+            }
+            .notfy-single-title {
+                font-weight: bold;
+            }
+            .notfy-message {
+                p {
+                    word-break: break-word;
+                }
+            }
+            .notfy-icons {
+                float: right;
+                padding: 0px;
+                width: 15px;
+                height: 17px;
+                color: #cccccc;
+                margin-right: 3px;
+                .mark-as-read {
+                    background: #0000FF;
+                    outline: none;
+                    width: 10px;
+                    height: 10px;
+                    padding: 0;
+                    border: none;
+                    border-radius: 50%;
+                }
+                .mark-as-unread {
+                    background: #808080;
+                    outline: none;
+                    width: 10px;
+                    height: 10px;
+                    padding: 0;
+                    border: none;
+                    border-radius: 50%;
+                }
+            }
+            .notfy-close-icon {
+                border: 1px solid transparent;
+                background-color: transparent;
+                display: inline-block;
+                vertical-align: middle;
+                outline: 0;
+                cursor: pointer;
+                background: url(/images/cancel.png) 0% 0%/75% no-repeat;
+                height: 17px;
+                width: 19px;
+            }
+        }
+        .pagination {
+            background: #333;
+            color: #FFF;
+            padding: 0;
+            margin: 3px 9px 0px 10px;
+            height: 25px;
+            width: 95%;
+            border-radius: 0;
+            li a{
+                border: none;
+                color: #2c6790;
+            }
+            li:last-child {
+                float:right;
+            }
+            a, a:hover, a:focus {
+                background: none;
+            }
+        }
+    }
 }
-
 .white-theme {}
 .default-theme {} 
 .black-theme {}
-
 
 .white-bg {
     background-color: #ffffff;
@@ -72,14 +420,42 @@
         .favorite-button {
             background: url(../images/icon-favourites-stroke-black.png);
             outline:none;
+            background-size: 75%;
+            background-repeat: no-repeat;
             &.favorite-selected {
                 background: url(../images/icon-favourite-selected.png);
                 outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
             }
         }
         .open-exteranl {
             background-image: url('../images/icon-opennewtab-black.png');
             outline:none;
+            background-size: 75%;
+            background-repeat: no-repeat;
+        }
+    }
+    .search-article {
+        .report-title-detailed-view {
+            .favorite-button {
+                background: url(../images/icon-favourites-stroke-black.png);
+                outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
+                &.favorite-selected {
+                    background: url(../images/icon-favourite-selected.png);
+                    outline:none;
+                    background-size: 75%;
+                    background-repeat: no-repeat;
+                }    
+            }
+            .open-exteranl {
+                background-image: url('../images/icon-opennewtab-black.png');
+                outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
+            }
         }
     }
     .panel{
@@ -214,7 +590,7 @@
         color: #FFF;
     }
     .detailed-view-icon {
-        background: url(../images/grid-view-dark.png);
+        background: url(../images/detailed-view-dark.png);
         background-repeat: no-repeat;
         width: 20px;
         height: 16px;
@@ -256,6 +632,9 @@
         background-repeat: no-repeat;
         background-size: 90%;
     }
+    .text-muted {
+        color: #888888;
+    }
 }
 
 .black-bg {
@@ -279,14 +658,42 @@
             .favorite-button {
                 background: url(../images/icon-favourites-stroke-white.png);
                 outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
                 &.favorite-selected {
                     background: url(../images/icon-favourite-selected.png);
-                    outline:none
+                    outline:none;
+                    background-size: 75%;
+                    background-repeat: no-repeat;
                 }
             }
             .open-exteranl {
                 background-image: url('../images/icon-opennewtab-white.png');
                 outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
+            }
+        }
+    }
+    .search-article {
+        .report-title-detailed-view {
+            .favorite-button {
+                background: url(../images/icon-favourites-stroke-white.png);
+                outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
+                &.favorite-selected {
+                    background: url(../images/icon-favourite-selected.png);
+                    outline:none;
+                    background-size: 75%;
+                    background-repeat: no-repeat;
+                }    
+            }
+            .open-exteranl {
+                background-image: url('../images/icon-opennewtab-white.png');
+                outline:none;
+                background-size: 75%;
+                background-repeat: no-repeat;
             }
         }
     }
@@ -452,7 +859,7 @@
         background: #333;
     }
     .detailed-view-icon {
-        background: url(../images/grid-view-white.png);
+        background: url(../images/detailed-view-white.png);
         background-repeat: no-repeat;
         width: 20px;
         height: 16px;
@@ -493,7 +900,23 @@
         background: url(/images/move-up-white.png);
         background-repeat: no-repeat;
         background-size: 90%;
-    }    
+    }
+    .reports-box-search {
+        .panel-heading {
+            border: 1px solid #1F1F1F;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+    }
+    .search-filter-dropdown {
+        background-color: #4F4F4F;
+        color: #FFF;
+        border: none;
+        outline: none;
+    }
+    .text-muted {
+        color: #FFF;
+    }
 }
 .black-theme, .default-theme {
     #wrapper {

@@ -13,7 +13,7 @@ angular.module('adminPageApp').controller('LevelCtrl', function ($scope, $http, 
     
     function columnDefs() {
         return[
-            {name: 'Options', width: '10%', cellTemplate: 'views/adminDropdown.html', enableSorting: false},
+            {name: 'Action', width: '10%', cellTemplate: 'views/adminDropdown.html', enableSorting: false},
             {name: 'levelId', displayName: 'Level Id', width: '10%', cellTooltip: true},
             {name: 'levelDesc', displayName: 'Level Name', width: '15%', cellTooltip: true},
             {name: 'levelNumber', displayName: 'Level Number', width: '15%', cellTooltip: true},
@@ -115,30 +115,16 @@ angular.module('adminPageApp').controller('LevelCtrl', function ($scope, $http, 
         } else {
             url = 'BITool/admin/levelSearch/' + offset + '/20?searchText=' + $scope.searchTextValue + '&personaId=';
         }
-        console.log(url);
+        
         var httpPromise = $http({
             'url': url,
             'method': 'get',
             'timeout': canceller.promise
         }).then(function (resp) {
-//            levels = resp.data.allLevels;
             groupIdList = _.sortBy(resp.data.allGroups, 'groupName');
             $scope.$emit('emitAuditGroup', groupIdList);
             var newUrl = 'BITool/admin/getParentOrChildLevel?levelId=';
             
-//            $http.get(newUrl).then(function(resp){
-//                parentLevelList = resp.data;
-//            });
-            
-//            _.map(resp.data.levelList, function (eachList) {
-//                //eachList.groupId; 
-//                _.map(resp.data.allLevels, function (eachLevel) {
-//                    if (eachList.parentLevelId === eachLevel.levelId) {
-//                        eachList.parentLevelDesc = eachLevel.levelDesc;
-//                    }
-//                });
-//            });
-
             if ($scope.myData.data.length === 0) {
                 $scope.myData.data = resp.data.levelList;
             } else {
@@ -313,7 +299,6 @@ angular.module('adminPageApp').controller('LevelModalInstanceCtrl', function ($s
             selectedItem = _.omit(selectedItem,'groupIdList');
             selectedItem = _.omit(selectedItem,'selectedGroupIdList');
             $scope.selectedItem = selectedItem;
-            console.log($scope.selectedItem);
             $uibModalInstance.close(selectedItem);
         } else {
             if($scope.levelFlag === 'Parent') {
@@ -335,7 +320,6 @@ angular.module('adminPageApp').controller('LevelModalInstanceCtrl', function ($s
             selectedItem = _.omit(selectedItem,'updatedBy');
             selectedItem = _.omit(selectedItem,'updatedDate');
             $scope.selectedItem = selectedItem;
-            console.log($scope.selectedItem);
             $uibModalInstance.close(selectedItem);
         }
     };

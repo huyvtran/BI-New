@@ -51,8 +51,6 @@ angular.module('myBiApp')
     }
     
     function RefreshSSO(args) {
-//        console.log($window.location);
-//        $localStorage.urlObj = $window.location;
         $window.location.reload();
     }
 

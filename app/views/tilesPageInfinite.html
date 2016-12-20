@@ -18,7 +18,7 @@
             <a class="btn btn-md bordered" href="javascript:;" ng-hide="panel.open" ng-click="collapseOpen();" data-toggle="tooltip" data-placement="top" tooltip title="Expand"><span class="report-expand-icon"></span></a>
         </div>
     </div>
-    <div ng-show="panel.open" class="row ibox-content no-padding" ng-class="{'tiles-list-view':panel.listView ==='list' && !mobileDevice, 'tiles-grid-view':panel.listView ==='grid', 'tiles-detailed-view':panel.listView ==='detailed' && !mobileDevice}">
+    <div ng-show="panel.open" class="row ibox-content no-padding" ng-class="{'tiles-list-view':panel.listView ==='list' && !mobileDevice, 'tiles-grid-view':panel.listView ==='grid' || mobileDevice, 'tiles-detailed-view':panel.listView ==='detailed' && !mobileDevice}">
         <div class="container-fluid"
             infinite-scroll='panel.service.loadReports(panel.parameter1,panel.parameter2)' 
             infinite-scroll-distance='1' 
@@ -27,7 +27,7 @@
             >
             <div class="row" >
                 <div ng-class="panel.class_names" class="single-tile report-block" ng-repeat="report in (mostviewed = (panel.service.reports| limitTo:panel.limit))" ng-mouseenter="showHideIcon(true,  report.id)" ng-mouseleave="showHideIcon(false, report.id)" ng-hide="reportFlagType && reportFlagType !== report.type">
-                    <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}" ng-show="panel.listView !=='detailed'">
+                    <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}" ng-show="panel.listView !=='detailed' || panel.listView ==='detailed' && mobileDevice">
                         <img ng-show="report.isMobileEnabled === 'N' && mobileDevice " alt="image" class="phone-banned" src="images/phone-banned.png">
                         <a href="javascript:void(0)" ng-click="loadReport(report);" title="{{(report.reportDesc) ? report.reportDesc : report.linkHoverInfo }}" ng-show="externalUrl">
                             <div class="panel panel-primary reports-box">
@@ -70,8 +70,8 @@
                         <div class="refresh-status-icon" ng-class="{'refresh-status-icon-green': report.refreshStatus === 'Y' }" >
                         </div>
                     </div>
-                    <article class="search-article background-box" ng-show="panel.listView ==='detailed'">
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-xs-5">
+                    <article class="search-article background-box" ng-show="panel.listView ==='detailed' && !mobileDevice">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-xs-5">
                             <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
                                 <img ng-show="report.isMobileEnabled === 'N' && mobileDevice " alt="image" class="phone-banned" src="images/phone-banned.png">
                                 <div class="reports-box reports-box-search">
@@ -85,38 +85,45 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="footer-links">
-                                <div class="favorite-button" 
+                        </div>  
+                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                            <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
+                                <div class="report-title-detailed-view">
+                                    <h3>
+                                        <a href="javascript:void(0)" ng-click="loadReport(report);" ng-show="externalUrl">
+                                            {{report.name}}
+                                        </a>
+                                        <a ng-href="#/reports/{{report.levelId}}/{{report.id}}/report" ng-hide="externalUrl">
+                                            {{report.name}}
+                                        </a>
+                                    </h3>
+                                    <div class="favorite-button" 
                                     ng-click="changeFavorite(report, $index, panel)" 
                                     ng-class="{'favorite-selected': report.favorite === 'Y' }" 
-                                    data-toggle="tooltip" data-placement="top" tooltip
+                                    data-toggle="tooltip" data-placement="right" tooltip
                                     title="{{(report.favorite === 'Y')? 'Remove favorite': 'Mark as favorite'}}"
                                     ng-show="showIcons === true+report.id || report.favorite === 'Y'"></div>
-                                <div class="open-exteranl hidden-xs" data-toggle="tooltip" data-placement="top" tooltip title="Open in new window/tab" ng-show="showIcons===true+report.id">
-                                    <a href="{{openNewTabUrl}}" target="_blank"><img src=""></a>
+                                    <div class="open-exteranl hidden-xs" data-toggle="tooltip" data-placement="left" tooltip title="Open in new window/tab" ng-show="showIcons===true+report.id">
+                                        <a href="{{openNewTabUrl}}" target="_blank"><img src=""></a>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>  
-                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                            <div ng-class="{'in-mobile-disable':report.isMobileEnabled === 'N' && mobileDevice}">
-                                <h3>
-                                    <a href="javascript:void(0)" ng-click="loadReport(report);" ng-show="externalUrl">
-                                        {{report.name}}
-                                    </a>
-                                    <a ng-href="#/reports/{{report.levelId}}/{{report.id}}/report" ng-hide="externalUrl">
-                                        {{report.name}}
-                                    </a>
-                                </h3>
-                                <div class="small text-muted">
-                                    Created by <cite title="{{report.owner}}" ng-bind-html="report.owner"></cite> in 
-                                    <span ng-bind-html="report.functionalArea"></span>
+                                <div class="small text-muted m-t-n-xs">
+                                    Created by <cite title="{{report.owner}}" ng-bind-html="report.owner"></cite>
+                                    <span ng-show="report.functionalArea"> in <span ng-bind-html="report.functionalArea"></span></span>
                                 </div>
                                 <p class="margin-top-md">
-                                    <span ng-show="report.reportDesc">Report Description: </span><span ng-bind-html="report.reportDesc"></span>
+                                    <span class="text-muted" ng-show="report.reportDesc" ng-bind-html="report.reportDesc"></span>
+                                    <span class="text-muted" ng-hide="report.reportDesc">The report does not have any description at this time. Please request your BUAdmin to update in Insights Portal.</span>
                                 </p>
                                 <div class="small text-muted details-in-mobile">
-                                    <span>Created: {{convertStringDate(report.createDate) | date:'MMM d yyyy'}}</span>
-                                    <span>Last modified: {{convertStringDate(report.updateDate) | date:'MMM d yyyy'}}</span>
+                                    <span>Insights Added: {{convertStringDate(report.createdDate) | date:'MMM d yyyy'}}</span>
+                                    <span>Insights Updated: {{convertStringDate(report.updatedDate) | date:'MMM d yyyy'}}</span>
+                                </div>
+                                <div class="small text-muted margin-top-md details-in-mobile">
+                                    <span>System Created: {{convertStringDate(report.sysCreatedDate) | date:'MMM d yyyy'}}</span>
+                                    <span>System Modified: {{convertStringDate(report.sysUpdatedDate) | date:'MMM d yyyy'}}</span>
+                                </div>
+                                <div class="small text-muted margin-top-md details-in-mobile">
                                     <span>Views:{{report.viewCount}}</span>
                                 </div>
                             </div>    

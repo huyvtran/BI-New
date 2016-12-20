@@ -18,14 +18,9 @@ angular.module("myBiApp").directive("resize", function($window) {
                 $(element).find('#main-div').removeAttr("style");
                 var navHeight = $(element).find('#nav-menu').height();
                 var divHeight = $(element).find('#page-wrapper').height();
-//                console.log(height);
-//                console.log($(element).find('#nav-menu').height());
-//                console.log($(element).find('#page-wrapper').height());
                 if(parseInt(navHeight, 10) > parseInt(divHeight,  10)) {
-//                    console.log('in if');
                     $(element).find('#main-div').height(navHeight);
                 } else {
-//                    console.log('in else');
                 }
             });
             

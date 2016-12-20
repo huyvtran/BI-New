@@ -78,8 +78,8 @@ angular.module('myBiApp')
                             if (levelid === 'Y') {
                                 report.reportName = report.name;
                                 report.reportType = report.type;
-                                report.createdDate = report.createDate;
-                                report.updatedDate = report.updateDate;
+//                                report.createdDate = report.createDate;
+//                                report.updatedDate = report.updateDate;
                             }
                         } else if (levelid) {
                             report.levelId = levelid;

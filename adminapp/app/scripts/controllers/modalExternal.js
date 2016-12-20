@@ -18,6 +18,10 @@ angular.module('adminPageApp')
     $scope.progress = false;
     $scope.saveText = '';
     
+    $scope.convertStringDate = function (date) {
+        return new Date(date);
+    };
+    
     $http.get('BITool/admin/externalrepo/searchreport/' + $scope.items.sourceReportId)
         .then(function (response) {
             var resp = response.data;

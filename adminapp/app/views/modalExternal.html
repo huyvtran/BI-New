@@ -11,14 +11,14 @@
             <div style="" class="col-xs-6">
                 <div class="row"  >
                     <div class="col-xs-4"> Created Date</div>
-                    <div class="col-xs-8"> {{items.createdDate}} </div>
+                    <div class="col-xs-8">{{convertStringDate(items.createdDate) | date:'medium'}}</div>
                 </div>
             </div>
 
             <div class="col-xs-6" >
                 <div class="row"  >
                     <div class="col-xs-4"> Updated Date </div>
-                    <div class="col-xs-6">{{items.updatedDate}} </div>
+                    <div class="col-xs-6">{{convertStringDate(items.updatedDate) | date:'medium'}}</div>
                 </div>
             </div>
         </div>

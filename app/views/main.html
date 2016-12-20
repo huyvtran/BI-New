@@ -21,7 +21,7 @@
                             <a href="{{slide.link}}" target="_blank">
                                 <img ng-src="{{slide.image}}" style="margin:auto;">
                             </a>    
-                            <div class="carousel-caption" ng-class="{'carousel-z-index':slide.details === ''}">
+                            <div class="carousel-caption" ng-class="{'carousel-z-index':!slide.details}">
                                 <div class="carousel-caption-centered">
                                     <div class="child1">
                                         <h4>{{slide.title}}</h4>
@@ -63,9 +63,10 @@
             </div>
         </div>
     </div>
+    <!--<div></div>-->
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 hidden-xs" ng-hide="personaInfo.status.toLowerCase() === 'error'">
         <div class="pull-right tile-list">
-            <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'detailed'}" ng-click="setListView('detailed')" data-toggle="tooltip" data-placement="left" tooltip title="Detailed View">
+            <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'detailed'}" ng-click="setListView('detailed')" data-toggle="tooltip" data-placement="left" tooltip title="Detail View">
                 <span class="detailed-view-icon"></span>
             </a>
             <a class="list-grid-container align-center" ng-class="{bordered:listViewStatus === 'list'}" ng-click="setListView('list')" data-toggle="tooltip" data-placement="left" tooltip title="List View">

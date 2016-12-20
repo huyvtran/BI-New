@@ -3302,13 +3302,27 @@ body > div.ng-scope {
   background-color: #ebebeb;
   border-color: #adadad;
 }
+/* line 2318, ../../app/styles/theme-default.scss */
+.calendarBlock .calendar-labal {
+  padding: 34px 0px 0 12px;
+}
+/* line 2321, ../../app/styles/theme-default.scss */
+.calendarBlock .calendar-input {
+  width: 60%;
+  float: left;
+  padding: 34px 0 0 0;
+}
+/* line 2326, ../../app/styles/theme-default.scss */
+.calendarBlock .calendar-time {
+  float: left;
+}
 
-/* line 2320, ../../app/styles/theme-default.scss */
+/* line 2331, ../../app/styles/theme-default.scss */
 select {
   max-width: 100%;
 }
 
-/* line 2324, ../../app/styles/theme-default.scss */
+/* line 2335, ../../app/styles/theme-default.scss */
 .scrollable-menu {
   height: auto;
   padding: 10px 0px 1px 10px !important;
@@ -3327,12 +3341,12 @@ select {
   list-style: none;
   background-color: #fff;
 }
-/* line 2341, ../../app/styles/theme-default.scss */
+/* line 2352, ../../app/styles/theme-default.scss */
 .scrollable-menu input[type=checkbox] {
   margin-top: 7px;
 }
 
-/* line 2345, ../../app/styles/theme-default.scss */
+/* line 2356, ../../app/styles/theme-default.scss */
 .divider {
   height: 1px;
   margin: 9px 0;
@@ -3340,7 +3354,7 @@ select {
   background-color: #e5e5e5;
 }
 
-/* line 2351, ../../app/styles/theme-default.scss */
+/* line 2362, ../../app/styles/theme-default.scss */
 .nav-select-dropdown {
   background: transparent;
   color: #FFF;
@@ -3348,11 +3362,11 @@ select {
   font-size: 20px;
   font-weight: normal;
 }
-/* line 2357, ../../app/styles/theme-default.scss */
+/* line 2368, ../../app/styles/theme-default.scss */
 .nav-select-dropdown span {
   color: #FFF;
 }
-/* line 2360, ../../app/styles/theme-default.scss */
+/* line 2371, ../../app/styles/theme-default.scss */
 .nav-select-dropdown option {
   background: #333333;
   color: #FFF;
@@ -3360,80 +3374,80 @@ select {
   font-size: 14px;
   font-weight: normal;
 }
-/* line 2367, ../../app/styles/theme-default.scss */
+/* line 2378, ../../app/styles/theme-default.scss */
 .nav-select-dropdown:hover {
   color: #FFF;
 }
-/* line 2370, ../../app/styles/theme-default.scss */
+/* line 2381, ../../app/styles/theme-default.scss */
 .nav-select-dropdown.focus {
   color: #FFF;
 }
 
-/* line 2374, ../../app/styles/theme-default.scss */
+/* line 2385, ../../app/styles/theme-default.scss */
 select:focus::-ms-value {
   background-color: #333;
   color: #D3D3D3;
 }
 
-/* line 2378, ../../app/styles/theme-default.scss */
+/* line 2389, ../../app/styles/theme-default.scss */
 option:hover {
   background-color: #66afe9;
   color: #FFF;
 }
 
-/* line 2382, ../../app/styles/theme-default.scss */
+/* line 2393, ../../app/styles/theme-default.scss */
 .additiona-info {
   left: 1px !important;
 }
 
-/* line 2385, ../../app/styles/theme-default.scss */
+/* line 2396, ../../app/styles/theme-default.scss */
 .font-Iconsize {
   font-size: 17px;
 }
 
-/* line 2390, ../../app/styles/theme-default.scss */
+/* line 2401, ../../app/styles/theme-default.scss */
 .submenu-list-admin li {
   float: left;
 }
-/* line 2393, ../../app/styles/theme-default.scss */
+/* line 2404, ../../app/styles/theme-default.scss */
 .submenu-list-admin .icon {
   background-size: cover;
   display: inline-block;
   margin-left: 40%;
 }
-/* line 2397, ../../app/styles/theme-default.scss */
+/* line 2408, ../../app/styles/theme-default.scss */
 .submenu-list-admin .icon.report {
   background-image: url("../images/about.png");
   height: 18px;
   width: 15px;
 }
-/* line 2402, ../../app/styles/theme-default.scss */
+/* line 2413, ../../app/styles/theme-default.scss */
 .submenu-list-admin .icon.news {
   background-image: url("../images/news.png");
   height: 18px;
   width: 18px;
 }
-/* line 2407, ../../app/styles/theme-default.scss */
+/* line 2418, ../../app/styles/theme-default.scss */
 .submenu-list-admin .icon.communication {
   background-image: url("../images/communications.png");
   height: 18px;
   width: 18px;
 }
 
-/* line 2415, ../../app/styles/theme-default.scss */
+/* line 2426, ../../app/styles/theme-default.scss */
 .color-picker-wrapper div {
   width: 100%;
 }
-/* line 2417, ../../app/styles/theme-default.scss */
+/* line 2428, ../../app/styles/theme-default.scss */
 .color-picker-wrapper div span {
   width: 15%;
 }
-/* line 2420, ../../app/styles/theme-default.scss */
+/* line 2431, ../../app/styles/theme-default.scss */
 .color-picker-wrapper div input {
   width: 85%;
 }
 
-/* line 2425, ../../app/styles/theme-default.scss */
+/* line 2436, ../../app/styles/theme-default.scss */
 .clear-button {
   position: absolute;
   top: 33px;
@@ -3447,98 +3461,103 @@ option:hover {
   outline: none;
 }
 
-/* line 2437, ../../app/styles/theme-default.scss */
+/* line 2448, ../../app/styles/theme-default.scss */
 .isembeded {
   padding-top: 10px;
 }
 
-/* line 2440, ../../app/styles/theme-default.scss */
+/* line 2451, ../../app/styles/theme-default.scss */
 .download-button {
   padding: 15px;
 }
 
-/* line 2443, ../../app/styles/theme-default.scss */
+/* line 2454, ../../app/styles/theme-default.scss */
 .row-options {
   font-size: 15px;
 }
-/* line 2445, ../../app/styles/theme-default.scss */
+/* line 2456, ../../app/styles/theme-default.scss */
 .row-options span {
   padding: 3px;
 }
 
-/* line 2450, ../../app/styles/theme-default.scss */
+/* line 2461, ../../app/styles/theme-default.scss */
 .notification-radio input[type='radio'] {
   vertical-align: middle;
   margin-top: 0px;
   margin-right: 4px;
 }
-/* line 2455, ../../app/styles/theme-default.scss */
+/* line 2466, ../../app/styles/theme-default.scss */
 .notification-radio .inactive {
   margin-left: 10px;
 }
 
+/* line 2471, ../../app/styles/theme-default.scss */
+.level-select select {
+  min-width: 110px;
+}
+
 @media (max-width: 992px) {
-  /* line 2460, ../../app/styles/theme-default.scss */
+  /* line 2476, ../../app/styles/theme-default.scss */
   .forum-info {
     margin: 15px 0 10px 0px;
     /* Comment this is you want to show forum info in small devices */
     display: none;
   }
 
-  /* line 2465, ../../app/styles/theme-default.scss */
+  /* line 2481, ../../app/styles/theme-default.scss */
   .forum-desc {
     float: none !important;
   }
 }
 @media (min-width: 768px) {
-  /* line 2470, ../../app/styles/theme-default.scss */
+  /* line 2486, ../../app/styles/theme-default.scss */
   .main-container {
     width: calc(100% - 280px);
     float: left;
   }
 
-  /* line 2474, ../../app/styles/theme-default.scss */
+  /* line 2490, ../../app/styles/theme-default.scss */
   .main-container-right {
     width: 280px;
     float: right;
   }
 
-  /* line 2478, ../../app/styles/theme-default.scss */
+  /* line 2494, ../../app/styles/theme-default.scss */
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 225px;
     min-height: 100%;
   }
 
-  /* line 2483, ../../app/styles/theme-default.scss */
+  /* line 2499, ../../app/styles/theme-default.scss */
   .navbar-static-side {
     z-index: 2002;
     position: absolute;
     width: 225px;
   }
 
-  /* line 2488, ../../app/styles/theme-default.scss */
+  /* line 2504, ../../app/styles/theme-default.scss */
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,
   .navbar-top-links .dropdown-alerts {
     margin-left: auto;
   }
 
-  /* line 2493, ../../app/styles/theme-default.scss */
+  /* line 2509, ../../app/styles/theme-default.scss */
   .modal-dialog {
     width: 875px;
     margin: 100px auto;
   }
 }
 @media (max-width: 768px) {
-  /* line 2499, ../../app/styles/theme-default.scss */
+  /* line 2515, ../../app/styles/theme-default.scss */
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 0px;
     min-height: 1000px;
   }
 
-  /* line 2504, ../../app/styles/theme-default.scss */
+  /* line 2520, ../../app/styles/theme-default.scss */
   .body-small .navbar-static-side {
     display: none;
     z-index: 2001;
@@ -3546,18 +3565,18 @@ option:hover {
     width: 70px;
   }
 
-  /* line 2510, ../../app/styles/theme-default.scss */
+  /* line 2526, ../../app/styles/theme-default.scss */
   .navbar-form-custom {
     display: none;
   }
 
-  /* line 2513, ../../app/styles/theme-default.scss */
+  /* line 2529, ../../app/styles/theme-default.scss */
   .navbar-header {
     display: inline;
     float: left;
   }
 
-  /* line 2517, ../../app/styles/theme-default.scss */
+  /* line 2533, ../../app/styles/theme-default.scss */
   .sidebard-panel {
     z-index: 2;
     position: relative;
@@ -3565,25 +3584,25 @@ option:hover {
     min-height: 100% !important;
   }
 
-  /* line 2523, ../../app/styles/theme-default.scss */
+  /* line 2539, ../../app/styles/theme-default.scss */
   .sidebar-content .wrapper {
     padding-right: 0px;
     z-index: 1;
   }
 
-  /* line 2527, ../../app/styles/theme-default.scss */
+  /* line 2543, ../../app/styles/theme-default.scss */
   body.rtls .navbar-top-links li:last-child {
     margin-left: 20px;
   }
 
-  /* line 2530, ../../app/styles/theme-default.scss */
+  /* line 2546, ../../app/styles/theme-default.scss */
   .body-small.rtls #page-wrapper {
     position: inherit;
     margin: 0 0 0 0px;
     min-height: 1000px;
   }
 
-  /* line 2535, ../../app/styles/theme-default.scss */
+  /* line 2551, ../../app/styles/theme-default.scss */
   .body-small.rtls .navbar-static-side {
     display: none;
     z-index: 2001;
@@ -3591,7 +3610,7 @@ option:hover {
     width: 70px;
   }
 
-  /* line 2541, ../../app/styles/theme-default.scss */
+  /* line 2557, ../../app/styles/theme-default.scss */
   .rtls.fixed-sidebar.body-small .navbar-static-side {
     display: none;
     z-index: 2001;
@@ -3600,40 +3619,40 @@ option:hover {
   }
 }
 @media (min-width: 300px) and (max-width: 768px) and (min-width: 300px) and (max-width: 452px) {
-  /* line 2550, ../../app/styles/theme-default.scss */
+  /* line 2566, ../../app/styles/theme-default.scss */
   body {
     font-size: 10px;
     line-height: 20px;
   }
 
-  /* line 2554, ../../app/styles/theme-default.scss */
+  /* line 2570, ../../app/styles/theme-default.scss */
   .report-list-grid {
     font-size: 10px;
   }
 
-  /* line 2557, ../../app/styles/theme-default.scss */
+  /* line 2573, ../../app/styles/theme-default.scss */
   .container-fluid {
     padding-left: 5px;
     padding-right: 5px;
   }
 
-  /* line 2561, ../../app/styles/theme-default.scss */
+  /* line 2577, ../../app/styles/theme-default.scss */
   .add-to-gallary {
     margin: 0px 20px;
   }
 
-  /* line 2564, ../../app/styles/theme-default.scss */
+  /* line 2580, ../../app/styles/theme-default.scss */
   .btn {
     font-size: 10px;
   }
 }
 @media (min-width: 300px) and (max-width: 768px) {
-  /* line 2569, ../../app/styles/theme-default.scss */
+  /* line 2585, ../../app/styles/theme-default.scss */
   .right-border {
     border-right: 0;
   }
 
-  /* line 2572, ../../app/styles/theme-default.scss */
+  /* line 2588, ../../app/styles/theme-default.scss */
   .menu-bar-small {
     border: 1px solid #e7eaec;
     padding: 10px 15px;
@@ -3641,127 +3660,127 @@ option:hover {
     border-image: none;
     border-radius: 4px 4px 0px 0px;
   }
-  /* line 2573, ../../app/styles/theme-default.scss */
+  /* line 2589, ../../app/styles/theme-default.scss */
   .menu-bar-small span {
     color: #ffffff !important;
     font-weight: 400;
     font-size: 14px;
   }
-  /* line 2578, ../../app/styles/theme-default.scss */
+  /* line 2594, ../../app/styles/theme-default.scss */
   .menu-bar-small button {
     background-color: inherit;
     padding: 0px 14px;
     margin: 0px;
   }
-  /* line 2583, ../../app/styles/theme-default.scss */
+  /* line 2599, ../../app/styles/theme-default.scss */
   .menu-bar-small ul {
     background-color: #4d4d4d;
     width: 91%;
     margin-left: 15px;
   }
-  /* line 2590, ../../app/styles/theme-default.scss */
+  /* line 2606, ../../app/styles/theme-default.scss */
   .menu-bar-small .dropdown-menu img {
     margin: 0px 10px 0px 0px;
   }
 
-  /* line 2598, ../../app/styles/theme-default.scss */
+  /* line 2614, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter {
     margin-bottom: 10px;
   }
-  /* line 2599, ../../app/styles/theme-default.scss */
+  /* line 2615, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter span {
     color: #ffffff !important;
     font-weight: 400;
     font-size: 14px;
   }
-  /* line 2604, ../../app/styles/theme-default.scss */
+  /* line 2620, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter .filter-heading {
     color: #333333 !important;
   }
-  /* line 2607, ../../app/styles/theme-default.scss */
+  /* line 2623, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter button {
     background-color: inherit;
     padding: 0px 14px;
     margin: 0px;
     border: 0;
   }
-  /* line 2613, ../../app/styles/theme-default.scss */
+  /* line 2629, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter ul {
     background-color: #4d4d4d;
     width: 91%;
     margin-left: 15px;
   }
-  /* line 2620, ../../app/styles/theme-default.scss */
+  /* line 2636, ../../app/styles/theme-default.scss */
   .menu-bar-small-filter .dropdown-menu img {
     margin: 0px 10px 0px 0px;
   }
 
-  /* line 2625, ../../app/styles/theme-default.scss */
+  /* line 2641, ../../app/styles/theme-default.scss */
   .dropdown-menu > li > a:hover {
     background-color: #2c95dd;
   }
 
-  /* line 2628, ../../app/styles/theme-default.scss */
+  /* line 2644, ../../app/styles/theme-default.scss */
   .search-btn-size {
     padding: 7px 10px;
   }
 
-  /* line 2631, ../../app/styles/theme-default.scss */
+  /* line 2647, ../../app/styles/theme-default.scss */
   .form-control {
     height: 30px;
   }
 
-  /* line 2634, ../../app/styles/theme-default.scss */
+  /* line 2650, ../../app/styles/theme-default.scss */
   .extra-small {
     width: 10%;
     height: 10%;
     margin-bottom: 3px;
   }
 
-  /* line 2639, ../../app/styles/theme-default.scss */
+  /* line 2655, ../../app/styles/theme-default.scss */
   .separator {
     margin-left: 2px;
     margin-right: 2px;
   }
 
-  /* line 2643, ../../app/styles/theme-default.scss */
+  /* line 2659, ../../app/styles/theme-default.scss */
   .container-fluid {
     padding-left: 8px;
     padding-right: 8px;
   }
 
-  /* line 2647, ../../app/styles/theme-default.scss */
+  /* line 2663, ../../app/styles/theme-default.scss */
   .navbar-header-right {
     float: left;
   }
 
-  /* line 2650, ../../app/styles/theme-default.scss */
+  /* line 2666, ../../app/styles/theme-default.scss */
   .navbar-toggle-filter {
     float: left;
   }
 }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 2655, ../../app/styles/theme-default.scss */
+  /* line 2671, ../../app/styles/theme-default.scss */
   .right-border {
     border-right: 0;
   }
 
-  /* line 2658, ../../app/styles/theme-default.scss */
+  /* line 2674, ../../app/styles/theme-default.scss */
   .navbar-static-side {
     width: 200px;
   }
 
-  /* line 2661, ../../app/styles/theme-default.scss */
+  /* line 2677, ../../app/styles/theme-default.scss */
   #page-wrapper {
     margin: 0 0 0 200px;
   }
 
-  /* line 2664, ../../app/styles/theme-default.scss */
+  /* line 2680, ../../app/styles/theme-default.scss */
   .reports-type {
     margin-left: 8px;
   }
 
-  /* line 2667, ../../app/styles/theme-default.scss */
+  /* line 2683, ../../app/styles/theme-default.scss */
   .menu-bar-small {
     border: 1px solid #e7eaec;
     padding: 10px 15px;
@@ -3769,68 +3788,68 @@ option:hover {
     border-image: none;
     border-radius: 4px 4px 0px 0px;
   }
-  /* line 2668, ../../app/styles/theme-default.scss */
+  /* line 2684, ../../app/styles/theme-default.scss */
   .menu-bar-small span {
     color: #ffffff !important;
     font-weight: 400;
     font-size: 14px;
   }
-  /* line 2673, ../../app/styles/theme-default.scss */
+  /* line 2689, ../../app/styles/theme-default.scss */
   .menu-bar-small button {
     background-color: inherit;
     padding: 0px 14px;
     margin: 0px;
   }
-  /* line 2678, ../../app/styles/theme-default.scss */
+  /* line 2694, ../../app/styles/theme-default.scss */
   .menu-bar-small ul {
     background-color: #4d4d4d;
     width: 91%;
     margin-left: 15px;
   }
-  /* line 2685, ../../app/styles/theme-default.scss */
+  /* line 2701, ../../app/styles/theme-default.scss */
   .menu-bar-small .dropdown-menu img {
     margin: 0px 10px 0px 0px;
   }
 
-  /* line 2693, ../../app/styles/theme-default.scss */
+  /* line 2709, ../../app/styles/theme-default.scss */
   .dropdown-menu > li > a:hover {
     background-color: #2c95dd;
   }
 
-  /* line 2696, ../../app/styles/theme-default.scss */
+  /* line 2712, ../../app/styles/theme-default.scss */
   .search-btn-size {
     padding: 4px 10px;
   }
 
-  /* line 2699, ../../app/styles/theme-default.scss */
+  /* line 2715, ../../app/styles/theme-default.scss */
   .form-control {
     height: 30px;
   }
 
-  /* line 2702, ../../app/styles/theme-default.scss */
+  /* line 2718, ../../app/styles/theme-default.scss */
   .extra-small {
     width: 9%;
     height: 9%;
   }
 
-  /* line 2706, ../../app/styles/theme-default.scss */
+  /* line 2722, ../../app/styles/theme-default.scss */
   .main-content-header > li > h2 {
     font-size: 18px;
   }
 }
 @media (max-width: 1000px) {
-  /* line 2711, ../../app/styles/theme-default.scss */
+  /* line 2727, ../../app/styles/theme-default.scss */
   .welcome-message {
     display: none;
   }
 }
 @media (min-width: 1200px) {
-  /* line 2716, ../../app/styles/theme-default.scss */
+  /* line 2732, ../../app/styles/theme-default.scss */
   .report-list {
     width: 20%;
   }
 
-  /* line 2719, ../../app/styles/theme-default.scss */
+  /* line 2735, ../../app/styles/theme-default.scss */
   .menu-visible-lg {
     display: block !important;
   }

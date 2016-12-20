@@ -37,7 +37,7 @@ angular
     tableauImagesPath: '../PreviewImages/',
     API: {
         //Set useMocks to true to simulate/mock actual webservice.
-        useMocks: true,
+        useMocks: false,
         fakeDelay: 800,
         //baseUrl: 'http://bipdurdev01.corp.emc.com/',
         baseUrl: '/'
@@ -143,7 +143,7 @@ angular
                         }}
                     };
 
-//                    $rootScope.$broadcast('RefreshSSO', modalContent);
+                    $rootScope.$broadcast('RefreshSSO', modalContent);
                 }
                 return $q.reject(rejection);
             }

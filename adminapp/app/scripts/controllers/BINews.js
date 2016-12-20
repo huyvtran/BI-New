@@ -9,7 +9,7 @@ angular.module('adminPageApp').controller('BINewsCtrl',function($scope,$http,$ui
     
     function columnDefs(){
         return[ 
-            {name: 'Options', width:'10%',cellTemplate: 'views/adminDropdown.html'},
+            {name: 'Action', width:'10%',cellTemplate: 'views/adminDropdown.html'},
             {name: 'id', displayName: 'News ID', width: '10%', cellTooltip:true},
             {name: 'title', displayName: 'Title', width: '15%', cellTooltip:true},
             {name: 'description', displayName: 'Description', width: '20%', cellTooltip:true},

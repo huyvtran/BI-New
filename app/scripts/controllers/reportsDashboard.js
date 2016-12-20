@@ -13,11 +13,15 @@ angular.module('myBiApp')
         $scope.operationDashboardLink = reportsMenu.operationalLink;
     });
     
-//    $scope.pageBreadCrumb = '<a href="#/">Home</a>  -> Operational Dashboard';
     $scope.$emit('bredCrumbValue', '');
     $scope.$emit('setNavBar', true);
     setUserPreference();
     setUserLevel();
+    
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
     
     function setUserLevel() {
         if(!$localStorage.myLevel) {
@@ -43,6 +47,7 @@ angular.module('myBiApp')
     
     function setUserPreference() {
         var personalization = [];
+        
         if(!$localStorage.userTheme || !$localStorage.personalization) {
             $scope.setLoading(true);
             $http.get('BITool/home/getUserPersonalization').then(function (response) {
@@ -54,24 +59,36 @@ angular.module('myBiApp')
                     } else {
                         personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     }
-
+                    
+                    if (response.data.isListViewed === null || !response.data.isListViewed) {
+                        $localStorage.listViewStatus = 'grid';
+                    } else {
+                        (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
+                    }
+                    
                     $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
+                    $scope.userTheme = $localStorage.userTheme;
+                    $scope.listViewStatus = $localStorage.listViewStatus;
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
-                    $localStorage.userTheme = 'default';
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
-                    $scope.userTheme = $localStorage.userTheme;
                     $localStorage.personalization = personalization;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
-            $scope.userTheme = $localStorage.userTheme;
             personalization = $localStorage.personalization;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.userTheme = $localStorage.userTheme;
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
 });

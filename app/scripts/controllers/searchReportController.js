@@ -22,17 +22,26 @@ angular.module('myBiApp')
     
     $scope.showIconFlag = function() {
         ($scope.searchText) ? $scope.showIcon = true : $scope.showIcon = false; 
-    }
+    };
+    
+    $scope.openSearch = function() {
+        $scope.$emit('hideNotfy', false);
+        if($scope.model.isMinimised) {
+            $scope.model.isMinimised = false;
+        } else {
+            $scope.model.isMinimised = true;
+        }
+    };
     
     $scope.GetDataWithHtml = function () {
         console.log('hi');
-    }
+    };
     
     $scope.clearText = function() {
         $scope.showIcon = false;
         $scope.searchText = "";
         angular.element('.globle-search-input').focus();
-    }
+    };
     
     popularSearchService.then(function (r) {
         $scope.model.searchCloud = r;

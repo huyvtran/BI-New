@@ -75,7 +75,6 @@ angular.module('myBiApp')
     };
 
     $scope.cancelTile = function () {
-        //$window.location.href = '/index.html'
         $location.path('/');
     };
 });

@@ -18,14 +18,11 @@ angular.module('myBiApp')
             userPromise.resolve(userObject);
         });
         if(!$rootScope.personaInfo) {
-            console.log('In If');
             $http.get(commonService.prepareGetUserPersonaInfoUrl()).then(function (response) {
                 userObject[0].personaInfo = response.data;
                 userPromise.resolve(userObject);
             }); 
         } else {
-            console.log('In Else');
-            console.log($rootScope.personaInfo);
             userObject[0].personaInfo = $rootScope.personaInfo;
         }
     });

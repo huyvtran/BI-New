@@ -35,7 +35,7 @@ angular.module('adminPageApp')
             {name: 'functionalArea', displayName: 'Functional Area', enableCellEdit: false, width: '100', cellTooltip: true},
             {name: 'owner', displayName: 'Created By', enableCellEdit: false, width: '100', cellTooltip: true},
             {name: 'additionalInfo', displayName: 'Tile Color', enableCellEdit: false, width: '100', cellTooltip: true},
-            {name: 'updatedDate', displayName: 'Updated Date', enableCellEdit: false, width: '100', cellTooltip: true}
+            {name: 'updatedDate', displayName: 'Updated Date', enableCellEdit: false, width: '100', cellTooltip: true, cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.updatedDate | date:"MM/dd/yy h:mm:ss a"}}</div>'}
         ];
     }
 

@@ -10,24 +10,31 @@
 angular.module('myBiApp')
 .controller('favoritesCtrl', function ($scope, $localStorage, reportsFactory, userDetailsService, $http, CONFIG) {
     var favoriteService = new reportsFactory.reportsFactoryFunction('favorite');
-//    $scope.pageBreadCrumb = '<a href="#/">Home</a>  -> My Favorites';
     $scope.$emit('bredCrumbValue', '');
     $scope.$emit('setNavBar', true);
-    $scope.selectedFilter = 'default';
-    $scope.defaultOption = 'Sort';
+    $scope.sortOption = 'ascName';
+    $scope.filterOption = 'filter';
+    $scope.defaultFilter = 'All';
     
     $scope.$on('listViewValue', function(event, status) {
         $localStorage.listViewStatus = status;
         $scope.listViewStatus = $localStorage.listViewStatus;
     });
     
-    $scope.getFilteredResult = function() {
-        if($scope.selectedFilter === 'default') {
-            $scope.defaultOption = 'Sort';
-        } else {
-            $scope.defaultOption = 'Default';
-        }
-        $scope.$broadcast('sortReports', $scope.selectedFilter);
+    $scope.$on('menuCollapsedStatus', function(event, status) {
+        $localStorage.isMenuCollapsed = status;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+    });
+    
+    setUserPreference();
+    
+    $scope.sortReports = function() {
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'sort');
+    }
+    
+    $scope.filterReports = function() {
+        $scope.defaultFilter = 'All';  
+        $scope.$broadcast('sortFilterReportsBroadCast', $scope.sortOption, $scope.filterOption, 'filter');
     }
     
     if(!$localStorage.myLevel) {
@@ -49,8 +56,6 @@ angular.module('myBiApp')
         $scope.myLevel = $localStorage.myLevel;
         $scope.$emit('myLevelIndication', $scope.myLevel);
     }
-    
-    setUserPreference();
     
     $scope.setListView = function (status) {
         if ($scope.myfavorites) {
@@ -109,36 +114,36 @@ angular.module('myBiApp')
                     } else {
                         personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     }
-
-                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
-                    $localStorage.personalization = personalization;
                     
-//                    (response.data.isListViewed === 0 || response.data.isListViewed === null || !response.data.isListViewed) ? $localStorage.listViewStatus = false : $localStorage.listViewStatus = true;
                     if (response.data.isListViewed === null || !response.data.isListViewed) {
                         $localStorage.listViewStatus = 'grid';
                     } else {
                         (response.data.isListViewed === 0) ? $localStorage.listViewStatus = 'grid' : ((response.data.isListViewed === 1)? $localStorage.listViewStatus = 'list': $localStorage.listViewStatus = 'detailed');
                     }
                     
+                    $localStorage.userTheme = CONFIG.userTheme[response.data.userTheme];
+                    $localStorage.personalization = personalization;
+                    $localStorage.isMenuCollapsed = (response.data.isMenuCollapsed === 1) ? true : false;
                     $scope.userTheme = $localStorage.userTheme;
                     $scope.listViewStatus = $localStorage.listViewStatus;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 } else {
                     personalization = ['recentViewedReports', 'favoriteReports', 'mostViewedReports'];
                     $localStorage.personalization = personalization;
-                    $localStorage.userTheme = 'default';
-                    $localStorage.listViewStatus = 'grid';
-                    $scope.userTheme = $localStorage.userTheme;
-                    $scope.listViewStatus = $localStorage.listViewStatus;
-                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+                    $scope.userTheme = $localStorage.userTheme = 'default';                    
+                    $scope.listViewStatus = $localStorage.listViewStatus = 'grid';
+                    $scope.isMenuCollapsed = $localStorage.isMenuCollapsed = 0;
+                    $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
                 }
             });
             $scope.setLoading(false);
         } else {
             personalization = $localStorage.personalization;
             $scope.userTheme = $localStorage.userTheme;
-            $scope.listViewStatus = $localStorage.listViewStatus;
-            $scope.$emit('myThemeSettings', $scope.userTheme, personalization);
+            $scope.listViewStatus = $localStorage.listViewStatus
+            $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
+            $scope.$emit('myThemeSettings', $scope.userTheme, personalization, $scope.isMenuCollapsed);
         }
     }
     

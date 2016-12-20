@@ -19,7 +19,7 @@ angular.module('myBiApp')
 //    redirectToPage();
     checkUserExist();
     getNotification();
-    
+    $scope.isMobileDevice = ($window.innerWidth < 768) ? true: false;
     $scope.noNavBar = true; 
     $scope.biGroup = reportsMenu;
     $scope.chevron = false;
@@ -34,6 +34,7 @@ angular.module('myBiApp')
     $scope.zIndex = '999';
     $localStorage.treeLevelId = false;
     $scope.operationalDashboard = false;
+    $scope.toggleNotfy = false;
     var newHeight, scrollBar;
     
     if($window.innerWidth < 768) {
@@ -49,11 +50,21 @@ angular.module('myBiApp')
     
     $scope.notfyConfig = {
         autoHideScrollbar: scrollBar,
-        theme: 'light',
+        theme: 'dark',
         advanced: {
             updateOnContentResize: true
         },
         setHeight: newHeight,
+        scrollInertia: 0
+    };
+    
+    $scope.notfyConfigEmpty = {
+        autoHideScrollbar: scrollBar,
+        theme: 'light',
+        advanced: {
+            updateOnContentResize: true
+        },
+        setHeight: 0,
         scrollInertia: 0
     };
     
@@ -67,11 +78,44 @@ angular.module('myBiApp')
     
     $scope.$on('setNavBar', function(event, value){
         $scope.noNavBar = true;
+        $scope.toggleNotfy = false;
         $scope.zIndex = '999';
     });
     
+    $scope.$on('hideNotfy', function(event, value){
+        $scope.toggleNotfy = value;
+    });
+    
+    $scope.toggleLeftMenu = function () {
+        $scope.isMenuCollapsed = ($scope.isMenuCollapsed) ? false : true;
+        $scope.$broadcast('menuCollapsedStatus', $scope.isMenuCollapsed);
+        var value = ($scope.isMenuCollapsed) ? 1 : 0;
+        
+        userDetailsService.userPromise.then(function(userObj) {
+            var putObj = {
+                'userId' : userObj[0].uid,
+                'isMenuCollapsed' :value,
+            };
+
+            $http.put('BITool/home/saveOrUpdateUserPersonalization', putObj)
+                .then(function (resp, status, headers) {
+
+                }, function (resp, status, headers, config) {
+
+                });
+        });
+    };
+    
+    $scope.showDismissIcon = function(status, id) {
+        if(status) {
+            $scope.dismissId = id;
+        } else {
+            $scope.dismissId = status;
+        }
+    };
+    
     $scope.hideNavBar = function() {
-//        ($scope.noNavBar) ? $scope.noNavBar = false: $scope.noNavBar = true;
+        $scope.toggleNotfy = false;
         if($scope.noNavBar) {
             $scope.noNavBar = false;
             $scope.zIndex = '998';
@@ -82,29 +126,36 @@ angular.module('myBiApp')
         }
     };
     
+    $scope.openNotfyMobile = function() {
+        if($scope.toggleNotfy){
+            $scope.toggleNotfy = false;
+        }  else {
+            $scope.toggleNotfy = true;
+        }
+    }
+    
     $scope.$on('myLevelIndication', function(event, value) {
         $localStorage.myLevel = value
         $scope.myLevel = $localStorage.myLevel;
     });
     
-    $scope.$on('myThemeSettings', function(event, theme, personalization){
+    $scope.$on('myThemeSettings', function(event, theme, personalization, isMenuCollapsed){
         $localStorage.userTheme = theme;
         $localStorage.personalization = personalization;
+        $localStorage.isMenuCollapsed = isMenuCollapsed
         $scope.userTheme = $localStorage.userTheme;
+        $scope.isMenuCollapsed = $localStorage.isMenuCollapsed;
     });
     
     $scope.$on('setSearchDisplayName', function(event, value){
         $scope.searchDisplayName = value;
     });
     
+    /**
+     * Update my level indication
+     */
     userDetailsService.userPromise.then(function (userObject) {
         $scope.userObject = userObject[0];
-        
-//        if($localStorage.myLevel) {
-//            $scope.myLevel = $localStorage.myLevel;
-//        } else {
-//            setUserLevel($scope.userObject);
-//        }
         
         $timeout(function() {
             if($localStorage.myLevel) {
@@ -117,11 +168,6 @@ angular.module('myBiApp')
             $scope.defaultPersona = userObject[0].userinfo.group[0].groupId;
             $scope.userPicUrl = commonService.prepareUserProfilePicUrl($scope.userObject.uid);
         },2000);
-        
-        /**
-         * Update my level indication
-         */
-//        var userRoleDetailsUrl = commonService.prepareUserRoleDetailsUrl($scope.userObject.emcLoginName);
         
         $q.all([reportsMenu.all()])
             .then(function (/*response*/) {
@@ -187,7 +233,6 @@ angular.module('myBiApp')
         }
     });
 
-    //?:embed=y&:showVizHome=n&:apiID=handler0&:toolbar=bottom 
     $scope.updateShowlist = function (boolValue) {
         $scope.showList = boolValue;
     };
@@ -204,15 +249,151 @@ angular.module('myBiApp')
         $scope.searchText = '';
     });
     
-    $scope.setReadNotification = function(id) {
-        console.log('read function');
-        console.log(id);
-    }
+    $scope.readAllNotification = function() {
+        $http.put('BITool/home/markAllNotificationAsRead')
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    $scope.readStatusMessage = resp.data.message;
+                    
+                    angular.forEach($scope.notficationObj.userNotificationList, function(notification){
+                        notification.readDate = new Date().getTime();
+                    });
+                    
+                    angular.forEach($scope.notficationObj.userNewAlertList, function(notification){
+                        notification.readDate = new Date().getTime();
+                    });
+                    
+                    $scope.notficationObj.newNotificationCount = 0;
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.readStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.readStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
+    
+    $scope.dismissAllNotification = function() {
+        var modalDeleteNotification = $uibModal.open({
+            templateUrl:'views/deleteNotificationModal.html',
+            controller:'DeleteNotificationModalCtrl',
+            windowClass: 'switch-modal',
+            resolve: {
+                items: function() {
+                    return {
+                        data: $scope.notficationObj
+                    };
+                }
+            }
+        });
+        
+            
+        modalDeleteNotification.result.then(function(Obj){
+            $http.put('BITool/home/dismissAllNotification')
+                .then(function (resp) {
+                    if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                        $scope.dismissStatusMessage = resp.data.message;            
+                        $localStorage.notficationObj  = $scope.notficationObj = {"userNewAlertList":[],"userNotificationList":[],"newNotificationCount":0};
+                        paginateNotification();
+                    } else {
+                        $scope.dismissStatusMessage = '';
+                        if (resp.data && resp.data.message) {
+                            $scope.messageAlertError = resp.data.message
+                        }
+                    }
+                }, function () {
+                    $scope.dismissStatusMessage = '';
+                    $scope.messageAlertError = "Error!!.";
+                }); 
+        });
+    };
+    
+    $scope.itemsPerPage = 3;
+    $scope.currentPage = 0;
+    $scope.notificationItems = [];
+    
+    $scope.setReadNotification = function(id,readFlag) {
+        $http.put('BITool/home/markNotificationAsRead?assignId='+id+'&isRead='+readFlag)
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    var index = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === id});   
+                    $scope.readStatusMessage = resp.data.message;
+                    
+                    if(!$scope.notficationObj.userNotificationList[index].readDate) {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+                        $scope.notficationObj.userNotificationList[index].readDate = new Date().getTime();
+                    } else {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount +1;
+                        $scope.notficationObj.userNotificationList[index].readDate = '';
+                    }
+                    
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.readStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.readStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
     
     $scope.dismissNotification = function(id) {
-        console.log('dismiss function');
-        console.log(id);
-    }
+        $http.put('BITool/home/dismissNotification?assignId='+id)
+            .then(function (resp) {
+                if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                    var index = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === id});
+                    $scope.dismissStatusMessage = resp.data.message;            
+                    
+                    if(!$scope.notficationObj.userNotificationList[index].readDate) {
+                        $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+                        ($scope.notficationObj.userNewAlertList).splice(index, 1);
+                    }
+                    
+                    ($scope.notficationObj.userNotificationList).splice(index, 1);
+                    $localStorage.notficationObj  = $scope.notficationObj;
+                    paginateNotification();
+                } else {
+                    $scope.dismissStatusMessage = '';
+                    if (resp.data && resp.data.message) {
+                        $scope.messageAlertError = resp.data.message
+                    }
+                }
+            }, function () {
+                $scope.dismissStatusMessage = '';
+                $scope.messageAlertError = "Error!!.";
+            });
+    };
+    
+    $scope.prevPage = function() {
+        if ($scope.currentPage > 0) {
+            $scope.currentPage--;
+            paginateNotification();
+        }
+    };
+
+    $scope.prevPageDisabled = function() {
+        return $scope.currentPage === 0 ? "disabled link-disable" : "";
+    };
+    
+    $scope.nextPage = function() {
+        if ($scope.currentPage < getPageCount()) {
+            $scope.currentPage++;
+            paginateNotification();
+        }
+    };
+
+    $scope.nextPageDisabled = function() {
+        return $scope.currentPage === getPageCount() ? "disabled link-disable" : "";
+    };
     
     function setUserLevel(usrObj) {
         if (usrObj.userinfo.badge === 'Bronze') {
@@ -238,13 +419,86 @@ angular.module('myBiApp')
         });
     }
     
+    function getPageCount() {
+        if($scope.notficationObj && $scope.notficationObj.userNotificationList) {
+            return Math.ceil($scope.notficationObj.userNotificationList.length/$scope.itemsPerPage)-1;
+        }
+    }
+    
     function getNotification() {
         $http.get('BITool/home/getNotificationByUser').then(function(response) {
             $scope.notficationObj = $localStorage.notficationObj = response.data;
-            console.log($scope.notficationObj);
+            
             if($scope.notficationObj.userNewAlertList.length > 0) {
-                console.log($scope.notficationObj.userNewAlertList.length)
+                $scope.createAlertPopup($scope.notficationObj);
             }
+            
+            paginateNotification();
+        });
+    }
+    
+    function paginateNotification() {
+        $scope.notificationItems = [];
+        var min = ($scope.currentPage * $scope.itemsPerPage);
+        var max  = ($scope.notficationObj.userNotificationList.length < min+3) ? $scope.notficationObj.userNotificationList.length : min+3;
+        
+        for (var i= min; i<max; i++) {
+            ($scope.notficationObj.userNotificationList[i])? $scope.notificationItems.push($scope.notficationObj.userNotificationList[i]):'';
+        }
+        
+        if($scope.notficationObj.userNotificationList.length === min) {
+            $scope.currentPage--;
+            paginateNotification();
+        }
+    }
+    
+    $scope.createAlertPopup = function () {
+        if($window.innerWidth < 768) {
+            return;
+        }
+            
+        angular.forEach($scope.notficationObj.userNewAlertList, function(notfication) {
+            var modalInstance = $uibModal.open({
+                templateUrl:'views/notificationModal.html',
+                controller:'NotificationModalCtrl',
+                windowClass: 'notfy-modal',
+                resolve: {
+                    items: function() {
+                        return{
+                            data: notfication
+                        };
+                    }
+                }
+            });
+            
+            modalInstance.result.then(function(Obj){
+                var index1 = _.findIndex($scope.notficationObj.userNewAlertList, function(item) { return item.assignId === Obj.assignId});
+                var index2 = _.findIndex($scope.notficationObj.userNotificationList, function(item) { return item.assignId === Obj.assignId});
+                console.log(index1);
+                console.log(index2);
+                $http.put('BITool/home/dismissNotification?assignId='+Obj.assignId)
+                    .then(function (resp) {
+                        if (resp.data && resp.data.status && resp.data.status.toLowerCase() === 'success') {
+                            getNotification();
+//                            $timeout(function() {
+//                                $scope.dismissAlertMessage = resp.data.message;     
+//                                ($scope.notficationObj.userNewAlertList).splice(index1, 1);   
+//                                ($scope.notficationObj.userNotificationList).splice(index2, 1);
+//                                $scope.notficationObj.newNotificationCount = $scope.notficationObj.newNotificationCount -1;
+//                                $localStorage.notficationObj  = $scope.notficationObj;
+//                                $scope.$apply();
+//                            }, 1000);
+                        } else {
+                            $scope.dismissAlertMessage = '';
+                            if (resp.data && resp.data.message) {
+                                $scope.messageAlertError = resp.data.message
+                            }
+                        }
+                    }, function () {
+                        $scope.dismissAlertMessage = '';
+                        $scope.messageAlertError = "Error!!.";
+                    });
+            });
         });
     }
     
@@ -291,7 +545,7 @@ angular.module('myBiApp')
                 $state.go('home');
                 $window.location.reload();
             });
-    }
+    };
     
 }).directive('errSrc', function () {
     return {
@@ -305,8 +559,7 @@ angular.module('myBiApp')
     };
 });
 
-angular.module('myBiApp')
-.controller('SwitchPeronaCtrl', function ($scope, $state, $uibModalInstance, items, $http, $window, $rootScope, $timeout) {
+angular.module('myBiApp').controller('SwitchPeronaCtrl', function ($scope, $state, $uibModalInstance, items, $http, $window, $rootScope, $timeout) {
     $scope.personaList = items.personaList;
     $scope.defaultPersona = items.defaultPersona;
     $scope.currentPersona = items.defaultPersona;

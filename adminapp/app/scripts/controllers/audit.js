@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adminPageApp').controller('AuditCtrl',function($scope, $q,$uibModal, $http, $timeout, userDetailsService){
+angular.module('adminPageApp').controller('AuditCtrl',function($scope, $q, $uibModal, $http, $timeout, userDetailsService){
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
     $scope.myData = {}; 

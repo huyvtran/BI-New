@@ -8,22 +8,23 @@
  * Controller of the adminPageApp
  */
 angular.module('adminPageApp')
-.controller('ModalCtrl', function ($scope, $uibModalInstance, items, $http, $q) {
-    
+.controller('ModalCtrl', function ($scope, $uibModalInstance, items, $http, $q, $timeout) {
     if(items.sourceSystem === 'EXTERNAL')  {
         $scope.exFlag = true;
     } else {
         $scope.exFlag = false;
     }
     
+    $scope.convertStringDate = function (date) {
+        return new Date(date);
+    };
+    
     $scope.items = items;
     $scope.headerFlag = ((items.isBUFlag && $scope.userObject.userinfo.role.toLowerCase() === 'buadmin')|| $scope.userObject.userinfo.role.toLowerCase() === 'admin')? true : false;
-    
     $scope.levelGroupMaps = [{
-        'selectedlevel': 0,
-        'selectedgroup': 0
+        'selectedLevel': 0,
+        'selectedGroup': 0
     }];
-    
     $scope.oldList = [];
     $scope.deletedLevelAndGroupIds = [];
     $scope.updatefields = true;
@@ -33,6 +34,8 @@ angular.module('adminPageApp')
         $scope.updatefields = val;
         $scope.saveText = '';
     };
+    $scope.enableError = true;
+    $scope.enableErrorMessage = '';
     
     if ($scope.exFlag) {
         delete $scope.items.createdBy;
@@ -82,11 +85,18 @@ angular.module('adminPageApp')
             $scope.levelGroup = response.data;
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
-                    'selectedlevel': parseInt(eachMap.levelId),
-                    'selectedgroup': eachMap.groupId,
-                    'recommendedSeq': eachMap.recommendedSeq
+                    'selectedGroup': eachMap.groupId,
+                    'selectedLevel': (eachMap.levelId)? parseInt(eachMap.levelId):'',
+                    'selectedParentLevel': (eachMap.parentLevelId)? parseInt(eachMap.parentLevelId):'',
+                    'selectedChildLevel': (eachMap.childLevelId)? parseInt(eachMap.childLevelId):'',
+                    'selectedSubChildLevel': (eachMap.subChildLevelId)? parseInt(eachMap.subChildLevelId):'',
+                    'recommendedSeq': eachMap.recommendedSeq,
+                    'parentLevelList' : (eachMap.parentLevelList)? eachMap.parentLevelList : [],
+                    'childLevelList' : (eachMap.childLevelList)? eachMap.childLevelList : [],
+                    'subChildLevelList' : (eachMap.subChildLevelList)? eachMap.subChildLevelList : []
                 };
             });
+            
             if (maps.length > 0) {
                 $scope.levelGroupMaps = maps;
                 $scope.oldList = $scope.levelGroup.levelAndGroupIds;
@@ -96,8 +106,8 @@ angular.module('adminPageApp')
 
     $scope.addLevelGroup = function () {
         $scope.levelGroupMaps.push({
-            'selectedlevel': 0,
-            'selectedgroup': 0,
+            'selectedLevel': 0,
+            'selectedGroup': 0,
             'recommendedSeq': null
         });
     };
@@ -109,11 +119,20 @@ angular.module('adminPageApp')
                 'groupId': 0,
                 'recommendedSeq':null
             };
-            rowVal.levelId = $scope.levelGroupMaps[index].selectedlevel;
-            rowVal.groupId = $scope.levelGroupMaps[index].selectedgroup;
+            
+            rowVal.levelId = $scope.levelGroupMaps[index].selectedLevel;
+            rowVal.groupId = $scope.levelGroupMaps[index].selectedGroup;
             rowVal.recommendedSeq = $scope.levelGroupMaps[index].recommendedSeq;
             $scope.deletedLevelAndGroupIds.push(rowVal);
             $scope.levelGroupMaps.splice(index, 1);
+            
+            if($scope.levelGroupMaps.length === 0) {
+                $scope.levelGroupMaps.push({
+                    'selectedLevel': 0,
+                    'selectedGroup': 0,
+                    'recommendedSeq': null
+                });
+            }
         }
     };
 
@@ -126,7 +145,6 @@ angular.module('adminPageApp')
             levelGroups: $scope.levelGroupMaps
         };
         
-        console.log(returnObj);
         $scope.saveText = 'saving...';
         $scope.progress = true;
         if ($scope.updatefields) {
@@ -149,31 +167,45 @@ angular.module('adminPageApp')
                 'deletedLevelAndGroupIds':[],
                 'biReportId': ($scope.items.id)? $scope.items.id : null 
             };
+            
             for (var i = 0; i < $scope.levelGroupMaps.length; i++) {    
                 var levelGroupMap = {
                     'levelId': 0,
                     'groupId': 0
                 };
-                if ($scope.levelGroupMaps[i].selectedlevel && $scope.levelGroupMaps[i].selectedgroup) {
-                    // groupsandlevels.levelAndGroupIds[$scope.levelGroupMaps[i].selectedgroup]=$scope.levelGroupMaps[i].selectedlevel;
-                    levelGroupMap.levelId = $scope.levelGroupMaps[i].selectedlevel;
-                    levelGroupMap.groupId = $scope.levelGroupMaps[i].selectedgroup;
+                
+                if ($scope.levelGroupMaps[i].selectedLevel && $scope.levelGroupMaps[i].selectedGroup) {
+                    levelGroupMap.levelId = $scope.levelGroupMaps[i].selectedLevel;
+                    levelGroupMap.groupId = $scope.levelGroupMaps[i].selectedGroup;
                     levelGroupMap.recommendedSeq = $scope.levelGroupMaps[i].recommendedSeq;
                     groupsandlevels.levelAndGroupIds.push(levelGroupMap);
+                } else {
+                    $scope.saveText = '';
+                    $scope.enableError = false;
+                    $scope.enableErrorMessage = 'Please Select Persona and Level';
                 }
             }
             
             groupsandlevels.deletedLevelAndGroupIds = getDifference($scope.oldList, groupsandlevels.levelAndGroupIds);
-            
-            $http.put("BITool/admin/updateReportGroupObj", groupsandlevels).then(function (resp) {
-                $scope.oldList = groupsandlevels.levelAndGroupIds;
-                $scope.deletedLevelAndGroupIds = [];
+
+            if($scope.enableError) {
+                $http.put("BITool/admin/updateReportGroupObj", groupsandlevels).then(function (resp) {
+                    $scope.oldList = groupsandlevels.levelAndGroupIds;
+                    $scope.deletedLevelAndGroupIds = [];
+                    $scope.progress = false;
+                    $scope.saveText = resp.data.message;
+                }, function (resp) {
+                    $scope.progress = false;
+                    $scope.saveText = resp.data.message;;
+                });
+            } else {
+                $timeout(function() {
+                    $scope.enableError = true;
+                    $scope.enableErrorMessage = '';
+                }, 2000);
+                $scope.saveText = '';
                 $scope.progress = false;
-                $scope.saveText = resp.data.message;
-            }, function (resp) {
-                $scope.progress = false;
-                $scope.saveText = resp.data.message;;
-            });
+            }
         }
         //$uibModalInstance.close(returnObj);
     };
@@ -186,9 +218,50 @@ angular.module('adminPageApp')
         $uibModalInstance.close(returnObj);
     };
     
+    $scope.populateParentLevel = function(groupId, index, listFlag) {
+        $http.get('BITool/admin/getParentLevelByPersona?personaId='+groupId)
+            .then(function (resp) {
+                if (resp.data) {
+                    var listItems = updateLeveAndGroupList($scope.levelGroupMaps, index, resp.data, listFlag);
+                    $scope.levelGroupMaps = listItems;
+                } else {
+                    $scope.messageAlertError = "Error While fetching the level list";
+                }
+            }, function () {
+            });
+    };
+    
+    $scope.populateChildLevel = function(levelId, index, listFlag) {
+        if(levelId) {
+            $http.get('BITool/admin/getParentOrChildLevel?levelId='+levelId)
+                .then(function (resp) {
+                    if (resp.data) {
+                        var listItems = updateLeveAndGroupList($scope.levelGroupMaps, index, resp.data, listFlag);
+                        $scope.levelGroupMaps = listItems;
+                        $scope.levelGroupMaps[index].selectedLevel = levelId;
+                    } else {
+                        $scope.messageAlertError = "Error While fetching the level list";
+                    }
+                }, function () {
+                });
+        } else {
+            var listItems = resetLeveAndGroupList($scope.levelGroupMaps, index, listFlag);
+            $scope.levelGroupMaps = listItems;
+            setLevelId($scope.levelGroupMaps, index, listFlag);
+        }
+    };
+    
+    $scope.populateSubChildLevel = function(levelId, index, listFlag) {
+        if(levelId) {
+            $scope.levelGroupMaps[index].selectedLevel = levelId;
+        } else {
+            setLevelId($scope.levelGroupMaps, index, listFlag);
+        }
+    }
+    
     function getDifference(oldList, newList) {
         return _.filter(oldList, function(val){
-            return !_.findWhere(newList,  val);
+            return !_.findWhere(newList, {groupId: val.groupId, levelId: val.levelId});
         });
     }
     
@@ -198,9 +271,15 @@ angular.module('adminPageApp')
             $scope.levelGroup = response.data;
             var maps = _.map($scope.levelGroup.levelAndGroupIds, function (eachMap) {
                 return {
-                    'selectedlevel': parseInt(eachMap.levelId),
-                    'selectedgroup': eachMap.groupId,
-                    'recommendedSeq': eachMap.recommendedSeq
+                    'selectedGroup': eachMap.groupId,
+                    'selectedLevel': (eachMap.levelId)? parseInt(eachMap.levelId):'',
+                    'selectedParentLevel': (eachMap.parentLevelId)? parseInt(eachMap.parentLevelId):'',
+                    'selectedChildLevel': (eachMap.childLevelId)? parseInt(eachMap.childLevelId):'',
+                    'selectedSubChildLevel': (eachMap.subChildLevelId)? parseInt(eachMap.subChildLevelId):'',
+                    'recommendedSeq': eachMap.recommendedSeq,
+                    'parentLevelList' : (eachMap.parentLevelList)? eachMap.parentLevelList : [],
+                    'childLevelList' : (eachMap.childLevelList)? eachMap.childLevelList : [],
+                    'subChildLevelList' : (eachMap.subChildLevelList)? eachMap.subChildLevelList : []
                 };
             });
             if (maps.length > 0) {
@@ -208,5 +287,51 @@ angular.module('adminPageApp')
                 $scope.oldList = $scope.levelGroup.levelAndGroupIds;
             }
         });
+    }
+    
+    function updateLeveAndGroupList(fullList, index, newList, listName) {
+        if(listName === 'parentLevelList') {
+            fullList[index].parentLevelList  = newList;
+            fullList[index].childLevelList = [];
+            fullList[index].subChildLevelList = [];
+            fullList[index].selectedParentLevel = '';
+            fullList[index].selectedChildLevel = '';
+            fullList[index].selectedSubChildLevel = '';
+        } else if(listName === 'childLevelList') {
+            fullList[index].childLevelList = newList;
+            fullList[index].subChildLevelList = [];
+            fullList[index].selectedChildLevel = '';
+            fullList[index].selectedSubChildLevel = '';
+        } else if(listName === 'subChildLevelList') {
+            fullList[index].subChildLevelList = newList;
+            fullList[index].selectedSubChildLevel = '';
+        }
+        
+        return  fullList;
+    }
+    
+    function resetLeveAndGroupList(fullList, index, listName) {
+        if(listName === 'childLevelList') {
+            fullList[index].childLevelList = [];
+            fullList[index].subChildLevelList = [];
+            fullList[index].selectedParentLevel = '';
+            fullList[index].selectedChildLevel = '';
+            fullList[index].selectedSubChildLevel = '';
+        } else if(listName === 'subChildLevelList') {
+            fullList[index].subChildLevelList = [];
+            fullList[index].selectedChildLevel = '';
+            fullList[index].selectedSubChildLevel = '';
+        }
+        return fullList;
+    }
+    
+    function setLevelId(fullList, index, listName){
+        if(listName === 'childLevelList') {
+            fullList[index].selectedLevel = '';
+        } else if(listName === 'subChildLevelList') {
+            fullList[index].selectedLevel = fullList[index].selectedParentLevel;
+        } else if(listName === 'lastList') {
+            fullList[index].selectedLevel = fullList[index].selectedChildLevel;
+        }
     }
 });

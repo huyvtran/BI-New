@@ -18,7 +18,6 @@ angular.module('adminPageApp').controller('deleteModalCtrl',function($scope,item
         $scope.message = 'Are you sure to delete Notification ' + $scope.items.data.notificationId + ' from Insights';
     }
     
-    
     $scope.delete=function(deleteObj){
         $uibModalInstance.close(deleteObj);
     };
@@ -26,9 +25,4 @@ angular.module('adminPageApp').controller('deleteModalCtrl',function($scope,item
     $scope.cancel = function(){
       $uibModalInstance.dismiss('cancel');  
     };
-    
-    
-    
-    
 });
-
